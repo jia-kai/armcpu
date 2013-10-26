@@ -1,6 +1,6 @@
 /*
  * $File: comtest.v
- * $Date: Sat Oct 26 12:00:24 2013 +0800
+ * $Date: Sat Oct 26 16:40:04 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -27,27 +27,33 @@ module comtest(
 	assign baseram_we = 1;
 
 	reg [7:0] frame_num_indicator;
-	reg [7:0] data_from_com_cache;
+	reg [7:0] data_to_write;
+	reg [7:0] data_from_com_prev;
 	reg is_write;
+	reg [2:0] state;
 
 	assign led = {frame_num_indicator, 
-		2'b0,
+		state[1:0],
 		is_write, uart_tbre, uart_tsre, uart_data_ready,
 		uart_framing_error, uart_parity_error};
 
 	digseg_driver data_disp_high(
-		.data(data_from_com_cache[7:4]),
+		.data(data_from_com_prev[7:4]),
 		.seg(segdisp1));
 
 	digseg_driver data_disp_low(
-		.data(data_from_com_cache[3:0]),
+		.data(data_from_com_prev[3:0]),
 		.seg(segdisp0));
 	
 
 
-	assign baseram_data = is_write ?  data_from_com_cache + 1'b1 : {8{1'bz}};
+	assign baseram_data = is_write ? data_to_write : {8{1'bz}};
 
-	reg [2:0] state;
+	/*
+	* protocol:
+	* read until null, write the xor of all
+	*/
+
 	always @(posedge clk) begin
 		if (!rst) begin
 			state <= 0;
@@ -72,6 +78,7 @@ module comtest(
 				if (uart_tsre) begin
 					is_write <= 0;
 					state <= 0;
+					data_to_write <= 0;
 				end
 			end else
 				state <= 0;
@@ -89,12 +96,19 @@ module comtest(
 					uart_rdn <= 0;
 				end
 			end else if (state == 3) begin
-				data_from_com_cache <= baseram_data;
+				data_to_write <= data_to_write ^ baseram_data;
 				frame_num_indicator <= {frame_num_indicator[6:0],
 					~(|frame_num_indicator[6:0])};
 
-				is_write <= 1;
-				state <= 0;
+				if (|baseram_data) begin
+					data_from_com_prev <= baseram_data;
+					uart_rdn <= 1;
+					state <= 2;
+				end
+				else begin
+					is_write <= 1;
+					state <= 0;
+				end
 			end else
 				state <= 0;
 		end
