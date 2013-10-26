@@ -1,4 +1,4 @@
-NET "clk" LOC = U25;	# 11MB
+NET "clk" LOC = U26;	# 50MB
 NET "rst" LOC = T1;
 
 NET "baseram_data[0]" LOC = AC24;
@@ -14,13 +14,12 @@ NET "baseram_ce" LOC = AA26;
 NET "baseram_oe" LOC = AD17;
 NET "baseram_we" LOC = AA25;
 
-NET "uart_data_ready" LOC = P24;	# inter0
-NET "uart_framing_error" LOC = R26;	# inter1
-NET "uart_parity_error" LOC = R24;	# inter2
-NET "uart_rdn" LOC = R25;		# inter3
-NET "uart_tbre" LOC = R23;		# inter4
-NET "uart_tsre" LOC = T26;		# inter5
-NET "uart_wrn" LOC = T24;		# inter6
+NET "uart_enable_recv" LOC = P24;		# inter0
+NET "uart_TxD_start" LOC = R26;			# inter1
+NET "uart_TxD_busy" LOC = R24;			# inter2
+NET "uart_RxD_data_ready" LOC = R25;	# inter3
+NET "uart_RxD_waiting_data" LOC = R23;	# inter4
+NET "uart_rst" LOC = T26;				# inter5
 
 NET "segdisp0[0]" LOC = B26;
 NET "segdisp0[1]" LOC = C25;

@@ -1,6 +1,6 @@
 /*
  * $File: comtest.v
- * $Date: Sat Oct 26 16:40:04 2013 +0800
+ * $Date: Sat Oct 26 20:04:47 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -14,18 +14,47 @@ module comtest(
 	output baseram_oe,
 	output baseram_ce,
 	output baseram_we,
-	output reg uart_wrn,
-	input uart_tbre,
-	input uart_tsre,
-	output reg uart_rdn,
-	input uart_data_ready,
-	input uart_framing_error,
-	input uart_parity_error);
+	output uart_enable_recv,
+	output uart_TxD_start,
+	input uart_TxD_busy,
+	input uart_RxD_data_ready,
+	input uart_RxD_waiting_data,
+	output uart_rst);
 
 	assign baseram_oe = 1;
 	assign baseram_ce = 1;
 	assign baseram_we = 1;
+	assign uart_rst = ~rst;
 
+	assign uart_TxD_start = 0;
+	assign uart_enable_recv = 1;
+
+	reg [7:0] frame_num;
+	reg [7:0] prev_recv_data;
+
+	assign led = {prev_recv_data,
+		5'b0, uart_RxD_data_ready, uart_RxD_waiting_data};
+
+	always @(posedge clk) begin
+		if (~rst) begin
+			frame_num <= 0;
+			prev_recv_data <= 0;
+		end else
+			if (uart_RxD_data_ready) begin
+				prev_recv_data <= baseram_data;
+				frame_num <= frame_num + 1'b1;
+			end
+	end
+
+	digseg_driver data_disp_high(
+		.data(frame_num[7:4]),
+		.seg(segdisp1));
+
+	digseg_driver data_disp_low(
+		.data(frame_num[3:0]),
+		.seg(segdisp0));
+
+	/*
 	reg [7:0] frame_num_indicator;
 	reg [7:0] data_to_write;
 	reg [7:0] data_from_com_prev;
@@ -49,10 +78,6 @@ module comtest(
 
 	assign baseram_data = is_write ? data_to_write : {8{1'bz}};
 
-	/*
-	* protocol:
-	* read until null, write the xor of all
-	*/
 
 	always @(posedge clk) begin
 		if (!rst) begin
@@ -114,6 +139,7 @@ module comtest(
 		end
 
 	end
+	*/
 
 endmodule
 
