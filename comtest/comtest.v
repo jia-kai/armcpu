@@ -1,49 +1,62 @@
 /*
  * $File: comtest.v
- * $Date: Sat Oct 26 00:39:37 2013 +0800
+ * $Date: Sat Oct 26 12:00:24 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 
 module comtest(
 	input clk, input rst,
-	output [31:0] baseram_data,
+	inout [7:0] baseram_data,
 	output [0:6] segdisp0,
 	output [0:6] segdisp1,
+	output [15:0] led,
 	output baseram_oe,
 	output baseram_ce,
 	output baseram_we,
 	output reg uart_wrn,
 	input uart_tbre,
 	input uart_tsre,
-	output uart_rdn);
+	output reg uart_rdn,
+	input uart_data_ready,
+	input uart_framing_error,
+	input uart_parity_error);
 
 	assign baseram_oe = 1;
 	assign baseram_ce = 1;
 	assign baseram_we = 1;
-	assign baseram_data = 32'h42424242;
 
-	reg [2:0] state;
+	reg [7:0] frame_num_indicator;
+	reg [7:0] data_from_com_cache;
+	reg is_write;
 
-	reg [10:0] debug_cnt;
+	assign led = {frame_num_indicator, 
+		2'b0,
+		is_write, uart_tbre, uart_tsre, uart_data_ready,
+		uart_framing_error, uart_parity_error};
 
-	assign uart_rdn = 1;	// disable com writer
-
-	digseg_driver debug_disp_cnt(
-		.data(debug_cnt[10:7]),
-		.seg(segdisp0));
-
-	digseg_driver debug_disp_state(
-		.data({1'b0, state}),
+	digseg_driver data_disp_high(
+		.data(data_from_com_cache[7:4]),
 		.seg(segdisp1));
 
+	digseg_driver data_disp_low(
+		.data(data_from_com_cache[3:0]),
+		.seg(segdisp0));
+	
+
+
+	assign baseram_data = is_write ?  data_from_com_cache + 1'b1 : {8{1'bz}};
+
+	reg [2:0] state;
 	always @(posedge clk) begin
 		if (!rst) begin
 			state <= 0;
-			debug_cnt <= 0;
-		end else begin
+			is_write <= 0;
+			frame_num_indicator <= 0;
+		end else if (is_write) begin
+			// writing to com
+			uart_rdn <= 1;
 			if (state == 0) begin
-				debug_cnt <= debug_cnt + 1'b1;
 				state <= 1;
 				uart_wrn <= 1;
 			end else if (state == 1) begin
@@ -56,13 +69,38 @@ module comtest(
 				if (uart_tbre)
 					state <= 4;
 			end else if (state == 4) begin
-				if (uart_tsre)
+				if (uart_tsre) begin
+					is_write <= 0;
 					state <= 0;
+				end
+			end else
+				state <= 0;
+		end else begin
+			// reading from com
+			uart_wrn <= 1;
+			if (state == 0) begin
+				state <= 1;
+			end else if (state == 1) begin
+				uart_rdn <= 1;
+				state <= 2;
+			end else if (state == 2) begin
+				if (uart_data_ready) begin
+					state <= 3;
+					uart_rdn <= 0;
+				end
+			end else if (state == 3) begin
+				data_from_com_cache <= baseram_data;
+				frame_num_indicator <= {frame_num_indicator[6:0],
+					~(|frame_num_indicator[6:0])};
+
+				is_write <= 1;
+				state <= 0;
 			end else
 				state <= 0;
 		end
+
 	end
-	
+
 endmodule
 
 
