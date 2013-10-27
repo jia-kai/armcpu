@@ -1,6 +1,6 @@
 /*
  * $File: flash_driver.v
- * $Date: Sun Oct 27 20:38:29 2013 +0800
+ * $Date: Sun Oct 27 21:39:08 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -15,28 +15,24 @@ module flash_driver(
 	/*
 	* when asserted, data could be continousely read from flash
 	* busy would be de-asserted for one cycle after finishing each read
+	* addr must be valid during the whole reading process
 	*/
 	input enable_erase,
 	// assert for one cycle to erase; addr woule be latched
 	input enable_write,
-	// assert for one cycle to write; addr woule be latched, and data should
-	// still be available after two cycles
-	output busy,
+	// assert for one cycle to write; addr and data woule be latched
+	output reg busy,
 	output reg [22:0] flash_addr,
 	inout [15:0] flash_data,
 	output [7:0] flash_ctl);
 
-	assign data_out = flash_data;
+	reg flash_oe, flash_we;
 
-	reg enable_we, enable_we_delay, flash_oe, we_read;
+	wire flash_byte = 1, flash_vpen = 1, flash_ce = 0, flash_rp = 1;
 
-	wire flash_byte = 1, flash_vpen = 1, flash_ce = 0, flash_rp = 1,
-		do_enable_we = enable_we | enable_we_delay,
-		we_write = (do_enable_we & ~clk) | ~do_enable_we,
-		// we_write is for write and erase
-		flash_we = we_write & we_read;
-
-	reg [15:0] data_to_write;
+	reg [15:0] data_to_write,
+		data_cache;	/* for both caching output data when reading, and latching
+						input data when writing */
 	assign flash_data = flash_oe ? data_to_write : {16{1'bz}};
 
 	assign flash_ctl = {
@@ -52,61 +48,83 @@ module flash_driver(
 	localparam
 		IDLE = 3'b000,
 		READ1 = 3'b001, READ2 = 3'b011, READ3 = 4'b1011,
-		WRITE1 = 3'b010,
-		ERASE1 = 3'b100,
+		WRITE1 = 3'b010, WRITE2 = 4'b1110, WRITE3 = 4'b1111,
+		ERASE1 = 3'b100, ERASE2 = 4'b1100, ERASE3 = 4'b1101,
 		SR1 = 3'b101, SR2 = 3'b111, SR3 = 3'b110, SR4 = 4'b1000;
 
-	assign busy = (state != IDLE) & (state != READ3);
-	
+	assign data_out = state == READ3 ? flash_data : data_cache;
+
 	always @(posedge clk) begin
 		case (state)
 			IDLE: begin
 				flash_addr <= addr;
 				if (enable_write) begin
+					data_cache <= data_in;
 					data_to_write <= 16'h0040;
-					enable_we <= 1;
+					flash_we <= 0;
 					state <= WRITE1;
+					busy <= 1;
 				end else if (enable_erase) begin
 					data_to_write <= 16'h0020;
-					enable_we <= 1;
+					flash_we <= 0;
 					state <= ERASE1;
+					busy <= 1;
 				end else if (enable_read) begin
 					data_to_write <= 16'h00FF;
-					we_read <= 0;
+					flash_we <= 0;
 					state <= READ1;
+					busy <= 1;
 				end else begin
-					enable_we <= 0;
 					flash_oe <= 1;
-					we_read <= 1;
+					flash_we <= 1;
+					busy <= 0;
 				end
 			end
 
 			WRITE1: begin
-				data_to_write <= data_in;
-				enable_we <= 0;
+				flash_we <= 1;
+				state <= WRITE2;
+			end
+			WRITE2: begin
+				flash_we <= 0;
+				data_to_write <= data_cache;
+				state <= WRITE3;
+			end
+			WRITE3: begin
+				flash_we <= 1;
 				state <= SR1;
 			end
 
 			ERASE1: begin
+				flash_we <= 1;
+				state <= ERASE2;
+			end
+			ERASE2: begin
+				flash_we <= 0;
 				data_to_write <= 16'h00d0;
-				enable_we <= 0;
+				state <= ERASE3;
+			end
+			ERASE3: begin
+				flash_we <= 1;
 				state <= SR1;
 			end
 
 			READ1: begin
-				we_read <= 1;
+				flash_we <= 1;
 				state <= READ2;
 			end
-
 			READ2: begin
 				flash_oe <= 0;
 				flash_addr <= addr;
 				state <= READ3;
+				busy <= 0;
 			end
-
 			READ3: begin
-				if (enable_read)
+				data_cache <= flash_data;
+				if (enable_read) begin
 					state <= READ2;
+					busy <= 1;
+				end
 				else begin
 					state <= IDLE;
 					flash_oe <= 1;
@@ -116,11 +134,11 @@ module flash_driver(
 			// wait for SR[7] to become 1
 			SR1: begin
 				data_to_write <= 16'h0070;
-				we_read <= 0;
+				flash_we <= 0;
 				state <= SR2;
 			end
 			SR2: begin
-				we_read <= 1;
+				flash_we <= 1;
 				state <= SR3;
 			end
 			SR3: begin
@@ -129,8 +147,10 @@ module flash_driver(
 			end
 			SR4: begin
 				flash_oe <= 1;
-				if (flash_data[7])
+				if (flash_data[7]) begin
 					state <= IDLE;
+					busy <= 0;
+				end
 				else
 					state <= SR1;
 			end
@@ -139,9 +159,6 @@ module flash_driver(
 				state <= IDLE;
 		endcase
 	end
-
-	always @(negedge clk)
-		enable_we_delay <= enable_we;
 
 
 endmodule
@@ -153,6 +170,7 @@ module flash_driver_testbench();
 	wire [22:0] flash_addr;
 	wire [7:0] flash_ctl;
 	reg enable_write = 0;
+	reg enable_erase = 0;
 	wire [15:0] flash_data = {16{1'bz}};
 
 	flash_driver flash_driver_test (.clk(clk),
@@ -161,13 +179,13 @@ module flash_driver_testbench();
 	.data_out(data_out),
 	.enable_read(1'b0),
 	.enable_write(enable_write),
-	.enable_erase(1'b0),
+	.enable_erase(enable_erase),
 	.busy(busy),
 	.flash_addr(flash_addr),
 	.flash_data(flash_data),
 	.flash_ctl(flash_ctl));
 
 	always #10 clk <= ~clk;
-	always #50 enable_write <= 1;
+	always #50 enable_erase <= 1;
 endmodule
 

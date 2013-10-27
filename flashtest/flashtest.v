@@ -1,6 +1,6 @@
 /*
  * $File: flashtest.v
- * $Date: Sun Oct 27 17:50:21 2013 +0800
+ * $Date: Sun Oct 27 21:14:32 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -23,7 +23,7 @@ module flashtest(
 	wire [15:0] data_to_disp;
 	assign led = {
 		data_to_disp[15:8],
-		2'b0,
+		4'b0,
 		enable_write, enable_erase, enable_read, flash_busy};
 
 	reg enable_write, enable_erase, enable_read;
