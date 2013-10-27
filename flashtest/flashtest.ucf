@@ -1,0 +1,127 @@
+NET "flash_addr[0]" LOC = G3;
+NET "flash_addr[1]" LOC = C8;
+NET "flash_addr[2]" LOC = D8;
+NET "flash_addr[3]" LOC = D7;
+NET "flash_addr[4]" LOC = E8;
+NET "flash_addr[5]" LOC = A7;
+NET "flash_addr[6]" LOC = C7;
+NET "flash_addr[7]" LOC = C6;
+NET "flash_addr[8]" LOC = D6;
+NET "flash_addr[9]" LOC = A6;
+NET "flash_addr[10]" LOC = B6;
+NET "flash_addr[11]" LOC = C5;
+NET "flash_addr[12]" LOC = E5;
+NET "flash_addr[13]" LOC = B4;
+NET "flash_addr[14]" LOC = A4;
+NET "flash_addr[15]" LOC = C4;
+NET "flash_addr[16]" LOC = C3;
+NET "flash_addr[17]" LOC = B2;
+NET "flash_addr[18]" LOC = A2;
+NET "flash_addr[19]" LOC = C2;
+NET "flash_addr[20]" LOC = F5;
+NET "flash_addr[21]" LOC = D3;
+NET "flash_addr[22]" LOC = G5;
+
+NET "flash_data[0]" LOC = G4;
+NET "flash_data[1]" LOC = J3;
+NET "flash_data[2]" LOC = K3;
+NET "flash_data[3]" LOC = K5;
+NET "flash_data[4]" LOC = C1;
+NET "flash_data[5]" LOC = E2;
+NET "flash_data[6]" LOC = F1;
+NET "flash_data[7]" LOC = G1;
+NET "flash_data[8]" LOC = H3;
+NET "flash_data[9]" LOC = J4;
+NET "flash_data[10]" LOC = H5;
+NET "flash_data[11]" LOC = B1;
+NET "flash_data[12]" LOC = D1;
+NET "flash_data[13]" LOC = E1;
+NET "flash_data[14]" LOC = G2;
+NET "flash_data[15]" LOC = H1;
+
+NET "flash_ctl[7]" LOC = F3;
+NET "flash_ctl[6]" LOC = E6;
+NET "flash_ctl[5]" LOC = E4;
+NET "flash_ctl[4]" LOC = E3;
+NET "flash_ctl[3]" LOC = J1;
+NET "flash_ctl[2]" LOC = A5;
+NET "flash_ctl[1]" LOC = D5;
+NET "flash_ctl[0]" LOC = K1;
+
+
+NET "clk" LOC = U26;
+
+NET "led[0]" LOC = N26;
+NET "led[1]" LOC = M26;
+NET "led[2]" LOC = L25;
+NET "led[3]" LOC = L26;
+NET "led[4]" LOC = K26;
+NET "led[5]" LOC = M23;
+NET "led[6]" LOC = K24;
+NET "led[7]" LOC = L24;
+NET "led[8]" LOC = J24;
+NET "led[9]" LOC = G23;
+NET "led[10]" LOC = J25;
+NET "led[11]" LOC = J26;
+NET "led[12]" LOC = H26;
+NET "led[13]" LOC = G25;
+NET "led[14]" LOC = G26;
+NET "led[15]" LOC = F26;
+
+NET "do_read" LOC = Y1;		# K0
+NET "do_erase" LOC = Y3;	# K1
+NET "do_write" LOC = AA3;	# K2
+
+NET "segdisp0[0]" LOC = B26;
+NET "segdisp0[1]" LOC = C25;
+NET "segdisp0[2]" LOC = D24;
+NET "segdisp0[3]" LOC = A25;
+NET "segdisp0[4]" LOC = B24;
+NET "segdisp0[5]" LOC = C26;
+NET "segdisp0[6]" LOC = D26;
+
+NET "segdisp1[0]" LOC = C24;
+NET "segdisp1[1]" LOC = D22;
+NET "segdisp1[2]" LOC = E23;
+NET "segdisp1[3]" LOC = B23;
+NET "segdisp1[4]" LOC = A23;
+NET "segdisp1[5]" LOC = D23;
+NET "segdisp1[6]" LOC = B25;
+
+# sw 0 - 22
+NET "user_addr[0]" LOC = Y5;
+NET "user_addr[1]" LOC = W1;
+NET "user_addr[2]" LOC = W2;
+NET "user_addr[3]" LOC = V1;
+NET "user_addr[4]" LOC = U1;
+NET "user_addr[5]" LOC = U2;
+NET "user_addr[6]" LOC = R1;
+NET "user_addr[7]" LOC = R2;
+NET "user_addr[8]" LOC = P1;
+NET "user_addr[9]" LOC = N1;
+NET "user_addr[10]" LOC = N2;
+NET "user_addr[11]" LOC = M1;
+NET "user_addr[12]" LOC = L1;
+NET "user_addr[13]" LOC = L2;
+NET "user_addr[14]" LOC = W5;
+NET "user_addr[15]" LOC = W3;
+NET "user_addr[16]" LOC = V4;
+NET "user_addr[17]" LOC = V3;
+NET "user_addr[18]" LOC = U4;
+NET "user_addr[19]" LOC = U3;
+NET "user_addr[20]" LOC = T4;
+NET "user_addr[21]" LOC = R4;
+NET "user_addr[22]" LOC = R3;
+
+# sw 24 - 31
+NET "user_data[0]" LOC = P3;
+NET "user_data[1]" LOC = N4;
+NET "user_data[2]" LOC = N3;
+NET "user_data[3]" LOC = N5;
+NET "user_data[4]" LOC = M4;
+NET "user_data[5]" LOC = M3;
+NET "user_data[6]" LOC = L4;
+NET "user_data[7]" LOC = L3;
+
+
+# vim: ft=conf
