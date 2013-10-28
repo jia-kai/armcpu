@@ -111,7 +111,6 @@ NET "user_addr[18]" LOC = U4;
 NET "user_addr[19]" LOC = U3;
 NET "user_addr[20]" LOC = T4;
 NET "user_addr[21]" LOC = R4;
-NET "user_addr[22]" LOC = R3;
 
 # sw 24 - 31
 NET "user_data[0]" LOC = P3;

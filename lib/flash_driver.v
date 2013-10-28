@@ -1,14 +1,16 @@
 /*
  * $File: flash_driver.v
- * $Date: Sun Oct 27 21:39:08 2013 +0800
+ * $Date: Mon Oct 28 09:15:12 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 `timescale 1ns/1ps
 
-module flash_driver(
+module flash_driver
+	#(parameter FLASH_ADDR_SIZE = 22)
+	(
 	input clk,
-	input [22:0] addr,
+	input [FLASH_ADDR_SIZE - 1:0] addr,
 	input [15:0] data_in,
 	output [15:0] data_out,
 	input enable_read,
@@ -22,7 +24,7 @@ module flash_driver(
 	input enable_write,
 	// assert for one cycle to write; addr and data woule be latched
 	output reg busy,
-	output reg [22:0] flash_addr,
+	output [FLASH_ADDR_SIZE:0] flash_addr,
 	inout [15:0] flash_data,
 	output [7:0] flash_ctl);
 
@@ -30,6 +32,8 @@ module flash_driver(
 
 	wire flash_byte = 1, flash_vpen = 1, flash_ce = 0, flash_rp = 1;
 
+	reg [FLASH_ADDR_SIZE - 1:0] flash_addr_sig;	// significant flash addr
+	assign flash_addr = {flash_addr_sig, 1'b0};
 	reg [15:0] data_to_write,
 		data_cache;	/* for both caching output data when reading, and latching
 						input data when writing */
@@ -57,7 +61,7 @@ module flash_driver(
 	always @(posedge clk) begin
 		case (state)
 			IDLE: begin
-				flash_addr <= addr;
+				flash_addr_sig <= addr;
 				if (enable_write) begin
 					data_cache <= data_in;
 					data_to_write <= 16'h0040;
@@ -115,7 +119,7 @@ module flash_driver(
 			end
 			READ2: begin
 				flash_oe <= 0;
-				flash_addr <= addr;
+				flash_addr_sig <= addr;
 				state <= READ3;
 				busy <= 0;
 			end

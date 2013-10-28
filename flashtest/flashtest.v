@@ -1,6 +1,6 @@
 /*
  * $File: flashtest.v
- * $Date: Sun Oct 27 21:14:32 2013 +0800
+ * $Date: Sun Oct 27 22:12:26 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -9,7 +9,7 @@ module flashtest(
 	input do_read,
 	input do_erase,
 	input do_write,
-	input [22:0] user_addr,
+	input [21:0] user_addr,
 	input [7:0] user_data,
 	output [22:0] flash_addr,
 	inout [15:0] flash_data,
