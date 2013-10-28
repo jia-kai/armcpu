@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: controller.py
-# $Date: Mon Oct 28 14:04:08 2013 +0800
+# $Date: Mon Oct 28 23:38:00 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import serial
@@ -88,6 +88,7 @@ if __name__ == '__main__':
             stopbits=2, parity=serial.PARITY_NONE, timeout=1)
     ctl = FlashController(ser)
     data = 'hello, world!'
-    ctl.write_data(data, 512)
-    print repr(ctl.read_data(512, len(data)))
+    addr = 3123
+    ctl.write_data(data, addr)
+    print repr(ctl.read_data(addr, len(data)))
 

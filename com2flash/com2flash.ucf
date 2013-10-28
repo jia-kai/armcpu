@@ -9,30 +9,6 @@ NET "baseram_data[4]" LOC = Y24;
 NET "baseram_data[5]" LOC = AA24;
 NET "baseram_data[6]" LOC = Y22;
 NET "baseram_data[7]" LOC = AB24;
-NET "baseram_data[8]" LOC = AD19;
-NET "baseram_data[9]" LOC = AB18;
-NET "baseram_data[10]" LOC = AD18;
-NET "baseram_data[11]" LOC = AC17;
-NET "baseram_data[12]" LOC = AB17;
-NET "baseram_data[13]" LOC = AF21;
-NET "baseram_data[14]" LOC = AE21;
-NET "baseram_data[15]" LOC = AF20;
-NET "baseram_data[16]" LOC = AE23;
-NET "baseram_data[17]" LOC = AF24;
-NET "baseram_data[18]" LOC = AE24;
-NET "baseram_data[19]" LOC = AF25;
-NET "baseram_data[20]" LOC = AE25;
-NET "baseram_data[21]" LOC = AE26;
-NET "baseram_data[22]" LOC = AD26;
-NET "baseram_data[23]" LOC = AC25;
-NET "baseram_data[24]" LOC = AF19;
-NET "baseram_data[25]" LOC = AE19;
-NET "baseram_data[26]" LOC = AF18;
-NET "baseram_data[27]" LOC = AF17;
-NET "baseram_data[28]" LOC = AE17;
-NET "baseram_data[29]" LOC = AF16;
-NET "baseram_data[30]" LOC = AF15;
-NET "baseram_data[31]" LOC = AE15;
 
 NET "baseram_ce" LOC = AA26;
 NET "baseram_oe" LOC = AD17;
@@ -128,6 +104,5 @@ NET "flash_ctl[3]" LOC = J1;
 NET "flash_ctl[2]" LOC = A5;
 NET "flash_ctl[1]" LOC = D5;
 NET "flash_ctl[0]" LOC = K1;
-
 
 # vim: ft=conf
