@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: controller.py
-# $Date: Tue Oct 29 00:57:40 2013 +0800
+# $Date: Tue Oct 29 01:04:54 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import serial
@@ -112,7 +112,7 @@ class SpeedCalc(object):
         self.done += delta
         t = time.time() - self.start_time
         sys.stdout.write('{:.3f} KiB/sec; {:.2f}%; ETA: {:.3f}sec  \r'.format(
-            self.done / t,
+            self.done / t / 1024,
             float(self.done) / self.tot_len * 100,
             t * (self.tot_len - self.done) / self.done))
         sys.stdout.flush()
