@@ -1,6 +1,6 @@
 /*
  * $File: com2flash.v
- * $Date: Mon Oct 28 11:05:31 2013 +0800
+ * $Date: Mon Oct 28 14:01:19 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -9,7 +9,7 @@
 * s: server (PC)
 * c: client (our board)
 * s -> c:
-*	START_WRITE
+*	CMD_WRITE
 *		s -> c:
 *			3 bytes start_addr, MSB to LSB
 *			3 bytes end_addr, MSB to LSB
@@ -21,7 +21,18 @@
 *		c -> s:
 *			1 byte, checksum
 *		goto idle state
-*		
+* s -> c:
+*	CMD_READ
+*		s -> c:
+*			3 bytes start_addr, MSB to LSB
+*			3 bytes end_addr, MSB to LSB
+*		c -> s:
+*			1 byte, checksum
+*		c -> s
+*			2 * (start_addr - end_addr) bytes, the data
+*			for each word, MSB to LSB order
+*		c -> s:
+*			1 byte, checksum
 *
 * output:
 *	segdisp: number of 4k blocks
@@ -40,7 +51,7 @@ module com2flash
 	output baseram_ce,
 	output baseram_we,
 	output reg uart_enable_recv,
-	output uart_TxD_start,
+	output reg uart_TxD_start,
 	input uart_TxD_busy,
 	input uart_RxD_data_ready,
 	input uart_RxD_waiting_data,
@@ -49,7 +60,7 @@ module com2flash
 	output [15:0] flash_data,
 	output [7:0] flash_ctl);
 
-	localparam CMD_WRITE = 8'hf3;
+	localparam CMD_WRITE = 8'hf3, CMD_READ = 8'h2a;
 
 	reg [19:0] frame_cnt;
 
@@ -62,14 +73,8 @@ module com2flash
 	assign baseram_ce = 1;
 	assign baseram_we = 1;
 
-	reg [7:0] data_to_com;
-	reg [7:0] flash_write_cnt;
+	reg [7:0] data_to_com, data_to_com_cache;
 	wire [7:0] data_from_com = baseram_data[7:0];
-	reg [15:0] prev_flash_data;	// XXX: debug only
-	assign baseram_data = {
-		flash_write_cnt, prev_flash_data,
-		uart_enable_recv ? {8{1'bz}} : data_to_com};
-	assign uart_TxD_start = ~uart_enable_recv;
 
 	reg [7:0] checksum;
 	reg [FLASH_ADDR_SIZE-1:0] start_addr, end_addr, addr_to_flash;
@@ -82,44 +87,45 @@ module com2flash
 	wire [7:0] checksum_init = 8'h23;
 
 	wire flash_busy;
-	reg enable_flash_write;
+	wire [15:0] data_from_flash;
+	reg enable_flash_write, enable_flash_read;
 
 	flash_driver #(.FLASH_ADDR_SIZE(FLASH_ADDR_SIZE)) flash_driver_inst(
 		.clk(~clk),	// invert clock to ensuare stable signal on rising edge
 		.addr(addr_to_flash),
-		.data_in(comdata_shift[15:0]), .data_out(),
-		.enable_read(1'b0),
+		.data_in(comdata_shift[15:0]), .data_out(data_from_flash),
+		.enable_read(enable_flash_read),
 		.enable_write(enable_flash_write),
 		.enable_erase(1'b0),
 		.busy(flash_busy),
 		.flash_addr(flash_addr), .flash_data(flash_data),
 		.flash_ctl(flash_ctl));
 
-	always @(negedge clk)
-		if (~rst) begin
-			prev_flash_data <= 0;
-			flash_write_cnt <= 0;
-		end else if (enable_flash_write) begin
-			prev_flash_data <= comdata_shift[15:0];
-			flash_write_cnt <= flash_write_cnt + 1'b1;
-		end
-
 	localparam
-		IDLE = 3'b000,
-		WRITE_RECV_META = 3'b001,
-		WRITE_SEND_META_ACK = 3'b011,
-		WRITE_INIT_TRANSFER = 3'b010,
-		WRITE_RECV_DATA = 3'b110,
-		WRITE_SEND_DATA_ACK = 3'b111,
-		ERROR = 3'b101;
+		IDLE = 4'b0000,
+		RECV_META = 4'b0001,
+		META_ACK = 4'b0011,
+		WRITE_INIT_TRANSFER = 4'b0010,
+		WRITE_RECV_DATA = 4'b0110,
+		WRITE_SEND_DATA_ACK = 4'b0111,
+		READ_INIT_TRANSFER = 4'b0101,
+		READ_READ_FLASH = 4'b0100,
+		READ_SEND_HIGH = 4'b1100,
+		READ_SEND_LOW = 4'b1101,
+		WAITING_UART_SEND = 4'b1111,
+		WAITING_UART_SEND_1 = 4'b1110,
+		ERROR = 4'b1010;
 
-	reg [2:0] state = IDLE;
+	reg [3:0] state = IDLE, state_after_meta_ack, state_after_uart_sent;
 
 	reg err_flash_too_slow = 0;
 
-	assign led = {state, 5'b0,
+	assign led = {state, 4'b0,
 		3'b0, err_flash_too_slow, uart_RxD_waiting_data,
 		uart_TxD_busy, uart_RxD_data_ready, flash_busy};
+	assign baseram_data = {
+		data_to_com_cache, data_from_flash,
+		uart_enable_recv ? {8{1'bz}} : data_to_com};
 
 	always @(posedge clk) begin
 		if (~rst)
@@ -136,33 +142,44 @@ module com2flash
 		else case (state)
 			IDLE: begin
 				uart_enable_recv <= 1;
+				uart_TxD_start <= 0;
+				checksum <= checksum_init;
+				comdata_shift_cnt <= 0;
+				enable_flash_write <= 0;
+				enable_flash_read <= 0;
 				if (uart_RxD_data_ready) begin
 					if (data_from_com == CMD_WRITE) begin
-						state <= WRITE_RECV_META;
-						checksum <= checksum_init;
-						comdata_shift_cnt <= 0;
+						state <= RECV_META;
+						state_after_meta_ack <= WRITE_INIT_TRANSFER;
+					end else if (data_from_com == CMD_READ) begin
+						state <= RECV_META;
+						state_after_meta_ack <= READ_INIT_TRANSFER;
 					end
 				end
 			end
 
-			WRITE_RECV_META:
+			RECV_META:
 				if (uart_RxD_data_ready) begin
 					comdata_shift_cnt <= comdata_shift_cnt_next;
 					checksum <= checksum ^ data_from_com;
 					if (comdata_shift_cnt_next == 6)
-						state <= WRITE_SEND_META_ACK;
+						state <= META_ACK;
 				end
-			WRITE_SEND_META_ACK: begin
+			META_ACK: begin
 				start_addr <= comdata_shift[FLASH_ADDR_SIZE-1+24:24];
 				end_addr <= comdata_shift[FLASH_ADDR_SIZE-1:0];
 				data_to_com <= checksum;
-				state <= WRITE_INIT_TRANSFER;
 				uart_enable_recv <= 0;
+				uart_TxD_start <= 1;
+				checksum <= checksum_init;
+				state <= WAITING_UART_SEND;
+				state_after_uart_sent <= state_after_meta_ack;
 			end
+
 			WRITE_INIT_TRANSFER: begin
 				uart_enable_recv <= 1;
+				uart_TxD_start <= 0;
 				comdata_shift_cnt[0] <= 0;
-				checksum <= checksum_init;
 				state <= WRITE_RECV_DATA;
 			end
 			WRITE_RECV_DATA: begin
@@ -190,8 +207,56 @@ module com2flash
 				if (!flash_busy) begin
 					data_to_com <= checksum;
 					uart_enable_recv <= 0;
-					state <= IDLE;
+					uart_TxD_start <= 1;
+					state_after_uart_sent <= IDLE;
+					state <= WAITING_UART_SEND;
 				end
+			end
+
+			READ_INIT_TRANSFER: begin
+				uart_TxD_start <= 0;
+				addr_to_flash <= start_addr;
+				enable_flash_read <= 1;
+				state <= READ_READ_FLASH;
+			end
+			READ_READ_FLASH: begin
+				if (!flash_busy) begin
+					checksum <= checksum ^ 
+						data_from_flash[15:8] ^ data_from_flash[7:0];
+					data_to_com <= data_from_flash[15:8];;
+					data_to_com_cache <= data_from_flash[7:0];
+					uart_TxD_start <= 1;
+					state_after_uart_sent <= READ_SEND_HIGH;
+					state <= WAITING_UART_SEND;
+				end
+			end
+			READ_SEND_HIGH: begin
+				data_to_com <= data_to_com_cache;
+				uart_TxD_start <= 1;
+				state_after_uart_sent <= READ_SEND_LOW;
+				state <= WAITING_UART_SEND;
+			end
+			READ_SEND_LOW: begin
+				if (start_addr_next == end_addr) begin
+					uart_TxD_start <= 1;
+					data_to_com <= checksum;
+					state_after_uart_sent <= IDLE;
+					state <= WAITING_UART_SEND;
+				end else begin
+					start_addr <= start_addr_next;
+					addr_to_flash <= start_addr_next;
+					state <= READ_READ_FLASH;
+				end
+			end
+
+			WAITING_UART_SEND:
+				if (uart_TxD_busy) begin
+					state <= WAITING_UART_SEND_1;
+					uart_TxD_start <= 0;
+				end
+			WAITING_UART_SEND_1: begin
+				if (~uart_TxD_busy)
+					state <= state_after_uart_sent;
 			end
 
 			ERROR:
