@@ -1,7 +1,8 @@
 /*
  * $File: flash_driver.v
- * $Date: Tue Oct 29 00:10:02 2013 +0800
+ * $Date: Wed Oct 30 11:45:17 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
+ *          Xinyu Zhou <zxytim@gmail.com>
  */
 
 `timescale 1ns/1ps
@@ -18,7 +19,7 @@ module flash_driver
 	* addr and read in next cycle when busy is 0
 	*/
 	input enable_read,
-	// assert for one cycle to erase; addr woule be latched
+	// assert for one cycle to erase; addr would be latched
 	input enable_erase,
 	// assert for one cycle to write; addr and data woule be latched
 	input enable_write,
@@ -39,9 +40,9 @@ module flash_driver
 
 	wire flash_byte = 1, flash_vpen = 1, flash_ce = 0, flash_rp = 1;
 
-	reg [FLASH_ADDR_SIZE - 1:0] addr_latch;	
+	reg [FLASH_ADDR_SIZE - 1:0] addr_latch;
 	assign flash_addr = {enable_read ? addr : addr_latch, 1'b0};
-	reg [15:0] data_to_write, data_in_latch;	
+	reg [15:0] data_to_write, data_in_latch;
 	assign flash_data = flash_oe ? data_to_write : {16{1'bz}};
 
 	assign flash_ctl = {
@@ -72,7 +73,7 @@ module flash_driver
 		SR4 = 4'b1001;
 
 	// XXX: I do not know why correct data can only appear after some time
-	// when read after writing, 
+	// UNFINISHED-COMMENT: when read after writing,
 	reg [2:0] read_wait_cnt;
 	always @(posedge clk) begin
 		case (state)
@@ -139,6 +140,7 @@ module flash_driver
 				read_wait_cnt <= 0;
 			end
 			READ3: begin
+				// request for comment: does this mean waiting for 4 clks?
 				if (read_wait_cnt[2]) begin
 					busy <= 0;
 					state <= READ4;
