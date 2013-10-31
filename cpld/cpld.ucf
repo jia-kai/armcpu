@@ -1,0 +1,7 @@
+NET "com_TxD"	LOC = "P6";		# InterConn0
+NET "com_RxD"	LOC = "P7";		# InterConn1
+
+NET "TxD"  LOC = "P54"; # TXD1
+NET "RxD"  LOC = "P58"; # RXD1
+
+# vim: ft=conf

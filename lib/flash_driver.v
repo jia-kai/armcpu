@@ -1,6 +1,6 @@
 /*
  * $File: flash_driver.v
- * $Date: Tue Oct 29 00:10:02 2013 +0800
+ * $Date: Thu Oct 31 21:19:09 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -10,6 +10,7 @@ module flash_driver
 	#(parameter FLASH_ADDR_SIZE = 22)
 	(
 	input clk,
+	input enable,	// assert for enable
 	input [FLASH_ADDR_SIZE - 1:0] addr,
 	input [15:0] data_in,
 	output [15:0] data_out,
@@ -37,11 +38,14 @@ module flash_driver
 
 	reg flash_oe, flash_we;
 
-	wire flash_byte = 1, flash_vpen = 1, flash_ce = 0, flash_rp = 1;
+	wire flash_byte = 1, flash_vpen = 1, flash_ce = ~enable, flash_rp = 1;
 
 	reg [FLASH_ADDR_SIZE - 1:0] addr_latch;	
 	assign flash_addr = {enable_read ? addr : addr_latch, 1'b0};
 	reg [15:0] data_to_write, data_in_latch;	
+
+	// by default, flash_data should be data_to_write, to avoid ruining data
+	// writ setup time
 	assign flash_data = flash_oe ? data_to_write : {16{1'bz}};
 
 	assign flash_ctl = {

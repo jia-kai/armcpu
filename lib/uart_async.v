@@ -11,7 +11,7 @@
                        // and RX receives one bit per clock cycle (for fast simulations)
 
 ////////////////////////////////////////////////////////
-module async_transmitter(
+module uart_async_transmitter(
 	input clk,
 	input TxD_start,
 	input [7:0] TxD_data,
@@ -72,19 +72,21 @@ endmodule
 
 
 ////////////////////////////////////////////////////////
-module async_receiver(
+module uart_async_receiver(
 	input clk,
 	input rst,	// assert to reset to waiting status
 	input RxD,
 	output RxD_data_ready,
 	output RxD_waiting_data, // asserted when in waiting status (line is idle)
-	output reg [7:0] RxD_data = 0,  // data received, valid only (for one clock cycle) when RxD_data_ready is asserted
+	output reg [7:0] RxD_data = 0  // data received, valid only (for one clock cycle) when RxD_data_ready is asserted
 
+	/*
 	// We also detect if a gap occurs in the received stream of characters
 	// That can be useful if multiple characters are sent in burst
 	//  so that multiple characters can be treated as a "packet"
 	output RxD_idle,  // asserted when no data has been received for a while
 	output RxD_endofpacket  // asserted for one clock cycle when a packet has been detected (i.e. RxD_idle is going high)
+	*/
 );
 
 parameter ClkFrequency = 25000000; // 25MHz
@@ -188,6 +190,7 @@ assign RxD_data_ready = (sampleNow && RxD_state==4'b0010 && RxD_bit);
 
 //RxD_data_error <= (sampleNow && RxD_state==4'b0010 && ~RxD_bit);  // error if a stop bit is not received
 
+/*
 reg [l2o+1:0] GapCnt = 0;
 always @(posedge clk) begin
 	if (RxD_state!=0)
@@ -197,13 +200,14 @@ always @(posedge clk) begin
 end
 assign RxD_idle = GapCnt[l2o+1];
 assign RxD_endofpacket = OversamplingTick & ~GapCnt[l2o+1] & &GapCnt[l2o:0];
+*/
 
 endmodule
 
 
 ////////////////////////////////////////////////////////
 // dummy module used to be able to raise an assertion in Verilog
-module ASSERTION_ERROR();
+module ASSERTION_ERROR(input param);
 endmodule
 
 

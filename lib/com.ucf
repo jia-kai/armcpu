@@ -1,0 +1,3 @@
+NET "com_TxD" LOC = P24;		# inter0
+NET "com_RxD" LOC = R26;		# inter1
+

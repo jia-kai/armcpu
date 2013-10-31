@@ -1,6 +1,6 @@
 /*
  * $File: com2flash.v
- * $Date: Tue Oct 29 00:33:29 2013 +0800
+ * $Date: Thu Oct 31 21:57:01 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -58,19 +58,11 @@ module com2flash
 	output [15:0] led,
 	output [0:6] segdisp0,
 	output [0:6] segdisp1,
-	inout [7:0] baseram_data,
-	output baseram_oe,
-	output baseram_ce,
-	output baseram_we,
-	output reg uart_enable_recv,
-	output reg uart_TxD_start,
-	input uart_TxD_busy,
-	input uart_RxD_data_ready,
-	input uart_RxD_waiting_data,
-	output uart_rst,
 	output [FLASH_ADDR_SIZE:0] flash_addr,
 	inout [15:0] flash_data,
-	output [7:0] flash_ctl);
+	output [7:0] flash_ctl,
+	output com_TxD,
+	input com_RxD);
 
 	localparam
 		CMD_WRITE	= 8'b11110000,
@@ -80,6 +72,10 @@ module com2flash
 		CMD_ERASE_FINISHED		= 8'b00110011;
 				
 
+	wire [7:0] data_from_com;
+	reg uart_TxD_start;
+	wire uart_TxD_busy, uart_RxD_data_ready, uart_rst;
+
 	reg [19:0] frame_cnt;
 	reg [3:0] frame_looper;
 
@@ -88,12 +84,13 @@ module com2flash
 	digseg_driver disp_fc_low(.data(frame_cnt[15:12]), .seg(segdisp0));
 
 	assign uart_rst = ~rst;
-	assign baseram_oe = 1;
-	assign baseram_ce = 1;
-	assign baseram_we = 1;
 
 	reg [7:0] data_to_com, data_to_com_cache;
-	wire [7:0] data_from_com = baseram_data[7:0];
+
+	uart uart_inst(.clk(clk), .rst(uart_rst), .data_in(data_to_com),
+		.data_out(data_from_com), .TxD_start(uart_TxD_start),
+		.TxD_busy(uart_TxD_busy), .RxD_data_ready(uart_RxD_data_ready),
+		.com_TxD(com_TxD), .com_RxD(com_RxD));
 
 	reg [7:0] checksum;
 	reg [FLASH_ADDR_SIZE-1:0] start_addr, end_addr, addr_to_flash;
@@ -113,6 +110,7 @@ module com2flash
 
 	flash_driver #(.FLASH_ADDR_SIZE(FLASH_ADDR_SIZE)) flash_driver_inst(
 		.clk(~clk),	// invert clock to ensuare stable signal on rising edge
+		.enable(1'b1),
 		.addr(addr_to_flash),
 		.data_in(comdata_shift[15:0]), .data_out(data_from_flash),
 		.enable_read(enable_flash_read),
@@ -144,18 +142,17 @@ module com2flash
 	reg err_flash_too_slow = 0;
 
 	assign led = {state, frame_looper,
-		err_flash_too_slow, uart_RxD_waiting_data,
+		1'b0, err_flash_too_slow, 
 		uart_TxD_busy, uart_RxD_data_ready,
 		enable_flash_erase, enable_flash_read, enable_flash_write,
 		flash_busy};
-	assign baseram_data = uart_enable_recv ? {8{1'bz}} : data_to_com;
 
 	always @(posedge clk) begin
 		if (~rst) begin
 			frame_cnt <= 0;
 			frame_looper <= 0;
 		end
-		else if (uart_enable_recv & uart_RxD_data_ready) begin
+		else if (uart_RxD_data_ready) begin
 			comdata_shift <= {comdata_shift[39:0], data_from_com};
 			frame_cnt <= frame_cnt + 1'b1;
 			frame_looper <= {frame_looper[2:0], !frame_looper[2:0]};
@@ -167,7 +164,6 @@ module com2flash
 			state <= IDLE;
 		else case (state)
 			IDLE: begin
-				uart_enable_recv <= 1;
 				uart_TxD_start <= 0;
 				checksum <= checksum_init;
 				comdata_shift_cnt <= 0;
@@ -199,7 +195,6 @@ module com2flash
 				start_addr <= comdata_shift[FLASH_ADDR_SIZE-1+24:24];
 				end_addr <= comdata_shift[FLASH_ADDR_SIZE-1:0];
 				data_to_com <= checksum;
-				uart_enable_recv <= 0;
 				uart_TxD_start <= 1;
 				checksum <= checksum_init;
 				state <= WAITING_UART_SEND;
@@ -207,7 +202,6 @@ module com2flash
 			end
 
 			WRITE_INIT_TRANSFER: begin
-				uart_enable_recv <= 1;
 				uart_TxD_start <= 0;
 				comdata_shift_cnt[0] <= 0;
 				state <= WRITE_RECV_DATA;
@@ -236,7 +230,6 @@ module com2flash
 				enable_flash_write <= 0;
 				if (!flash_busy) begin
 					data_to_com <= checksum;
-					uart_enable_recv <= 0;
 					uart_TxD_start <= 1;
 					state_after_uart_sent <= IDLE;
 					state <= WAITING_UART_SEND;

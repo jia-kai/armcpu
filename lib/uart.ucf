@@ -1,7 +1,0 @@
-NET "uart_enable_recv" LOC = P24;		# inter0
-NET "uart_TxD_start" LOC = R26;			# inter1
-NET "uart_TxD_busy" LOC = R24;			# inter2
-NET "uart_RxD_data_ready" LOC = R25;	# inter3
-NET "uart_RxD_waiting_data" LOC = R23;	# inter4
-NET "uart_rst" LOC = T26;				# inter5
-
