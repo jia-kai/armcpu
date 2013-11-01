@@ -1,6 +1,6 @@
 /*
  * $File: ram_driver.v
- * $Date: Fri Nov 01 21:26:26 2013 +0800
+ * $Date: Fri Nov 01 21:29:50 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -44,8 +44,8 @@ module ram_driver(
 		extram_ce = ~(enable & ram_selector),
 		baseram_oe = ~(enable & ~ram_selector & ~ram_oe),
 		extram_oe = ~(enable & ram_selector & ~ram_oe),
-		baseram_we = 1, // XXX ~(enable & ~ram_selector & ~ram_we),
-		extram_we = 1; // XXX ~(enable & ram_selector & ~ram_we);
+		baseram_we = ~(enable & ~ram_selector & ~ram_we),
+		extram_we = ~(enable & ram_selector & ~ram_we);
 
 	assign data_out = ram_selector ? extram_data : baseram_data;
 
