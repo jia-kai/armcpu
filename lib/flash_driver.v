@@ -1,6 +1,6 @@
 /*
  * $File: flash_driver.v
- * $Date: Fri Nov 01 20:26:56 2013 +0800
+ * $Date: Fri Nov 01 22:45:16 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -18,9 +18,9 @@ module flash_driver
 	* addr and read in next cycle when busy is 0
 	*/
 	input enable_read,
-	// assert for one cycle to erase; addr woule be latched
+	// assert for one cycle to erase; addr would be latched
 	input enable_erase,
-	// assert for one cycle to write; addr and data woule be latched
+	// assert for one cycle to write; addr and data would be latched
 	input enable_write,
 	/*
 	* indicate whether can start reading in read mode
@@ -75,7 +75,7 @@ module flash_driver
 		SR4 = 4'b1001;
 
 	// XXX: I do not know why correct data can only appear after some time
-	// when read after writing, 
+	// when read after writing
 	reg [2:0] read_wait_cnt;
 	always @(posedge clk) begin
 		case (state)
@@ -184,5 +184,6 @@ module flash_driver
 
 
 endmodule
+
 
 
