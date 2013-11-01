@@ -1,6 +1,6 @@
 /*
  * $File: flash_driver.v
- * $Date: Thu Oct 31 21:19:09 2013 +0800
+ * $Date: Fri Nov 01 08:59:45 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -82,18 +82,18 @@ module flash_driver
 		case (state)
 			IDLE: begin
 				addr_latch <= addr;
-				if (enable_write) begin
+				if (enable & enable_write) begin
 					data_in_latch <= data_in;
 					data_to_write <= 16'h0040;
 					flash_we <= 0;
 					state <= WRITE1;
 					busy <= 1;
-				end else if (enable_erase) begin
+				end else if (enable & enable_erase) begin
 					data_to_write <= 16'h0020;
 					flash_we <= 0;
 					state <= ERASE1;
 					busy <= 1;
-				end else if (enable_read) begin
+				end else if (enable & enable_read) begin
 					data_to_write <= 16'h00FF;
 					flash_we <= 0;
 					state <= READ1;
