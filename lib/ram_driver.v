@@ -1,6 +1,6 @@
 /*
  * $File: ram_driver.v
- * $Date: Fri Nov 01 19:44:07 2013 +0800
+ * $Date: Fri Nov 01 21:26:26 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -44,8 +44,8 @@ module ram_driver(
 		extram_ce = ~(enable & ram_selector),
 		baseram_oe = ~(enable & ~ram_selector & ~ram_oe),
 		extram_oe = ~(enable & ram_selector & ~ram_oe),
-		baseram_we = ~(enable & ~ram_selector & ~ram_we),
-		extram_we = ~(enable & ram_selector & ~ram_we);
+		baseram_we = 1, // XXX ~(enable & ~ram_selector & ~ram_we),
+		extram_we = 1; // XXX ~(enable & ram_selector & ~ram_we);
 
 	assign data_out = ram_selector ? extram_data : baseram_data;
 
@@ -56,18 +56,19 @@ module ram_driver(
 
 	
 	reg [1:0] state;
+	reg [2:0] read_wait;	// just like flash, need to wait before first read
 	localparam IDLE = 2'b00, READ = 2'b01, WRITE0 = 2'b11, WRITE1 = 2'b10;
 
-	assign read_ready = (state == READ);
+	assign read_ready = (state == READ && read_wait[2]);
 
 	always @(posedge clk) begin
 		case (state)
-
 			IDLE: begin
 				write_finished <= 0;
 				if (enable & enable_read) begin
 					ram_oe <= 0;
 					state <= READ;
+					read_wait <= 0;
 				end else if (enable & enable_write) begin
 					addr_latch <= addr;
 					data_latch <= data_in;
@@ -78,9 +79,12 @@ module ram_driver(
 			end
 
 			READ: begin
-				if (!enable_read) begin
+				if (!read_wait[2])
+					read_wait <= read_wait + 1'b1;
+				else if (!enable_read) begin
 					state <= IDLE;
 					ram_oe <= 1;
+					read_wait <= 0;
 				end
 			end
 
