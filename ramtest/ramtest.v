@@ -37,10 +37,11 @@ module ramtest(
 		enable_read_key_prev <= enable_read_key;
 	end
 
+	assign l0 = led[0];
 	wire write_finished, read_ready;
 	always @(posedge clk) begin
 		if (mode_changed_to_write)
-			led[0] <= ~led[0];
+			l0 <= ~l0;
 		if (write_finished)
 			led[1] <= ~led[1];
 		if (read_ready) begin

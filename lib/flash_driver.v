@@ -1,6 +1,6 @@
 /*
  * $File: flash_driver.v
- * $Date: Fri Nov 01 08:59:45 2013 +0800
+ * $Date: Fri Nov 01 20:26:56 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -10,7 +10,6 @@ module flash_driver
 	#(parameter FLASH_ADDR_SIZE = 22)
 	(
 	input clk,
-	input enable,	// assert for enable
 	input [FLASH_ADDR_SIZE - 1:0] addr,
 	input [15:0] data_in,
 	output [15:0] data_out,
@@ -38,14 +37,14 @@ module flash_driver
 
 	reg flash_oe, flash_we;
 
-	wire flash_byte = 1, flash_vpen = 1, flash_ce = ~enable, flash_rp = 1;
+	wire flash_byte = 1, flash_vpen = 1, flash_ce = 0, flash_rp = 1;
 
 	reg [FLASH_ADDR_SIZE - 1:0] addr_latch;	
 	assign flash_addr = {enable_read ? addr : addr_latch, 1'b0};
 	reg [15:0] data_to_write, data_in_latch;	
 
 	// by default, flash_data should be data_to_write, to avoid ruining data
-	// writ setup time
+	// write setup time
 	assign flash_data = flash_oe ? data_to_write : {16{1'bz}};
 
 	assign flash_ctl = {
@@ -82,18 +81,18 @@ module flash_driver
 		case (state)
 			IDLE: begin
 				addr_latch <= addr;
-				if (enable & enable_write) begin
+				if (enable_write) begin
 					data_in_latch <= data_in;
 					data_to_write <= 16'h0040;
 					flash_we <= 0;
 					state <= WRITE1;
 					busy <= 1;
-				end else if (enable & enable_erase) begin
+				end else if (enable_erase) begin
 					data_to_write <= 16'h0020;
 					flash_we <= 0;
 					state <= ERASE1;
 					busy <= 1;
-				end else if (enable & enable_read) begin
+				end else if (enable_read) begin
 					data_to_write <= 16'h00FF;
 					flash_we <= 0;
 					state <= READ1;
@@ -186,29 +185,4 @@ module flash_driver
 
 endmodule
 
-module flash_driver_testbench();
-	reg clk = 0;
-	wire [15:0] data_out;
-	wire busy;
-	wire [22:0] flash_addr;
-	wire [7:0] flash_ctl;
-	reg enable_write = 0;
-	reg enable_erase = 0;
-	wire [15:0] flash_data = {16{1'bz}};
-
-	flash_driver flash_driver_test (.clk(clk),
-	.addr(23'b0),
-	.data_in(16'b0),
-	.data_out(data_out),
-	.enable_read(1'b0),
-	.enable_write(enable_write),
-	.enable_erase(enable_erase),
-	.busy(busy),
-	.flash_addr(flash_addr),
-	.flash_data(flash_data),
-	.flash_ctl(flash_ctl));
-
-	always #10 clk <= ~clk;
-	always #50 enable_erase <= 1;
-endmodule
 

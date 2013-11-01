@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: gen_fsm.py
-# $Date: Mon Oct 28 08:42:49 2013 +0800
+# $Date: Fri Nov 01 17:12:33 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 def gen_gray(tgt_len):
@@ -24,8 +24,9 @@ if __name__ == '__main__':
 
     code_fmt = "{}'b{{:0>{}}}".format(nr_bit, nr_bit).format
 
+    print 'localparam STATE_WIDTH = {};'.format(nr_bit)
     print 'localparam\n\t\t' + ',\n\t\t'.join([
         states[i] + ' = ' +code_fmt(bin(code[i])[2:])
-        for i in range(len(states))])
+        for i in range(len(states))]) + ';'
 
 

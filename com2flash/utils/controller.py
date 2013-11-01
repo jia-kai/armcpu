@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: controller.py
-# $Date: Tue Oct 29 01:04:54 2013 +0800
+# $Date: Fri Nov 01 19:51:22 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import serial
@@ -122,13 +122,16 @@ class SpeedCalc(object):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        sys.exit('usage: {} read|write|erase'.format(sys.argv[0]))
-
     ser = serial.Serial('/dev/ttyUSB0', 115201,
             stopbits=2, parity=serial.PARITY_NONE, timeout=1)
 
     ctl = FlashController(ser)
+    ctl.erase(0)
+    ctl.write_data('jd', 0)
+    print repr(ctl.read_data(0, 4))
+    if len(sys.argv) == 1:
+        sys.exit('usage: {} read|write|erase'.format(sys.argv[0]))
+
     if sys.argv[1] == 'read':
         offset, size = map(int, sys.argv[2:4])
         fout_path = sys.argv[4]
