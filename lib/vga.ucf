@@ -1,0 +1,13 @@
+NET "color_out[0]" LOC = M24;
+NET "color_out[1]" LOC = N25;
+NET "color_out[2]" LOC = N24;
+NET "color_out[3]" LOC = E24;
+NET "color_out[4]" LOC = E25;
+NET "color_out[5]" LOC = E26;
+NET "color_out[6]" LOC = H24;
+NET "color_out[7]" LOC = G24;
+NET "color_out[8]" LOC = F24;
+NET "vsync" LOC = L23;
+NET "hsync" LOC = J23;
+
+NET "clk50M" LOC = U26;

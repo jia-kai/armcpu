@@ -80,3 +80,4 @@ xlnx_*
 xst
 *.xst
 *.xwbt
+*.lst
