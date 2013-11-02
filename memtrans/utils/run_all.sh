@@ -1,6 +1,6 @@
 #!/bin/bash -e
 # $File: run_all.sh
-# $Date: Fri Nov 01 22:31:22 2013 +0800
+# $Date: Sat Nov 02 12:32:26 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 DATA_SIZE=88800
@@ -12,7 +12,7 @@ dd if=/dev/urandom of=$WORKDIR/f1 bs=1 count=$DATA_SIZE
 dd if=/dev/urandom of=$WORKDIR/f2 bs=1 count=$DATA_SIZE
 
 cnt=1
-for start_addr in 128k 5M
+for start_addr in 1M 5M
 do
 	echo "test ram write $start_addr ..."
 	./controller.py ram write $start_addr $WORKDIR/f$cnt
@@ -20,7 +20,7 @@ do
 done
 
 cnt=1
-for start_addr in 128k 5M
+for start_addr in 1M 5M
 do
 	echo "test ram read $start_addr ..."
 	./controller.py ram read $start_addr $DATA_SIZE $WORKDIR/fout
