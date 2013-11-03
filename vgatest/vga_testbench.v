@@ -1,6 +1,6 @@
 /*
  * $File: vga_testbench.v
- * $Date: Sat Nov 02 19:37:52 2013 +0800
+ * $Date: Sat Nov 02 20:59:15 2013 +0800
  * $Author: Xinyu Zhou <zxytim@gmail.com>
  */
 
@@ -18,9 +18,9 @@ module vga_driver_test;
 	always #10 clk50M = !clk50M;
 
 	initial begin
-//        $dumpfile("test.vcd");
-//        $dumpvars(2, vga_driver_test);
-//        #20000000 $finish;
+		$dumpfile("test.vcd");
+		$dumpvars(2, vga_driver_test);
+		#20000000 $finish;
 	end
 
 endmodule

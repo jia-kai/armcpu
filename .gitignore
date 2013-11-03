@@ -81,3 +81,4 @@ xst
 *.xst
 *.xwbt
 *.lst
+*.vcd
