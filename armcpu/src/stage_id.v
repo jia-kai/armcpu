@@ -1,10 +1,10 @@
 /*
  * $File: stage_id.v
- * $Date: Fri Nov 15 16:00:24 2013 +0800
+ * $Date: Fri Nov 15 18:04:17 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
-// instruction decode
+`timescale 1ns/1ps
 
 `include "alu_opt.vh"
 `include "branch_opt.vh"
@@ -15,6 +15,7 @@
 `include "gencode/if2id_param.v"
 `include "gencode/id2ex_param.v"
 
+// instruction decode
 module stage_id(
 	input clk,
 	input rst,
@@ -113,6 +114,8 @@ module stage_id(
 			default:
 				proc_itype();
 		endcase
+		$display("  < -- id -- > time=%g got instruction: next_pc=%h instr=%b",
+			$time, next_pc, instr);
 	end
 
 endmodule

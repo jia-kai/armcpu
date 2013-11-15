@@ -1,10 +1,9 @@
 /*
  * $File: stage_if.v
- * $Date: Fri Nov 15 12:07:22 2013 +0800
+ * $Date: Fri Nov 15 18:04:11 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
-`timescale 1ns/1ps
 `include "gencode/if2id_param.v"
 
 // instruction fetch
@@ -37,8 +36,6 @@ module stage_if(
 			else
 				pc <= next_pc;
 			instr <= mem_data;
-			$display("  < -- if -- > time=%g fetch instruction: pc=%h instr=%b",
-				$time, mem_addr, mem_data);
 		end
 	end
 

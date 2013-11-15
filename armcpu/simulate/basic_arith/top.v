@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Fri Nov 15 11:39:33 2013 +0800
+ * $Date: Fri Nov 15 18:02:33 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -15,7 +15,8 @@ module top;
 
 	cpu ucpu(.clk(clk), .rst(rst),
 		.instrmem_addr(instrmem_addr),
-		.instrmem_data(instrmem_data));
+		.instrmem_data(instrmem_data),
+		.debug_out());
 
 	always @(instrmem_addr)
 		instrmem_data = 32'h24210001; // ADDIU $1, $1, 1
