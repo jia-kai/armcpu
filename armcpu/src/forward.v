@@ -1,6 +1,6 @@
 /*
  * $File: forward.v
- * $Date: Fri Nov 15 12:05:07 2013 +0800
+ * $Date: Fri Nov 15 15:49:10 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -18,6 +18,7 @@ module forward(
 
 	always @(*) begin
 		forward_enable = 0;
+		forward_data = 0;
 		if (ex2mem_wb_src == `WB_SRC_ALU &&
 			ex2mem_wb_reg_addr == alu_opr_reg_addr &&
 				alu_opr_reg_addr != 0) begin

@@ -1,6 +1,6 @@
 /*
  * $File: stage_ex.v
- * $Date: Fri Nov 15 11:13:21 2013 +0800
+ * $Date: Fri Nov 15 15:09:29 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -25,6 +25,9 @@ module stage_ex(
 	input [31:0] reg1_forward_data,
 	input reg2_forward,
 	input [31:0] reg2_forward_data,
+
+	output reg do_branch,
+	output reg [31:0] branch_dest,
 	
 	output [`EX2MEM_WIRE_WIDTH-1:0] interstage_ex2mem);
 
@@ -42,24 +45,29 @@ module stage_ex(
 		.opr2(alu_src == `ALU_SRC_IMM ? alu_sa_imm : reg2_actual_data),
 		.opt(alu_opt), .result(result_from_alu), .illegal_opt());
 
-	always @(mem_opt)
+	always @(posedge clk) begin
+		do_branch <= 0;
 		case(mem_opt)
 			`MEM_OPT_SW:
-				memwrite_opt = `MEMWRITE_OPT_WORD;
+				memwrite_opt <= `MEMWRITE_OPT_WORD;
 			`MEM_OPT_SB:
-				memwrite_opt = `MEMWRITE_OPT_BYTE;
+				memwrite_opt <= `MEMWRITE_OPT_BYTE;
 			default:
-				memwrite_opt = `MEMWRITE_OPT_NONE;
+				memwrite_opt <= `MEMWRITE_OPT_NONE;
 		endcase
-
-	// TODO: branch
-
-	always @(posedge clk) begin
-		alu_result <= result_from_alu;
-		wb_src_ex2mem <= wb_src_id2ex;
-		wb_reg_addr_ex2mem <= wb_reg_addr_id2ex;
-		mem_addr <= reg1_actual_data + {{16{alu_sa_imm[15]}}, alu_sa_imm};
-		mem_data <= reg2_actual_data;
+		if (branch_opt_id2ex == `BRANCH_NONE) begin
+			alu_result <= result_from_alu;
+			wb_src_ex2mem <= wb_src_id2ex;
+			wb_reg_addr_ex2mem <= wb_reg_addr_id2ex;
+			mem_addr <= reg1_actual_data + {{16{alu_sa_imm[15]}}, alu_sa_imm};
+			mem_data <= reg2_actual_data;
+		end else if (
+				(branch_opt_id2ex == `BRANCH_ON_ALU_EQZ && !result_from_alu) ||
+				(branch_opt_id2ex == `BRANCH_ON_ALU_NEZ && result_from_alu) ||
+				(branch_opt_id2ex == `BRANCH_UNCOND)) begin
+			do_branch <= 1;
+			branch_dest <= branch_dest_id2ex;
+		end
 	end
 
 endmodule

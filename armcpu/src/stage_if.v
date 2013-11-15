@@ -1,6 +1,6 @@
 /*
  * $File: stage_if.v
- * $Date: Fri Nov 15 11:26:29 2013 +0800
+ * $Date: Fri Nov 15 12:07:22 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -37,7 +37,7 @@ module stage_if(
 			else
 				pc <= next_pc;
 			instr <= mem_data;
-			$display("time=%g fetch instruction: pc=%h instr=%b",
+			$display("  < -- if -- > time=%g fetch instruction: pc=%h instr=%b",
 				$time, mem_addr, mem_data);
 		end
 	end
