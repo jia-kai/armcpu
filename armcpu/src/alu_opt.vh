@@ -1,6 +1,6 @@
 /*
  * $File: alu_opt.vh
- * $Date: Fri Nov 15 14:29:56 2013 +0800
+ * $Date: Fri Nov 15 18:09:37 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -15,5 +15,6 @@
 `define ALU_OPT_DISABLE	6'h00
 `define ALU_OPT_ADDU	6'h21
 `define ALU_OPT_SUBU	6'h23
+`define ALU_OPT_OR		6'h25
 
 // vim: ft=verilog

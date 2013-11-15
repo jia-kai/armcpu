@@ -1,6 +1,6 @@
 /*
  * $File: alu.v
- * $Date: Fri Nov 15 14:30:15 2013 +0800
+ * $Date: Fri Nov 15 18:11:24 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -23,6 +23,8 @@ module alu(
 				result = opr1 + opr2;
 			`ALU_OPT_SUBU:
 				result = opr1 - opr2;
+			`ALU_OPT_OR:
+				result = opr1 | opr2;
 			default:
 				illegal_opt = 1;
 		endcase
