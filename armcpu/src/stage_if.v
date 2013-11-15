@@ -1,9 +1,10 @@
 /*
  * $File: stage_if.v
- * $Date: Fri Nov 15 10:33:35 2013 +0800
+ * $Date: Fri Nov 15 11:26:29 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
+`timescale 1ns/1ps
 `include "gencode/if2id_param.v"
 
 // instruction fetch
@@ -27,15 +28,18 @@ module stage_if(
 	assign mem_addr = branch ? branch_dest : pc;
 
 	always @(posedge clk) begin
-		if (rst)
+		if (rst) begin
+			instr <= 0;
 			pc <= 0;
-		else if (branch)
-			pc <= branch_dest;
-		else
-			pc <= next_pc;
-		instr <= mem_data;
-		$display("fetch instruction: pc=%h instr=%b",
-			next_pc, mem_data);
+		end else begin
+			if (branch)
+				pc <= branch_dest;
+			else
+				pc <= next_pc;
+			instr <= mem_data;
+			$display("time=%g fetch instruction: pc=%h instr=%b",
+				$time, mem_addr, mem_data);
+		end
 	end
 
 endmodule

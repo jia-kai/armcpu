@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Fri Nov 15 10:46:58 2013 +0800
+ * $Date: Fri Nov 15 11:40:42 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -45,7 +45,7 @@ module stage_id(
 
 	register_file uregfile(.clk(clk), .rst(rst),
 		.read1_addr(instr_rs), .read2_addr(instr_rt),
-		.write_addr(reg_write_addr), .enable_write(reg_write_addr != 0),
+		.write_addr(reg_write_addr), 
 		.data_in(reg_write_data),
 		.data_out1(rf_data1), .data_out2(rf_data2));
 
