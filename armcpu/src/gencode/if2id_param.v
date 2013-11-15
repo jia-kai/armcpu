@@ -1,0 +1,1 @@
+`define IF2ID_WIRE_WIDTH (64)
