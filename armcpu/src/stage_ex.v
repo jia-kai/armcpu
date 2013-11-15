@@ -1,10 +1,10 @@
 /*
  * $File: stage_ex.v
- * $Date: Fri Nov 15 15:09:29 2013 +0800
+ * $Date: Fri Nov 15 19:46:35 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
-// instruction execution stage
+`timescale 1ns/1ps
 
 `include "common.vh"
 `include "alu_opt.vh"
@@ -15,6 +15,7 @@
 `include "gencode/id2ex_param.v"
 `include "gencode/ex2mem_param.v"
 
+// instruction execution stage
 module stage_ex(
 	input clk,
 	input rst,

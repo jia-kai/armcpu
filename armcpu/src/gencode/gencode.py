@@ -1,17 +1,15 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: gencode.py
-# $Date: Fri Nov 15 15:03:19 2013 +0800
+# $Date: Fri Nov 15 19:19:53 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import os
 import os.path
 from collections import namedtuple
 
-noreg = namedtuple('noreg', ['var', 'width'])
-
 trans_if2id = [
-    noreg('next_pc', 32),
+    ('next_pc', 32),
     ('instr', 32)
 ]
 
@@ -63,31 +61,23 @@ def gen_code(name, desc):
                 name.upper(), '+'.join(width_list))
 
     var_group_list = '{{ {} }}'.format(','.join(var for var, _ in desc))
-    with open('{}_extract_store.v'.format(name), 'w') as fout:
+
+    def gen_var_def(t, fout):
         for i in desc:
             var, width = i
             if isinstance(width, int):
                 width -= 1
             else:
                 width = '`{}-1'.format(width)
-            if isinstance(i, noreg):
-                print >>fout, 'wire [{}:0] {};'.format(width, var)
-            else:
-                print >>fout, 'reg [{}:0] {};'.format(width, var)
+            print >>fout, '{} [{}:0] {};'.format(t, width, var)
 
+    with open('{}_extract_store.v'.format(name), 'w') as fout:
+        gen_var_def('reg', fout)
         print >>fout, 'assign interstage_{} = {};'.format(
                 name, var_group_list)
 
     with open('{}_extract_load.v'.format(name), 'w') as fout:
-        item = []
-        for i in desc:
-            var, width = i
-            if isinstance(width, int):
-                width -= 1
-            else:
-                width = '`{}-1'.format(width)
-            print >>fout, 'wire [{}:0] {};'.format(width, var)
-
+        gen_var_def('wire', fout)
         print >>fout, 'assign {} = interstage_{};'.format(
                 var_group_list, name)
 

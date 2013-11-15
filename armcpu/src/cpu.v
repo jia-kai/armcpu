@@ -1,8 +1,10 @@
 /*
  * $File: cpu.v
- * $Date: Fri Nov 15 16:00:57 2013 +0800
+ * $Date: Fri Nov 15 20:00:38 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
+
+`timescale 1ns/1ps
 
 `include "common.vh"
 `include "wb_src.vh"
@@ -46,12 +48,16 @@ module cpu(
 		.ex2mem_alu_result(ex2mem_alu_result),
 		.ex2mem_wb_reg_addr(ex2mem_wb_reg_addr),
 		.ex2mem_wb_src(ex2mem_wb_src),
+		.regfile_write_addr(wb_addr),
+		.regfile_write_data(wb_data),
 		.forward_enable(ex_reg1_forward),
 		.forward_data(ex_reg1_forward_data));
 	forward ufwd2(.alu_opr_reg_addr(ex_reg2_addr),
 		.ex2mem_alu_result(ex2mem_alu_result),
 		.ex2mem_wb_reg_addr(ex2mem_wb_reg_addr),
 		.ex2mem_wb_src(ex2mem_wb_src),
+		.regfile_write_addr(wb_addr),
+		.regfile_write_data(wb_data),
 		.forward_enable(ex_reg2_forward),
 		.forward_data(ex_reg2_forward_data));
 

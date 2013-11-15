@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Fri Nov 15 18:28:51 2013 +0800
+ * $Date: Fri Nov 15 20:31:27 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -38,11 +38,9 @@ module stage_id(
 
 	wire [31:0] rf_data1, rf_data2;
 
-	wire [5:0] instr_opcode = instr[31:26];
+	wire [5:0] instr_opcode = instr[31:26], instr_func = instr[5:0];
 	wire [4:0] instr_rs = instr[25:21], instr_rt = instr[20:16],
-				instr_rd = instr[15:11],
-				instr_sa = instr[10:6],
-				instr_func = instr[5:0];
+				instr_rd = instr[15:11], instr_sa = instr[10:6];
 	wire [15:0] instr_imm = instr[15:0];
 
 	wire [31:0] branch_absolute_addr =
@@ -100,6 +98,11 @@ module stage_id(
 		endcase
 	end endtask
 
+	task proc_instr_j; begin
+		branch_opt_id2ex <= `BRANCH_UNCOND;
+		branch_dest_id2ex <= {next_pc[31:28], instr[25:0], 2'b00};
+	end endtask
+
 	always @(posedge clk) begin
 		branch_opt_id2ex <= `BRANCH_NONE;
 		wb_reg_addr_id2ex <= 0;
@@ -110,11 +113,13 @@ module stage_id(
 		case (instr_opcode)
 			6'b000000:
 				proc_rtype();
+			6'b000010:
+				proc_instr_j();
 			// TODO: coprocessor
 			default:
 				proc_itype();
 		endcase
-		$display("  < -- id -- > time=%g got instruction: next_pc=%h instr=%b",
+		$display("\033[32m < -- id -- > time=%g got instruction: next_pc=%h instr=%h \033[0m",
 			$time, next_pc, instr);
 	end
 
