@@ -1,2 +1,2 @@
 regfile is always written when addr != 0 on negedge, regardless of stall
-branch flag should be set by combinational logic
+branch flag and set_stall should be set by combinational logic

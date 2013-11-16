@@ -1,6 +1,6 @@
 /*
  * $File: cpu.v
- * $Date: Sat Nov 16 09:49:07 2013 +0800
+ * $Date: Sat Nov 16 17:11:39 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -20,10 +20,22 @@ module cpu(
 	input clk,
 	input rst,
 
-	output [31:0] instrmem_addr,
-	input [31:0] instrmem_data,
+	// connected to physical memory controller
+	output [31:0] dev_mem_addr,
+	input [31:0] dev_mem_data_in,
+	output [31:0] dev_mem_data_out,
+	output dev_mem_is_write,
+	input dev_mem_busy,
 
 	output [31:0] debug_out);
+
+	// -------------------------------------------------------------------
+
+	wire [31:0] instrmem_addr, instrmem_data,
+		datamem_addr,
+		datamem_data_to_mem, datamem_data_from_mem;
+	wire mmu_busy;
+	wire [`MEM_OPT_WIDTH-1:0] datamem_opt;
 
 	wire [`IF2ID_WIRE_WIDTH-1:0] interstage_if2id;
 	wire [`ID2EX_WIRE_WIDTH-1:0] interstage_id2ex;
@@ -89,11 +101,21 @@ module cpu(
 		.interstage_ex2mem(interstage_ex2mem),
 		.wb_reg_addr(wb_addr), .wb_reg_data(wb_data),
 		.set_stall(stall),
-		.memdev_addr(),
-		.memdev_data_in(32'b0),
-		.memdev_data_out(),
-		.memdev_opt(),
-		.memdev_busy(1'b0));
+		.mmu_addr(datamem_addr),
+		.mmu_data_in(datamem_data_from_mem),
+		.mmu_data_out(datamem_data_to_mem),
+		.mmu_opt(datamem_opt),
+		.mmu_busy(mmu_busy));
 
+	mmu ummu(.clk(clk), .rst(rst),
+		.instr_addr(instrmem_addr), .instr_out(instrmem_data),
+		.data_opt(datamem_opt), .data_addr(datamem_addr),
+		.data_in(datamem_data_to_mem), .data_out(datamem_data_from_mem),
+		.busy(mmu_busy),
+		.dev_mem_addr(dev_mem_addr),
+		.dev_mem_data_in(dev_mem_data_in),
+		.dev_mem_data_out(dev_mem_data_out),
+		.dev_mem_is_write(dev_mem_is_write),
+		.dev_mem_busy(dev_mem_busy));
 endmodule
 

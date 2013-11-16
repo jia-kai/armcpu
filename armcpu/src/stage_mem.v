@@ -1,6 +1,6 @@
 /*
  * $File: stage_mem.v
- * $Date: Sat Nov 16 09:52:48 2013 +0800
+ * $Date: Sat Nov 16 17:22:27 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -20,46 +20,47 @@ module stage_mem(
 	output reg [`REGADDR_WIDTH-1:0] wb_reg_addr,
 	output reg [31:0] wb_reg_data,
 
-	output set_stall,	// must be updated before negedge
+	output set_stall,
 
-	// connected to memory device
-	output reg [31:0] memdev_addr,
-	input [31:0] memdev_data_in,
-	output reg [31:0] memdev_data_out,
-	output reg [`MEM_OPT_WIDTH-1:0] memdev_opt,
-	input memdev_busy);
+	// interface to MMU
+	output reg [31:0] mmu_addr,
+	input [31:0] mmu_data_in,
+	output reg [31:0] mmu_data_out,
+	output reg [`MEM_OPT_WIDTH-1:0] mmu_opt,
+	input mmu_busy);
 
 	`include "gencode/ex2mem_extract_load.v"
 
-	reg [1:0] state;
-	localparam READY = 2'b00, WAIT_BUSY = 2'b01, WAIT_UNBUSY = 2'b10;
+	reg state;
+	localparam READY = 1'b0, WAIT_UNBUSY = 1'b1;
 
 	assign set_stall = (state != READY);
 
 	always @(posedge clk) begin
 		wb_reg_addr <= 0;
-		if (rst)
+		if (rst) begin
 			state <= READY;
+			mmu_opt <= `MEM_OPT_NONE;
+		end
 		else case (state)
 			READY: begin
 				if (!stall) begin
 					wb_reg_addr <= wb_reg_addr_ex2mem;
 					wb_reg_data <= alu_result;
-					memdev_opt <= mem_opt_ex2mem;
-					memdev_addr <= mem_addr;
-					memdev_data_out <= alu_result;
+					mmu_opt <= mem_opt_ex2mem;
+					mmu_addr <= mem_addr;
+					mmu_data_out <= alu_result;
 					if (mem_opt_ex2mem != `MEM_OPT_NONE)
-						state <= WAIT_BUSY;
+						state <= WAIT_UNBUSY;
 				end
 			end
-			WAIT_BUSY:
-				if (memdev_busy)
-					state <= WAIT_UNBUSY;
-			WAIT_UNBUSY:
-				if (!memdev_busy) begin
+			WAIT_UNBUSY: begin
+				mmu_opt <= `MEM_OPT_NONE;
+				if (!mmu_busy) begin
+					wb_reg_data <= mmu_data_in;
 					state <= READY;
-					wb_reg_data <= memdev_data_in;
 				end
+			end
 		endcase
 	end
 
