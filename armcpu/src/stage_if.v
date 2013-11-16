@@ -1,6 +1,6 @@
 /*
  * $File: stage_if.v
- * $Date: Fri Nov 15 19:39:56 2013 +0800
+ * $Date: Sat Nov 16 10:11:23 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -10,12 +10,13 @@
 module stage_if(
 	input clk,
 	input rst,
+	input stall,
 	input branch,
 	input [31:0] branch_dest,
 
 	output [`IF2ID_WIRE_WIDTH-1:0] interstage_if2id,
 	
-	// mem_data must be ready before posedge for the mem_addr
+	// mem_data must be asynchronously updated for mem_addr
 	output [31:0] mem_addr,
 	input [31:0] mem_data);
 
@@ -24,17 +25,15 @@ module stage_if(
 	reg [31:0] pc;
 
 	assign mem_addr = branch ? branch_dest : pc;
+    wire [31:0] pc_plus_4 = mem_addr + 4;
 
-	always @(negedge clk) begin
+	always @(posedge clk) begin
 		if (rst) begin
 			instr <= 0;
 			pc <= 0;
-		end else begin
-			if (branch) 
-				pc <= branch_dest;
-			else 
-				pc <= pc + 4;
-			next_pc <= mem_addr + 4;
+		end else if (!stall) begin
+            pc <= pc_plus_4;
+			next_pc <= pc_plus_4;
 			instr <= mem_data;
 		end
 	end

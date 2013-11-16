@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Fri Nov 15 20:31:27 2013 +0800
+ * $Date: Sat Nov 16 09:42:14 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -19,6 +19,7 @@
 module stage_id(
 	input clk,
 	input rst,
+	input stall,
 
 	input [`IF2ID_WIRE_WIDTH-1:0] interstage_if2id,
 
@@ -28,7 +29,9 @@ module stage_id(
 	input [31:0] reg_write_data,
 
 	output reg [`REGADDR_WIDTH-1:0] reg1_addr,
+	output reg [31:0] reg1_data,
 	output reg [`REGADDR_WIDTH-1:0] reg2_addr,
+	output reg [31:0] reg2_data,
 
 	output [`ID2EX_WIRE_WIDTH-1:0] interstage_id2ex,
 	output [31:0] debug_out);
@@ -109,18 +112,20 @@ module stage_id(
 		alu_opt <= `ALU_OPT_DISABLE;
 		reg1_addr <= 0;
 		reg2_addr <= 0;
-		mem_opt <= `MEM_OPT_NONE;
-		case (instr_opcode)
-			6'b000000:
-				proc_rtype();
-			6'b000010:
-				proc_instr_j();
-			// TODO: coprocessor
-			default:
-				proc_itype();
-		endcase
-		$display("\033[32m < -- id -- > time=%g got instruction: next_pc=%h instr=%h \033[0m",
-			$time, next_pc, instr);
+		mem_opt_id2ex <= `MEM_OPT_NONE;
+		if (!stall) begin
+			case (instr_opcode)
+				6'b000000:
+					proc_rtype();
+				6'b000010:
+					proc_instr_j();
+				// TODO: coprocessor
+				default:
+					proc_itype();
+			endcase
+			$display("\033[32m < -- id -- > time=%g got instruction: next_pc=%h instr=%h \033[0m",
+				$time, next_pc, instr);
+		end
 	end
 
 endmodule

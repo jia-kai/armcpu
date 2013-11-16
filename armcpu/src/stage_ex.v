@@ -1,6 +1,6 @@
 /*
  * $File: stage_ex.v
- * $Date: Fri Nov 15 19:46:35 2013 +0800
+ * $Date: Sat Nov 16 09:59:03 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -19,16 +19,15 @@
 module stage_ex(
 	input clk,
 	input rst,
+	input stall,
 
 	input [`ID2EX_WIRE_WIDTH-1:0] interstage_id2ex,
 
-	input reg1_forward,
-	input [31:0] reg1_forward_data,
-	input reg2_forward,
-	input [31:0] reg2_forward_data,
+	input [31:0] reg1_data,
+	input [31:0] reg2_data,
 
-	output reg do_branch,
-	output reg [31:0] branch_dest,
+	output do_branch,
+	output [31:0] branch_dest,
 	
 	output [`EX2MEM_WIRE_WIDTH-1:0] interstage_ex2mem);
 
@@ -37,37 +36,28 @@ module stage_ex(
 
 	wire [31:0] result_from_alu;
 
-	wire [31:0]
-		reg1_actual_data = reg1_forward ? reg1_forward_data : reg1_data,
-		reg2_actual_data = reg2_forward ? reg2_forward_data : reg2_data;
-
 	alu alu_unit(
-		.opr1(reg1_actual_data),
-		.opr2(alu_src == `ALU_SRC_IMM ? alu_sa_imm : reg2_actual_data),
+		.opr1(reg1_data),
+		.opr2(alu_src == `ALU_SRC_IMM ? alu_sa_imm : reg2_data),
 		.opt(alu_opt), .result(result_from_alu), .illegal_opt());
 
+
+	assign do_branch = (
+		(branch_opt_id2ex == `BRANCH_ON_ALU_EQZ && !result_from_alu) ||
+		(branch_opt_id2ex == `BRANCH_ON_ALU_NEZ && result_from_alu) ||
+		(branch_opt_id2ex == `BRANCH_UNCOND));
+	assign branch_dest = branch_dest_id2ex;
+
 	always @(posedge clk) begin
-		do_branch <= 0;
-		case(mem_opt)
-			`MEM_OPT_SW:
-				memwrite_opt <= `MEMWRITE_OPT_WORD;
-			`MEM_OPT_SB:
-				memwrite_opt <= `MEMWRITE_OPT_BYTE;
-			default:
-				memwrite_opt <= `MEMWRITE_OPT_NONE;
-		endcase
-		if (branch_opt_id2ex == `BRANCH_NONE) begin
+		mem_opt_ex2mem <= `MEM_OPT_NONE;
+		wb_reg_addr_ex2mem <= 0;
+		if (!stall) begin
+			mem_opt_ex2mem <= mem_opt_id2ex;
 			alu_result <= result_from_alu;
 			wb_src_ex2mem <= wb_src_id2ex;
 			wb_reg_addr_ex2mem <= wb_reg_addr_id2ex;
-			mem_addr <= reg1_actual_data + {{16{alu_sa_imm[15]}}, alu_sa_imm};
-			mem_data <= reg2_actual_data;
-		end else if (
-				(branch_opt_id2ex == `BRANCH_ON_ALU_EQZ && !result_from_alu) ||
-				(branch_opt_id2ex == `BRANCH_ON_ALU_NEZ && result_from_alu) ||
-				(branch_opt_id2ex == `BRANCH_UNCOND)) begin
-			do_branch <= 1;
-			branch_dest <= branch_dest_id2ex;
+			mem_addr <= reg1_data + {{16{alu_sa_imm[15]}}, alu_sa_imm};
+			mem_data <= reg2_data;
 		end
 	end
 
