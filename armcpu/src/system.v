@@ -1,6 +1,6 @@
 /*
  * $File: system.v
- * $Date: Sat Nov 16 16:41:01 2013 +0800
+ * $Date: Sat Nov 16 23:15:20 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -9,6 +9,8 @@
 module system(
 	input clk,
 	input rst,
+
+	output [31:0] debug_out,
 
 	// ram interface
 	output [19:0] baseram_addr,
@@ -32,7 +34,7 @@ module system(
 		.dev_mem_data_out(data_to_mem),
 		.dev_mem_is_write(mem_is_write),
 		.dev_mem_busy(mem_busy),
-		.debug_out());
+		.debug_out(debug_out));
 
 	phy_mem_ctrl umem(.clk(clk), .rst(rst),
 		.is_write(mem_is_write), .addr(mem_addr),

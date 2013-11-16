@@ -1,0 +1,101 @@
+# vsim -do {run 200ns; quit} -c top 
+# Loading work.top
+# Loading work.ram_sim
+# Loading work.system
+# Loading work.cpu
+# Loading work.forward
+# Loading work.stage_if
+# Loading work.stage_id
+# Loading work.register_file
+# Loading work.stage_ex
+# Loading work.alu
+# Loading work.stage_mem
+# Loading work.mmu
+# Loading work.phy_mem_ctrl
+# run 200ns 
+# initial mem dump: 00000000: 24040104
+# initial mem dump: 00000001: 24050001
+# initial mem dump: 00000002: ac85fffc
+# initial mem dump: 00000003: ac850000
+# initial mem dump: 00000004: 8c85fffc
+# initial mem dump: 00000005: 8c860000
+# initial mem dump: 00000006: 00a63821
+# initial mem dump: 00000007: 24840004
+# initial mem dump: 00000008: 08000004
+# initial mem dump: 00000009: ac870000
+# time=0 debug_out=xxxxxxxx
+# time=1 reg1($at)=00000000
+# time=1 reg2($v0)=00000000
+# time=1 reg3($v1)=00000000
+# time=1 reg4($a0)=00000000
+# time=1 reg5($a1)=00000000
+# time=1 reg6($a2)=00000000
+# time=1 reg7($a3)=00000000
+# time=1 debug_out=00000000
+# [32m < -- id -- > time=3 got instruction: pc=xxxxxxxx instr=00000000 [0m
+# [32m < -- id -- > time=5 got instruction: pc=00000000 instr=24040104 [0m
+# [32m < -- id -- > time=7 got instruction: pc=00000004 instr=24050001 [0m
+# [32m < -- id -- > time=9 got instruction: pc=00000008 instr=ac85fffc [0m
+# time=9 reg4($a0)=00000104
+# [32m < -- id -- > time=11 got instruction: pc=0000000c instr=ac850000 [0m
+# time=11 reg5($a1)=00000001
+# [31m <-- mem --> time=16 write: addr=00040 data=00000001[0m
+# [32m < -- id -- > time=31 got instruction: pc=00000010 instr=8c85fffc [0m
+# [31m <-- mem --> time=36 write: addr=00041 data=00000001[0m
+# [32m < -- id -- > time=51 got instruction: pc=00000014 instr=8c860000 [0m
+# [32m < -- id -- > time=55 got instruction: pc=00000018 instr=00a63821 [0m
+# [32m < -- id -- > time=59 got instruction: pc=0000001c instr=24840004 [0m
+# time=59 reg6($a2)=00000001
+# [32m < -- id -- > time=61 got instruction: pc=00000020 instr=08000004 [0m
+# time=61 reg7($a3)=00000002
+# time=61 debug_out=00000002
+# [32m < -- id -- > time=63 got instruction: pc=00000024 instr=ac870000 [0m
+# time=63 reg4($a0)=00000108
+# [32m < -- id -- > time=65 got instruction: pc=00000010 instr=8c85fffc [0m
+# [31m <-- mem --> time=70 write: addr=00042 data=00000002[0m
+# [32m < -- id -- > time=85 got instruction: pc=00000014 instr=8c860000 [0m
+# [32m < -- id -- > time=89 got instruction: pc=00000018 instr=00a63821 [0m
+# [32m < -- id -- > time=93 got instruction: pc=0000001c instr=24840004 [0m
+# time=93 reg6($a2)=00000002
+# [32m < -- id -- > time=95 got instruction: pc=00000020 instr=08000004 [0m
+# time=95 reg7($a3)=00000003
+# time=95 debug_out=00000003
+# [32m < -- id -- > time=97 got instruction: pc=00000024 instr=ac870000 [0m
+# time=97 reg4($a0)=0000010c
+# [32m < -- id -- > time=99 got instruction: pc=00000010 instr=8c85fffc [0m
+# [31m <-- mem --> time=104 write: addr=00043 data=00000003[0m
+# [32m < -- id -- > time=119 got instruction: pc=00000014 instr=8c860000 [0m
+# [32m < -- id -- > time=123 got instruction: pc=00000018 instr=00a63821 [0m
+# time=123 reg5($a1)=00000002
+# [32m < -- id -- > time=127 got instruction: pc=0000001c instr=24840004 [0m
+# time=127 reg6($a2)=00000003
+# [32m < -- id -- > time=129 got instruction: pc=00000020 instr=08000004 [0m
+# time=129 reg7($a3)=00000005
+# time=129 debug_out=00000005
+# [32m < -- id -- > time=131 got instruction: pc=00000024 instr=ac870000 [0m
+# time=131 reg4($a0)=00000110
+# [32m < -- id -- > time=133 got instruction: pc=00000010 instr=8c85fffc [0m
+# [31m <-- mem --> time=138 write: addr=00044 data=00000005[0m
+# [32m < -- id -- > time=153 got instruction: pc=00000014 instr=8c860000 [0m
+# [32m < -- id -- > time=157 got instruction: pc=00000018 instr=00a63821 [0m
+# time=157 reg5($a1)=00000003
+# [32m < -- id -- > time=161 got instruction: pc=0000001c instr=24840004 [0m
+# time=161 reg6($a2)=00000005
+# [32m < -- id -- > time=163 got instruction: pc=00000020 instr=08000004 [0m
+# time=163 reg7($a3)=00000008
+# time=163 debug_out=00000008
+# [32m < -- id -- > time=165 got instruction: pc=00000024 instr=ac870000 [0m
+# time=165 reg4($a0)=00000114
+# [32m < -- id -- > time=167 got instruction: pc=00000010 instr=8c85fffc [0m
+# [31m <-- mem --> time=172 write: addr=00045 data=00000008[0m
+# [32m < -- id -- > time=187 got instruction: pc=00000014 instr=8c860000 [0m
+# [32m < -- id -- > time=191 got instruction: pc=00000018 instr=00a63821 [0m
+# time=191 reg5($a1)=00000005
+# [32m < -- id -- > time=195 got instruction: pc=0000001c instr=24840004 [0m
+# time=195 reg6($a2)=00000008
+# [32m < -- id -- > time=197 got instruction: pc=00000020 instr=08000004 [0m
+# time=197 reg7($a3)=0000000d
+# time=197 debug_out=0000000d
+# [32m < -- id -- > time=199 got instruction: pc=00000024 instr=ac870000 [0m
+# time=199 reg4($a0)=00000118
+#  quit 

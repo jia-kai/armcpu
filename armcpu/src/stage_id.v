@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Sat Nov 16 21:29:01 2013 +0800
+ * $Date: Sat Nov 16 23:40:16 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -8,7 +8,6 @@
 
 `include "alu_opt.vh"
 `include "branch_opt.vh"
-`include "wb_src.vh"
 `include "mem_opt.vh"
 `include "common.vh"
 
@@ -70,7 +69,6 @@ module stage_id(
 
 	// process rtype instructions
 	task proc_rtype; begin
-		wb_src_id2ex <= `WB_SRC_ALU;
 		wb_reg_addr_id2ex <= instr_rd;
 		assign_reg1();
 		assign_reg2();
@@ -90,29 +88,20 @@ module stage_id(
 		alu_sa_imm <= imm;
 	end endtask
 
-	task wb_from_alu; begin
-		wb_src_id2ex <= `WB_SRC_ALU;
-		wb_reg_addr_id2ex <= instr_rt;
-	end endtask
-
-	task wb_from_mem; begin
-		wb_src_id2ex <= `WB_SRC_MEM;
-		wb_reg_addr_id2ex <= instr_rt;
-	end endtask
 
 	task mem_opt(input [`MEM_OPT_WIDTH-1:0] opt); begin
 		assign_reg1();
 		assign_reg2();
 		alu_from_imm(`ALU_OPT_ADDU, instr_imm_signext);
 		if (`MEM_OPT_IS_READ(opt))
-			wb_from_mem();
+			wb_reg_addr_id2ex <= instr_rt;
 		mem_opt_id2ex <= opt;
 	end endtask
 
 	task wb_with_alu_imm(input [`ALU_OPT_WIDTH-1:0] alu_opt, input [31:0] imm); begin
+		wb_reg_addr_id2ex <= instr_rt;
 		assign_reg1();
 		alu_from_imm(alu_opt, imm);
-		wb_from_alu();
 	end endtask
 
 	// process itype instructions

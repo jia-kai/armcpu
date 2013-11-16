@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: gencode.py
-# $Date: Sat Nov 16 19:57:42 2013 +0800
+# $Date: Sat Nov 16 23:33:01 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import os
@@ -23,16 +23,14 @@ trans_id2ex = [
 
     ('mem_opt_id2ex', 'MEM_OPT_WIDTH'),
 
-    ('wb_src_id2ex', 'WB_SRC_WIDTH'),
     ('wb_reg_addr_id2ex', 'REGADDR_WIDTH')
 ]
 
 trans_ex2mem = [
-    ('mem_opt_ex2mem', 'MEM_OPT_WIDTH'),
     ('mem_addr_ex2mem', 32),
     ('mem_data_ex2mem', 32),
 
-    ('wb_src_ex2mem', 'WB_SRC_WIDTH'),
+    ('mem_opt_ex2mem', 'MEM_OPT_WIDTH'),
     ('wb_reg_addr_ex2mem', 'REGADDR_WIDTH'),
 
     ('alu_result', 32)

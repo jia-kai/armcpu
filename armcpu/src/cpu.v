@@ -1,13 +1,12 @@
 /*
  * $File: cpu.v
- * $Date: Sat Nov 16 20:30:34 2013 +0800
+ * $Date: Sat Nov 16 23:47:01 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 `timescale 1ns/1ps
 
 `include "common.vh"
-`include "wb_src.vh"
 `include "branch_opt.vh"
 `include "alu_opt.vh"
 `include "mem_opt.vh"
@@ -45,7 +44,8 @@ module cpu(
 	wire [31:0] wb_data;
 
 	wire [`REGADDR_WIDTH-1:0] id2ex_reg1_addr, id2ex_reg2_addr, ex2mem_wb_reg_addr;
-	wire [`WB_SRC_WIDTH-1:0] ex2mem_wb_src;
+	wire [`MEM_OPT_WIDTH-1:0] ex2mem_mem_opt;
+	assign ex2mem_wb_from_alu = ex2mem_mem_opt == `MEM_OPT_NONE;
 	wire [31:0] id2ex_reg1_data, id2ex_reg1_forward_data,
 		id2ex_reg2_data, id2ex_reg2_forward_data;
 	wire [31:0] ex2mem_alu_result = interstage_ex2mem[31:0];
@@ -55,15 +55,15 @@ module cpu(
 
 	wire stall;
 
-	assign {ex2mem_wb_src, ex2mem_wb_reg_addr} = 
-		interstage_ex2mem[`WB_SRC_WIDTH+`REGADDR_WIDTH+31:32];
+	assign {ex2mem_mem_opt, ex2mem_wb_reg_addr} = 
+		interstage_ex2mem[`MEM_OPT_WIDTH+`REGADDR_WIDTH+31:32];
 
 	forward ufwd1(
 		.opr_reg_addr(id2ex_reg1_addr),
 		.opr_reg_data(id2ex_reg1_data),
 		.ex2mem_alu_result(ex2mem_alu_result),
 		.ex2mem_wb_reg_addr(ex2mem_wb_reg_addr),
-		.ex2mem_wb_src(ex2mem_wb_src),
+		.ex2mem_wb_from_alu(ex2mem_wb_from_alu),
 		.regfile_write_addr(wb_addr),
 		.regfile_write_data(wb_data),
 		.forward_data(id2ex_reg1_forward_data));
@@ -72,7 +72,7 @@ module cpu(
 		.opr_reg_data(id2ex_reg2_data),
 		.ex2mem_alu_result(ex2mem_alu_result),
 		.ex2mem_wb_reg_addr(ex2mem_wb_reg_addr),
-		.ex2mem_wb_src(ex2mem_wb_src),
+		.ex2mem_wb_from_alu(ex2mem_wb_from_alu),
 		.regfile_write_addr(wb_addr),
 		.regfile_write_data(wb_data),
 		.forward_data(id2ex_reg2_forward_data));

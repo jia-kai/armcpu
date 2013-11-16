@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Sat Nov 16 21:30:33 2013 +0800
+ * $Date: Sat Nov 16 23:16:27 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -15,6 +15,8 @@ module top;
 	wire baseram_ce, baseram_oe, baseram_we,
 		extram_ce, extram_oe, extram_we;
 
+	wire [31:0] debug_out;
+
 	ram_sim #(.IMAGE_FILE("prog.bin"))
 		ubaseram(
 		.addr(baseram_addr), .data(baseram_data),
@@ -24,7 +26,7 @@ module top;
 		.addr(extram_addr), .data(extram_data),
 		.ce(extram_ce), .oe(extram_oe), .we(extram_we));
 
-	system usystem(.clk(clk), .rst(rst),
+	system usystem(.clk(clk), .rst(rst), .debug_out(debug_out),
 		.baseram_addr(baseram_addr), .baseram_data(baseram_data),
 		.baseram_ce(baseram_ce), .baseram_oe(baseram_oe), .baseram_we(baseram_we),
 		.extram_addr(extram_addr), .extram_data(extram_data),
@@ -36,6 +38,8 @@ module top;
 		$dumpfile("dump.vcd");
 		$dumpvars(0, ubaseram);
 		$dumpvars(0, usystem);
+
+		$monitor("time=%g debug_out=%h", $time, debug_out);
 
 		#3 rst = 0;
 	end

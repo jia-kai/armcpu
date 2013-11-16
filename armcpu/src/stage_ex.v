@@ -1,6 +1,6 @@
 /*
  * $File: stage_ex.v
- * $Date: Sat Nov 16 21:46:10 2013 +0800
+ * $Date: Sat Nov 16 23:28:02 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -9,7 +9,6 @@
 `include "common.vh"
 `include "alu_opt.vh"
 `include "branch_opt.vh"
-`include "wb_src.vh"
 `include "mem_opt.vh"
 
 `include "gencode/id2ex_param.v"
@@ -36,7 +35,7 @@ module stage_ex(
 
 	wire [31:0] result_from_alu;
 
-	alu alu_unit(
+	alu ualu(
 		.opr1(reg1_data),
 		.opr2(alu_src == `ALU_SRC_IMM ? alu_sa_imm : reg2_data),
 		.opt(alu_opt), .result(result_from_alu), .illegal_opt());
@@ -55,7 +54,6 @@ module stage_ex(
 		end
 		if (!stall) begin
 			alu_result <= result_from_alu;
-			wb_src_ex2mem <= wb_src_id2ex;
 			wb_reg_addr_ex2mem <= wb_reg_addr_id2ex;
 			mem_opt_ex2mem <= mem_opt_id2ex;
 			mem_addr_ex2mem <= result_from_alu;
