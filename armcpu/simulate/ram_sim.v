@@ -1,8 +1,10 @@
 /*
  * $File: ram_sim.v
- * $Date: Sat Nov 16 17:28:15 2013 +0800
+ * $Date: Sat Nov 16 20:18:36 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
+
+`timescale 1ns/1ps
 
 // simulate ram device
 module ram_sim
@@ -15,8 +17,11 @@ module ram_sim
 	reg [31:0] storage [0:(1 << ADDR_WIDTH)-1];
 
 	always @(negedge we)
-		if (!ce)
+		if (!ce) begin
 			storage[addr] <= data;
+			$display("\033[31m <-- mem --> time=%g write: addr=%h data=%h\033[0m",
+				$time, addr, data);
+		end
 
 	wire [31:0] data_from_mem = storage[addr];
 	assign data = (!ce && !oe ? data_from_mem : {32{1'bz}});
@@ -31,6 +36,8 @@ module ram_sim
 		fin = $fopen(IMAGE_FILE, "rb");
 		nr_read = $fread(storage, fin) / 4;
 		$fclose(fin);
+		if (nr_read <= 0) 
+			$fatal("failed to load ram image from `%s'", IMAGE_FILE);
 		for (i = 0; i < nr_read; i = i + 1) begin
 			tmp = storage[i];
 			storage[i] = {tmp[7:0], tmp[15:8], tmp[23:16], tmp[31:24]};

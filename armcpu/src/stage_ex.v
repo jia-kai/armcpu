@@ -1,6 +1,6 @@
 /*
  * $File: stage_ex.v
- * $Date: Sat Nov 16 09:59:03 2013 +0800
+ * $Date: Sat Nov 16 21:46:10 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -49,15 +49,17 @@ module stage_ex(
 	assign branch_dest = branch_dest_id2ex;
 
 	always @(posedge clk) begin
-		mem_opt_ex2mem <= `MEM_OPT_NONE;
-		wb_reg_addr_ex2mem <= 0;
+		if (rst) begin
+			mem_opt_ex2mem <= `MEM_OPT_NONE;
+			wb_reg_addr_ex2mem <= 0;
+		end
 		if (!stall) begin
-			mem_opt_ex2mem <= mem_opt_id2ex;
 			alu_result <= result_from_alu;
 			wb_src_ex2mem <= wb_src_id2ex;
 			wb_reg_addr_ex2mem <= wb_reg_addr_id2ex;
-			mem_addr <= reg1_data + {{16{alu_sa_imm[15]}}, alu_sa_imm};
-			mem_data <= reg2_data;
+			mem_opt_ex2mem <= mem_opt_id2ex;
+			mem_addr_ex2mem <= result_from_alu;
+			mem_data_ex2mem <= reg2_data;
 		end
 	end
 

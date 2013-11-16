@@ -1,6 +1,6 @@
 /*
  * $File: cpu.v
- * $Date: Sat Nov 16 17:11:39 2013 +0800
+ * $Date: Sat Nov 16 20:30:34 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -97,7 +97,7 @@ module cpu(
 		.do_branch(branch), .branch_dest(branch_dest),
 		.interstage_ex2mem(interstage_ex2mem));
 
-	stage_mem umem(.clk(clk), .rst(rst), .stall(stall),
+	stage_mem umem(.clk(clk), .rst(rst),
 		.interstage_ex2mem(interstage_ex2mem),
 		.wb_reg_addr(wb_addr), .wb_reg_data(wb_data),
 		.set_stall(stall),

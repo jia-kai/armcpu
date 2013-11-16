@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Sat Nov 16 17:27:36 2013 +0800
+ * $Date: Sat Nov 16 21:30:33 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -35,14 +35,34 @@ module top;
 	initial begin
 		$dumpfile("dump.vcd");
 		$dumpvars(0, ubaseram);
-		$dumpvars(0, usystem.ucpu);
+		$dumpvars(0, usystem);
 
 		#3 rst = 0;
-		$monitor("time=%g reg4=%h reg5=%h reg6=%h", $time,
-			usystem.ucpu.uid.uregfile.mem[4],
-			usystem.ucpu.uid.uregfile.mem[5],
-			usystem.ucpu.uid.uregfile.mem[6]);
 	end
+
+	// $monitor seems to override privious ones
+
+	always @(usystem.ucpu.uid.uregfile.mem[1])
+		$display("time=%g reg1($at)=%h", $time,
+			usystem.ucpu.uid.uregfile.mem[1]);
+	always @(usystem.ucpu.uid.uregfile.mem[2])
+		$display("time=%g reg2($v0)=%h", $time,
+			usystem.ucpu.uid.uregfile.mem[2]);
+	always @(usystem.ucpu.uid.uregfile.mem[3])
+		$display("time=%g reg3($v1)=%h", $time,
+			usystem.ucpu.uid.uregfile.mem[3]);
+	always @(usystem.ucpu.uid.uregfile.mem[4])
+		$display("time=%g reg4($a0)=%h", $time,
+			usystem.ucpu.uid.uregfile.mem[4]);
+	always @(usystem.ucpu.uid.uregfile.mem[5])
+		$display("time=%g reg5($a1)=%h", $time,
+			usystem.ucpu.uid.uregfile.mem[5]);
+	always @(usystem.ucpu.uid.uregfile.mem[6])
+		$display("time=%g reg6($a2)=%h", $time,
+			usystem.ucpu.uid.uregfile.mem[6]);
+	always @(usystem.ucpu.uid.uregfile.mem[7])
+		$display("time=%g reg7($a3)=%h", $time,
+			usystem.ucpu.uid.uregfile.mem[7]);
 
 endmodule
 

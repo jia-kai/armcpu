@@ -1,6 +1,6 @@
 /*
  * $File: stage_mem.v
- * $Date: Sat Nov 16 17:22:27 2013 +0800
+ * $Date: Sat Nov 16 22:23:12 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -13,7 +13,6 @@
 module stage_mem(
 	input clk,
 	input rst,
-	input stall,
 
 	input [`EX2MEM_WIRE_WIDTH-1:0] interstage_ex2mem,
 
@@ -34,30 +33,33 @@ module stage_mem(
 	reg state;
 	localparam READY = 1'b0, WAIT_UNBUSY = 1'b1;
 
-	assign set_stall = (state != READY);
+	reg [`REGADDR_WIDTH-1:0] wb_reg_addr_latch;
 
-	always @(posedge clk) begin
-		wb_reg_addr <= 0;
+	assign set_stall = (state == WAIT_UNBUSY);
+
+	always @(negedge clk) begin
 		if (rst) begin
 			state <= READY;
 			mmu_opt <= `MEM_OPT_NONE;
 		end
 		else case (state)
 			READY: begin
-				if (!stall) begin
-					wb_reg_addr <= wb_reg_addr_ex2mem;
-					wb_reg_data <= alu_result;
-					mmu_opt <= mem_opt_ex2mem;
-					mmu_addr <= mem_addr;
-					mmu_data_out <= alu_result;
-					if (mem_opt_ex2mem != `MEM_OPT_NONE)
-						state <= WAIT_UNBUSY;
+				wb_reg_addr <= wb_reg_addr_ex2mem;
+				wb_reg_data <= alu_result;
+				mmu_opt <= mem_opt_ex2mem;
+				mmu_addr <= mem_addr_ex2mem;
+				mmu_data_out <= mem_data_ex2mem;
+				if (mem_opt_ex2mem != `MEM_OPT_NONE) begin
+					state <= WAIT_UNBUSY;
+					wb_reg_addr_latch <= wb_reg_addr_ex2mem;
+					wb_reg_addr <= 0;
 				end
 			end
 			WAIT_UNBUSY: begin
 				mmu_opt <= `MEM_OPT_NONE;
 				if (!mmu_busy) begin
 					wb_reg_data <= mmu_data_in;
+					wb_reg_addr <= wb_reg_addr_latch;
 					state <= READY;
 				end
 			end

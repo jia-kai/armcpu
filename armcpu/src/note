@@ -1,2 +1,22 @@
-regfile is always written when addr != 0 on negedge, regardless of stall
+regfile is always written when addr != 0 on posedge, regardless of stall
 branch flag and set_stall should be set by combinational logic
+
+stall: the state of whole system should be identical to that where time during
+stall set is "removed"
+
+regfile is written by stage_mem at negedge
+
+implemented instructions:
+
+addu
+subu
+
+addiu
+ori
+lui
+
+beq
+j
+
+lw
+sw

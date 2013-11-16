@@ -1,6 +1,6 @@
 /*
  * $File: register_file.v
- * $Date: Fri Nov 15 20:39:32 2013 +0800
+ * $Date: Sat Nov 16 21:58:57 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -10,7 +10,7 @@ module register_file(
 	input [4:0] read1_addr,
 	input [4:0] read2_addr,
 
-	// if not 0 on negedge, would write to the register
+	// if not 0 on posedge, would write to the register
 	input [4:0] write_addr,
 
 	input [31:0] data_in,
@@ -20,12 +20,14 @@ module register_file(
 
 	reg [31:0] mem [0:31];
 
-	assign data_out1 = mem[read1_addr];
-	assign data_out2 = mem[read2_addr];
+	assign data_out1 = (write_addr != 0 && read1_addr == write_addr ?
+		data_in : mem[read1_addr]);
+	assign data_out2 = (write_addr != 0 && read2_addr == write_addr ?
+		data_in : mem[read2_addr]);
 
 	assign debug_out = mem[4];
 
-	always @(negedge clk)
+	always @(posedge clk)
 		if (rst) begin: RESET_REG
 			integer i;
 			for (i = 0; i < 32; i = i + 1)

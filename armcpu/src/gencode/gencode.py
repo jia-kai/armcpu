@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: gencode.py
-# $Date: Sat Nov 16 09:48:26 2013 +0800
+# $Date: Sat Nov 16 19:57:42 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import os
@@ -17,7 +17,7 @@ trans_id2ex = [
     ('branch_opt_id2ex', 'BRANCH_OPT_WIDTH'),
     ('branch_dest_id2ex', 32),
 
-    ('alu_sa_imm', 16), # shift amout, or immediate opr
+    ('alu_sa_imm', 32), # shift amout, or immediate opr
     ('alu_src', 'ALU_SRC_WIDTH'),
     ('alu_opt', 'ALU_OPT_WIDTH'),
 
@@ -29,8 +29,8 @@ trans_id2ex = [
 
 trans_ex2mem = [
     ('mem_opt_ex2mem', 'MEM_OPT_WIDTH'),
-    ('mem_addr', 32),
-    ('mem_data', 32),
+    ('mem_addr_ex2mem', 32),
+    ('mem_data_ex2mem', 32),
 
     ('wb_src_ex2mem', 'WB_SRC_WIDTH'),
     ('wb_reg_addr_ex2mem', 'REGADDR_WIDTH'),

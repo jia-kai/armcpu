@@ -1,6 +1,6 @@
 #!/bin/bash
 # $File: asm2bin.sh
-# $Date: Sat Nov 16 18:45:34 2013 +0800
+# $Date: Sat Nov 16 22:55:11 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 AS=mips-sde-elf-as
@@ -20,11 +20,13 @@ fi
 
 tmpobj=$(mktemp)
 
+rst=0
 (
 set -e
 $AS $AS_FLAGS $asmfile -o $tmpobj
 [ -z "$deasm_dump" ] || $OBJDUMP -j .text $tmpobj -D > $deasm_dump
 $OBJCOPY -j .text -O binary $tmpobj $outfile
-)
+) || rst=1
 rm -f $tmpobj
 
+exit $rst

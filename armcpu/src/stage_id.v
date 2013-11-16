@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Sat Nov 16 09:42:14 2013 +0800
+ * $Date: Sat Nov 16 21:29:01 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -24,7 +24,6 @@ module stage_id(
 	input [`IF2ID_WIRE_WIDTH-1:0] interstage_if2id,
 
 	// since reg[0] is always 0, no need for write enable signal;
-	// just set reg_write_addr = 0 to disable write
 	input [`REGADDR_WIDTH-1:0] reg_write_addr,
 	input [31:0] reg_write_data,
 
@@ -41,13 +40,16 @@ module stage_id(
 
 	wire [31:0] rf_data1, rf_data2;
 
-	wire [5:0] instr_opcode = instr[31:26], instr_func = instr[5:0];
+	wire [5:0] instr_opcode = instr[31:26];
+	wire [`ALU_OPT_WIDTH-1:0] instr_func = {1'b0, instr[5:0]};
 	wire [4:0] instr_rs = instr[25:21], instr_rt = instr[20:16],
 				instr_rd = instr[15:11], instr_sa = instr[10:6];
 	wire [15:0] instr_imm = instr[15:0];
+	wire [31:0] instr_imm_signext = {{16{instr_imm[15]}}, instr_imm},
+				instr_imm_unsignext = {16'b0, instr_imm};
 
 	wire [31:0] branch_absolute_addr =
-		next_pc + {{14{instr_imm[15]}}, instr_imm, 2'b00};
+		next_pc + {instr_imm_signext[31:2], 2'b00};
 
 	register_file uregfile(.clk(clk), .rst(rst),
 		.read1_addr(instr_rs), .read2_addr(instr_rt),
@@ -77,27 +79,64 @@ module stage_id(
 		alu_opt <= instr_func;
 	end endtask
 
+	task alu_from_reg(input [`ALU_OPT_WIDTH-1:0] opt); begin
+		alu_src <= `ALU_SRC_REG;
+		alu_opt <= opt;
+	end endtask
+
+	task alu_from_imm(input [`ALU_OPT_WIDTH-1:0] opt, input [31:0] imm); begin
+		alu_src <= `ALU_SRC_IMM;
+		alu_opt <= opt;
+		alu_sa_imm <= imm;
+	end endtask
+
+	task wb_from_alu; begin
+		wb_src_id2ex <= `WB_SRC_ALU;
+		wb_reg_addr_id2ex <= instr_rt;
+	end endtask
+
+	task wb_from_mem; begin
+		wb_src_id2ex <= `WB_SRC_MEM;
+		wb_reg_addr_id2ex <= instr_rt;
+	end endtask
+
+	task mem_opt(input [`MEM_OPT_WIDTH-1:0] opt); begin
+		assign_reg1();
+		assign_reg2();
+		alu_from_imm(`ALU_OPT_ADDU, instr_imm_signext);
+		if (`MEM_OPT_IS_READ(opt))
+			wb_from_mem();
+		mem_opt_id2ex <= opt;
+	end endtask
+
+	task wb_with_alu_imm(input [`ALU_OPT_WIDTH-1:0] alu_opt, input [31:0] imm); begin
+		assign_reg1();
+		alu_from_imm(alu_opt, imm);
+		wb_from_alu();
+	end endtask
+
 	// process itype instructions
 	task proc_itype; begin
-		alu_src <= `ALU_SRC_IMM;
-		alu_sa_imm <= instr_imm;
 		case (instr_opcode)
 			6'h04: begin // BEQ
 				assign_reg1();
 				assign_reg2();
-				alu_src <= `ALU_SRC_REG;
-				alu_opt <= `ALU_OPT_SUBU;
+				alu_from_reg(`ALU_OPT_SUBU);
 				branch_opt_id2ex <= `BRANCH_ON_ALU_EQZ;
 				branch_dest_id2ex <= branch_absolute_addr;
 			end
-			6'h09: begin // ADDIU
-				assign_reg1();
-				wb_src_id2ex <= `WB_SRC_ALU;
-				wb_reg_addr_id2ex <= instr_rt;
-				alu_opt <= `ALU_OPT_ADDU;
-			end
+			6'h09:	// ADDIU
+				wb_with_alu_imm(`ALU_OPT_ADDU, instr_imm_signext);
+			6'h0d:	// ORI
+				wb_with_alu_imm(`ALU_OPT_OR, instr_imm_unsignext);
+			6'h0f:	// LUI
+				wb_with_alu_imm(`ALU_OPT_SETU, {instr_imm, 16'b0});
+			6'h23:	// LW
+				mem_opt(`MEM_OPT_LW);
+			6'h2b:	// SW
+				mem_opt(`MEM_OPT_SW);
 			default:
-				; // TODO: exception
+				$warning("invalid instruction: %h", instr); // TODO: exception
 		endcase
 	end endtask
 
@@ -106,25 +145,30 @@ module stage_id(
 		branch_dest_id2ex <= {next_pc[31:28], instr[25:0], 2'b00};
 	end endtask
 
-	always @(posedge clk) begin
+	task reset; begin
 		branch_opt_id2ex <= `BRANCH_NONE;
 		wb_reg_addr_id2ex <= 0;
 		alu_opt <= `ALU_OPT_DISABLE;
 		reg1_addr <= 0;
 		reg2_addr <= 0;
 		mem_opt_id2ex <= `MEM_OPT_NONE;
-		if (!stall) begin
+	end endtask
+
+	always @(posedge clk) begin
+		if (rst)
+			reset();
+		else if (!stall) begin
+			reset();
 			case (instr_opcode)
 				6'b000000:
 					proc_rtype();
 				6'b000010:
 					proc_instr_j();
-				// TODO: coprocessor
 				default:
 					proc_itype();
 			endcase
-			$display("\033[32m < -- id -- > time=%g got instruction: next_pc=%h instr=%h \033[0m",
-				$time, next_pc, instr);
+			$display("\033[32m < -- id -- > time=%g got instruction: pc=%h instr=%h \033[0m",
+				$time, next_pc - 4, instr);
 		end
 	end
 

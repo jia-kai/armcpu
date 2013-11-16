@@ -1,6 +1,6 @@
 /*
  * $File: phy_mem_ctrl.v
- * $Date: Sat Nov 16 17:19:41 2013 +0800
+ * $Date: Sat Nov 16 22:25:24 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -35,19 +35,19 @@ module phy_mem_ctrl(
 	localparam RAM_ADDR_MASK = 32'h1fffff;	// 8MiB, 2M 32-bit word
 
 	reg [1:0] state;
-	localparam READ = 2'b00,
-		WRITE0 = 2'b01, WRITE1 = 2'b11, WAIT_READ_READY = 2'b10;
+	localparam READ_RAM = 2'b00,
+		WRITE_RAM0 = 2'b01, WRITE_RAM1 = 2'b11, WAIT_READ_RAM_READ_RAMY = 2'b10;
 
-	assign ram_we = (state != WRITE1);
-	assign ram_oe = ~(state == READ || state == WAIT_READ_READY);
-	assign busy = (state != READ || is_write);
+	assign ram_we = (state != WRITE_RAM1);
+	assign ram_oe = ~(state == READ_RAM || state == WAIT_READ_RAM_READ_RAMY);
+	assign busy = (state != READ_RAM || is_write);
 
 	always @(*)
 		if (addr[1:0])
-			$warning("access unaligned addr");
+			$warning("access unaligned addr: %h", addr);
 
 	wire [20:0]
-		addr_to_ram = (state == READ ? addr[22:2] : write_addr_latch[22:2]);
+		addr_to_ram = (state == READ_RAM ? addr[22:2] : write_addr_latch[22:2]);
 	assign ram_selector = addr_to_ram[20],
 		baseram_ce = ram_selector,
 		extram_ce = ~ram_selector,
@@ -75,28 +75,27 @@ module phy_mem_ctrl(
 
 	always @(negedge clk)
 		if (rst)
-			state <= READ;
+			state <= READ_RAM;
 		else case (state)
-			READ: if (is_write) begin
-				if ((addr & RAM_ADDR_MASK) == RAM_ADDR_MASK) begin
-					write_addr_latch <= addr;
-					write_data_latch <= data_in;
-					state <= WRITE0;
-				end
+			READ_RAM: if (is_write) begin
+				write_addr_latch <= addr;
+				write_data_latch <= data_in;
+				if ((addr & RAM_ADDR_MASK) == addr)
+					state <= WRITE_RAM0;
 			end
-			WRITE0:
-				state <= WRITE1;
-			WRITE1: begin
+			WRITE_RAM0:
+				state <= WRITE_RAM1;
+			WRITE_RAM1: begin
 				read_wait <= 0;
-				state <= WAIT_READ_READY;
+				state <= WAIT_READ_RAM_READ_RAMY;
 			end
-			WAIT_READ_READY: begin
+			WAIT_READ_RAM_READ_RAMY: begin
 				read_wait <= read_wait + 1'b1;
 				if (read_wait[2])
-					state <= READ;
+					state <= READ_RAM;
 			end
 			default:
-				state <= READ;
+				state <= READ_RAM;
 		endcase
 
 endmodule

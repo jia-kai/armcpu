@@ -1,6 +1,6 @@
 /*
  * $File: stage_if.v
- * $Date: Sat Nov 16 10:11:23 2013 +0800
+ * $Date: Sat Nov 16 20:25:11 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -25,15 +25,15 @@ module stage_if(
 	reg [31:0] pc;
 
 	assign mem_addr = branch ? branch_dest : pc;
-    wire [31:0] pc_plus_4 = mem_addr + 4;
+    wire [31:0] mem_addr_plus_4 = mem_addr + 4;
 
 	always @(posedge clk) begin
 		if (rst) begin
 			instr <= 0;
 			pc <= 0;
 		end else if (!stall) begin
-            pc <= pc_plus_4;
-			next_pc <= pc_plus_4;
+            pc <= mem_addr_plus_4;
+			next_pc <= mem_addr_plus_4;
 			instr <= mem_data;
 		end
 	end
