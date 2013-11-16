@@ -1,6 +1,6 @@
 #!/bin/bash
 # $File: asm2bin.sh
-# $Date: Fri Nov 15 18:48:10 2013 +0800
+# $Date: Sat Nov 16 18:45:34 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 AS=mips-sde-elf-as
@@ -11,6 +11,7 @@ OBJDUMP=mips-sde-elf-objdump
 asmfile=$1
 outfile=$2
 deasm_dump=$3
+[ -z "$deasm_dump" ] && deasm_dump=/dev/stdout
 if [ -z "$asmfile" -o -z "$outfile" ]
 then
 	echo "usage: $0 <asm file> <output file> [<dump disassemble>]"
