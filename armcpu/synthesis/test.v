@@ -1,6 +1,6 @@
 /*
  * $File: test.v
- * $Date: Sun Nov 17 00:06:18 2013 +0800
+ * $Date: Sun Nov 17 00:48:42 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -28,7 +28,7 @@ module test(
 
 
 	reg [21:0] clk_cnt;
-	assign clk_div = select_slow_clk ? clk_cnt[21] : clk50M;
+	assign clk_div = clk50M; //select_slow_clk ? clk_cnt[21] : clk50M;
 
 	always @(posedge clk50M)
 		clk_cnt <= clk_cnt + 1'b1;
@@ -44,8 +44,8 @@ module test(
 	always @(posedge clk_div)
 		led <= {led[14:0], !led[14:0]};
 
-	digseg_driver useg0(.data(monitor_data[3:0]), .seg(segdisp0));
-	digseg_driver useg1(.data(monitor_data[7:4]), .seg(segdisp1));
+	digseg_driver useg0(.data(monitor_data[19:16]), .seg(segdisp0));
+	digseg_driver useg1(.data(monitor_data[6:3]), .seg(segdisp1));
 
 endmodule
 

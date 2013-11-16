@@ -4,4 +4,5 @@ loop_start:
 addu $a2, $a0, $a1
 move $a0, $a1
 move $a1, $a2
+move $a3, $a2
 j loop_start
