@@ -1,6 +1,6 @@
 /*
  * $File: phy_mem_ctrl.v
- * $Date: Sun Nov 17 09:54:31 2013 +0800
+ * $Date: Sun Nov 17 12:28:39 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -15,6 +15,8 @@ module phy_mem_ctrl(
 	input [31:0] data_in,
 	output reg [31:0] data_out,
 	output busy,
+
+	input [7:0] ram_read_wait,
 
 	// ram interface
 	output [19:0] baseram_addr,
@@ -71,7 +73,7 @@ module phy_mem_ctrl(
 		extram_addr = addr_to_ram[19:0];
 
 	
-	reg [2:0] read_wait;	// just like flash, need to wait before first read
+	reg [7:0] ram_read_wait_cnt;
 
 	always @(negedge clk)
 		if (rst)
@@ -86,12 +88,12 @@ module phy_mem_ctrl(
 			WRITE_RAM0:
 				state <= WRITE_RAM1;
 			WRITE_RAM1: begin
-				read_wait <= 0;
+				ram_read_wait_cnt <= 0;
 				state <= WAIT_READ_RAM_READ_RAMY;
 			end
 			WAIT_READ_RAM_READ_RAMY: begin
-				read_wait <= read_wait + 1'b1;
-				if (read_wait[2])
+				ram_read_wait_cnt <= ram_read_wait_cnt + 1'b1;
+				if (ram_read_wait_cnt == ram_read_wait)
 					state <= READ_RAM;
 			end
 			default:

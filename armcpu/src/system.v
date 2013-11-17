@@ -1,6 +1,6 @@
 /*
  * $File: system.v
- * $Date: Sun Nov 17 09:28:15 2013 +0800
+ * $Date: Sun Nov 17 12:29:47 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -10,6 +10,8 @@ module system(
 	input clk_cpu,
 	input clk_mem,
 	input rst,
+
+	input [7:0] ram_read_wait,
 
 	output [31:0] debug_out,
 
@@ -41,6 +43,8 @@ module system(
 		.is_write(mem_is_write), .addr(mem_addr),
 		.data_in(data_to_mem), .data_out(data_from_mem),
 		.busy(mem_busy),
+
+		.ram_read_wait(ram_read_wait),
 
 		.baseram_addr(baseram_addr), .baseram_data(baseram_data),
 		.baseram_ce(baseram_ce), .baseram_oe(baseram_oe), .baseram_we(baseram_we),

@@ -1,6 +1,6 @@
 /*
  * $File: test.v
- * $Date: Sun Nov 17 12:09:31 2013 +0800
+ * $Date: Sun Nov 17 12:32:10 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -11,7 +11,7 @@ module test(
 	output [0:6] segdisp1,
 
 	output reg [15:0] led,
-	input [31:0] cpu_speed,
+	input [31:0] params,
 
 	// ram interface
 	output [19:0] baseram_addr,
@@ -27,7 +27,9 @@ module test(
 
 
 	reg clk_cpu;
-	reg [31:0] clk50M_cnt;
+	wire [23:0] cpu_speed = params[23:0];
+	wire [7:0] ram_read_wait = params[31:24];
+	reg [23:0] clk50M_cnt;
 	always @(posedge clk50M) begin
 		if (clk50M_cnt >= cpu_speed) begin
 			clk50M_cnt <= 0;
@@ -38,7 +40,9 @@ module test(
 
 	wire [31:0] monitor_data;
 
-	system usys(.clk_cpu(clk_cpu), .clk_mem(clk50M), .rst(~rst), .debug_out(monitor_data),
+	system usys(.clk_cpu(clk_cpu), .clk_mem(clk50M), .rst(~rst),
+		.ram_read_wait(ram_read_wait),
+		.debug_out(monitor_data),
 		.baseram_addr(baseram_addr), .baseram_data(baseram_data),
 		.baseram_ce(baseram_ce), .baseram_oe(baseram_oe), .baseram_we(baseram_we),
 		.extram_addr(extram_addr), .extram_data(extram_data),
