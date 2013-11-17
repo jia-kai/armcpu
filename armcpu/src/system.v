@@ -1,13 +1,14 @@
 /*
  * $File: system.v
- * $Date: Sat Nov 16 23:15:20 2013 +0800
+ * $Date: Sun Nov 17 09:28:15 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 
 // top-level system
 module system(
-	input clk,
+	input clk_cpu,
+	input clk_mem,
 	input rst,
 
 	output [31:0] debug_out,
@@ -28,7 +29,7 @@ module system(
 	wire [31:0] mem_addr, data_to_mem, data_from_mem;
 
 
-	cpu ucpu(.clk(clk), .rst(rst),
+	cpu ucpu(.clk(clk_cpu), .rst(rst),
 		.dev_mem_addr(mem_addr),
 		.dev_mem_data_in(data_from_mem),
 		.dev_mem_data_out(data_to_mem),
@@ -36,7 +37,7 @@ module system(
 		.dev_mem_busy(mem_busy),
 		.debug_out(debug_out));
 
-	phy_mem_ctrl umem(.clk(clk), .rst(rst),
+	phy_mem_ctrl umem(.clk(clk_mem), .rst(rst),
 		.is_write(mem_is_write), .addr(mem_addr),
 		.data_in(data_to_mem), .data_out(data_from_mem),
 		.busy(mem_busy),

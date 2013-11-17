@@ -1,5 +1,8 @@
 NET "clk50M" LOC = U26;
 NET "rst" LOC = T1;
 
-NET "select_slow_clk" LOC = Y1;	// K0
-
+NET "clk50M" TNM_NET = clk50M;
+TIMESPEC TS_clk50M = PERIOD "clk50M" 20 ns HIGH 50%;
+#Created by Constraints Editor (xc6slx100-fgg676-3) - 2013/11/17
+NET "clk25M" TNM_NET = clk25M;
+TIMESPEC TS_clk25M = PERIOD "clk25M" 40 ns HIGH 50%;

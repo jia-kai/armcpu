@@ -109,4 +109,3 @@ NET "extram_data[31]" LOC = AF12;
 NET "extram_ce" LOC = AC3;
 NET "extram_oe" LOC = AB9;
 NET "extram_we" LOC = AC4;
-

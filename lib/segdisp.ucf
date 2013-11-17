@@ -13,4 +13,3 @@ NET "segdisp1[3]" LOC = B23;
 NET "segdisp1[4]" LOC = A23;
 NET "segdisp1[5]" LOC = D23;
 NET "segdisp1[6]" LOC = B25;
-

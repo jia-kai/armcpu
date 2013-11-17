@@ -1,13 +1,13 @@
 /*
  * $File: top.v
- * $Date: Sat Nov 16 23:16:27 2013 +0800
+ * $Date: Sun Nov 17 09:34:32 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 `timescale 1ns/1ps
 
 module top;
-	reg clk = 0;
+	reg clk = 0, clk_half = 0;
 	reg rst = 1;
 
 	wire [31:0] baseram_data, extram_data;
@@ -26,13 +26,17 @@ module top;
 		.addr(extram_addr), .data(extram_data),
 		.ce(extram_ce), .oe(extram_oe), .we(extram_we));
 
-	system usystem(.clk(clk), .rst(rst), .debug_out(debug_out),
+	system usystem(.clk_cpu(clk_half), .clk_mem(clk),
+		.rst(rst), .debug_out(debug_out),
 		.baseram_addr(baseram_addr), .baseram_data(baseram_data),
 		.baseram_ce(baseram_ce), .baseram_oe(baseram_oe), .baseram_we(baseram_we),
 		.extram_addr(extram_addr), .extram_data(extram_data),
 		.extram_ce(extram_ce), .extram_oe(extram_oe), .extram_we(extram_we));
 
 	always #1 clk <= ~clk;
+
+	always @(posedge clk)
+		clk_half <= ~clk_half;
 
 	initial begin
 		$dumpfile("dump.vcd");
@@ -41,7 +45,7 @@ module top;
 
 		$monitor("time=%g debug_out=%h", $time, debug_out);
 
-		#3 rst = 0;
+		#6 rst = 0;
 	end
 
 	// $monitor seems to override privious ones
