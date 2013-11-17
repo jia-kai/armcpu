@@ -1,6 +1,6 @@
 /*
  * $File: phy_mem_ctrl.v
- * $Date: Sat Nov 16 22:25:24 2013 +0800
+ * $Date: Sun Nov 17 09:54:31 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -47,7 +47,7 @@ module phy_mem_ctrl(
 			$warning("access unaligned addr: %h", addr);
 
 	wire [20:0]
-		addr_to_ram = (state == READ_RAM ? addr[22:2] : write_addr_latch[22:2]);
+		addr_to_ram = (ram_oe ? write_addr_latch[22:2] : addr[22:2]);
 	assign ram_selector = addr_to_ram[20],
 		baseram_ce = ram_selector,
 		extram_ce = ~ram_selector,

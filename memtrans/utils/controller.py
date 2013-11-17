@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: controller.py
-# $Date: Fri Nov 01 22:28:12 2013 +0800
+# $Date: Sun Nov 17 10:00:52 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 from ctllib import MemtransController
@@ -94,15 +94,18 @@ if __name__ == '__main__':
     elif function == 'write':
         offset, fpath = parse_addr(args[0]), args[1]
         speed = SpeedCalc(os.stat(fpath).st_size)
+        cnt = 0
         with open(fpath) as fin:
             while True:
                 data = fin.read(CHUNKSIZE)
                 if not data:
                     break
+                cnt += len(data)
                 writer(data, offset)
                 offset += len(data)
                 speed.trigger(len(data))
         speed.finish()
+        print '{} bytes written'.format(cnt)
     elif function == 'erase':
         start = parse_addr(args[0]) / FLASH_BLOCK_SIZE * FLASH_BLOCK_SIZE
         stop = parse_addr(args[1]) / FLASH_BLOCK_SIZE * FLASH_BLOCK_SIZE

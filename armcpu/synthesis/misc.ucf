@@ -2,7 +2,43 @@ NET "clk50M" LOC = U26;
 NET "rst" LOC = T1;
 
 NET "clk50M" TNM_NET = clk50M;
+
+NET "cpu_nr_cycle[0]" LOC = Y5;
+NET "cpu_nr_cycle[1]" LOC = W1;
+NET "cpu_nr_cycle[2]" LOC = W2;
+NET "cpu_nr_cycle[3]" LOC = V1;
+NET "cpu_nr_cycle[4]" LOC = U1;
+NET "cpu_nr_cycle[5]" LOC = U2;
+NET "cpu_nr_cycle[6]" LOC = R1;
+NET "cpu_nr_cycle[7]" LOC = R2;
+NET "cpu_nr_cycle[8]" LOC = P1;
+NET "cpu_nr_cycle[9]" LOC = N1;
+NET "cpu_nr_cycle[10]" LOC = N2;
+NET "cpu_nr_cycle[11]" LOC = M1;
+NET "cpu_nr_cycle[12]" LOC = L1;
+NET "cpu_nr_cycle[13]" LOC = L2;
+NET "cpu_nr_cycle[14]" LOC = W5;
+NET "cpu_nr_cycle[15]" LOC = W3;
+NET "cpu_nr_cycle[16]" LOC = V4;
+NET "cpu_nr_cycle[17]" LOC = V3;
+NET "cpu_nr_cycle[18]" LOC = U4;
+NET "cpu_nr_cycle[19]" LOC = U3;
+NET "cpu_nr_cycle[20]" LOC = T4;
+NET "cpu_nr_cycle[21]" LOC = R4;
+NET "cpu_nr_cycle[22]" LOC = R3;
+NET "cpu_nr_cycle[23]" LOC = P5;
+NET "cpu_nr_cycle[24]" LOC = P3;
+NET "cpu_nr_cycle[25]" LOC = N4;
+NET "cpu_nr_cycle[26]" LOC = N3;
+NET "cpu_nr_cycle[27]" LOC = N5;
+NET "cpu_nr_cycle[28]" LOC = M4;
+NET "cpu_nr_cycle[29]" LOC = M3;
+NET "cpu_nr_cycle[30]" LOC = L4;
+NET "cpu_nr_cycle[31]" LOC = L3;
+
+
+
 TIMESPEC TS_clk50M = PERIOD "clk50M" 20 ns HIGH 50%;
 #Created by Constraints Editor (xc6slx100-fgg676-3) - 2013/11/17
-NET "clk25M" TNM_NET = clk25M;
-TIMESPEC TS_clk25M = PERIOD "clk25M" 40 ns HIGH 50%;
+NET "clk_cpu" TNM_NET = clk_cpu;
+TIMESPEC TS_clk_cpu = PERIOD "clk_cpu" 40 ns HIGH 50%;
