@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Sun Nov 17 17:37:50 2013 +0800
+ * $Date: Sun Nov 17 20:13:18 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -41,8 +41,9 @@ module top;
 
 	initial begin
 		$dumpfile("dump.vcd");
-		$dumpvars(0, ubaseram);
 		$dumpvars(0, usystem);
+		$dumpvars(0, ubaseram);
+		$dumpvars(0, uextram);
 
 		$monitor("time=%g debug_out=%h", $time, debug_out);
 

@@ -1,6 +1,6 @@
 /*
  * $File: phy_mem_ctrl.v
- * $Date: Sun Nov 17 19:28:38 2013 +0800
+ * $Date: Sun Nov 17 20:18:42 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -35,7 +35,7 @@ module phy_mem_ctrl(
 
 	reg [31:0] write_addr_latch, write_data_latch;
 
-	localparam RAM_ADDR_MASK = 32'h1fffff;	// 8MiB, 2M 32-bit word
+	localparam RAM_ADDR_MASK = 32'h007fffff;	// 8MiB
 
 	reg [1:0] state;
 	localparam READ_RAM = 2'b00,
