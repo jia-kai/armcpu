@@ -6,6 +6,10 @@ stall set is "removed"
 
 regfile is written by stage_mem at negedge
 
+branch: branch_dest_id2ex: lowest bit indicate whether to jump to this
+address(0), or reg2_data(1)
+
+=========================
 implemented instructions:
 
 addu

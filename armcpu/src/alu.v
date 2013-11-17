@@ -1,6 +1,6 @@
 /*
  * $File: alu.v
- * $Date: Sat Nov 16 19:45:22 2013 +0800
+ * $Date: Sun Nov 17 15:37:21 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -9,6 +9,7 @@
 module alu(
 	input [31:0] opr1,
 	input [31:0] opr2,
+    input [31:0] sa_imm,
 	input [`ALU_OPT_WIDTH-1:0] opt,
 	output reg [31:0] result,
 	output reg illegal_opt);
@@ -17,8 +18,8 @@ module alu(
 		illegal_opt = 0;
 		result = 0;
 		case (opt)
-			`ALU_OPT_DISABLE:
-				result = 0;
+            `ALU_OPT_SLL_IMM:
+                result = opr2 << sa_imm;
 			`ALU_OPT_ADDU:
 				result = opr1 + opr2;
 			`ALU_OPT_SUBU:

@@ -1,3 +1,4 @@
+# simu: 200ns
 li $a0, 0x100		# $a0 = 0x100
 li $a1, 0x19931102	# $a1 = 0x19930000, 0x19931102
 sw $a1, 0($a0)		# store after alu

@@ -1,6 +1,6 @@
 /*
  * $File: stage_ex.v
- * $Date: Sat Nov 16 23:28:02 2013 +0800
+ * $Date: Sun Nov 17 15:51:20 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -38,6 +38,7 @@ module stage_ex(
 	alu ualu(
 		.opr1(reg1_data),
 		.opr2(alu_src == `ALU_SRC_IMM ? alu_sa_imm : reg2_data),
+		.sa_imm(alu_sa_imm),
 		.opt(alu_opt), .result(result_from_alu), .illegal_opt());
 
 
@@ -45,7 +46,7 @@ module stage_ex(
 		(branch_opt_id2ex == `BRANCH_ON_ALU_EQZ && !result_from_alu) ||
 		(branch_opt_id2ex == `BRANCH_ON_ALU_NEZ && result_from_alu) ||
 		(branch_opt_id2ex == `BRANCH_UNCOND));
-	assign branch_dest = branch_dest_id2ex;
+	assign branch_dest = branch_dest_id2ex[0] ? reg2_data : branch_dest_id2ex;
 
 	always @(posedge clk) begin
 		if (rst) begin

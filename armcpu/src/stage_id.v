@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Sun Nov 17 15:10:45 2013 +0800
+ * $Date: Sun Nov 17 15:50:38 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -40,7 +40,7 @@ module stage_id(
 	wire [31:0] rf_data1, rf_data2;
 
 	wire [5:0] instr_opcode = instr[31:26];
-	wire [`ALU_OPT_WIDTH-1:0] instr_func = {1'b0, instr[5:0]};
+	wire [5:0] instr_func = instr[5:0];
 	wire [4:0] instr_rs = instr[25:21], instr_rt = instr[20:16],
 				instr_rd = instr[15:11], instr_sa = instr[10:6];
 	wire [15:0] instr_imm = instr[15:0];
@@ -134,6 +134,13 @@ module stage_id(
 		branch_dest_id2ex <= {next_pc[31:28], instr[25:0], 2'b00};
 	end endtask
 
+    task proc_instr_jr; begin
+        branch_opt_id2ex <= `BRANCH_UNCOND;
+        branch_dest_id2ex <= 32'b1; // set to reg2_data
+		reg2_addr <= instr_rs;
+		reg2_data <= rf_data1;
+    end endtask
+
 	task reset; begin
 		branch_opt_id2ex <= `BRANCH_NONE;
 		wb_reg_addr_id2ex <= 0;
@@ -150,7 +157,10 @@ module stage_id(
 			reset();
 			case (instr_opcode)
 				6'b000000:
-					proc_rtype();
+                    if (instr_func == 6'h08) 
+                        proc_instr_jr();
+                    else
+                        proc_rtype();
 				6'b000010:
 					proc_instr_j();
 				default:
