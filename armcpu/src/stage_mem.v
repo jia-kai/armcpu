@@ -1,6 +1,6 @@
 /*
  * $File: stage_mem.v
- * $Date: Sat Nov 16 23:34:35 2013 +0800
+ * $Date: Sun Nov 17 14:18:14 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -29,12 +29,12 @@ module stage_mem(
 
 	`include "gencode/ex2mem_extract_load.v"
 
-	reg state;
-	localparam READY = 1'b0, WAIT_UNBUSY = 1'b1;
+	reg [1:0] state;
+	localparam READY = 2'b00, WAIT_UNBUSY = 2'b01, SLEEP = 2'b10;
 
 	reg [`REGADDR_WIDTH-1:0] wb_reg_addr_latch;
 
-	assign set_stall = (state == WAIT_UNBUSY);
+	assign set_stall = (state != READY);
 
 	always @(negedge clk) begin
 		if (rst) begin
@@ -59,9 +59,13 @@ module stage_mem(
 				if (!mmu_busy) begin
 					wb_reg_data <= mmu_data_in;
 					wb_reg_addr <= wb_reg_addr_latch;
-					state <= READY;
+					state <= SLEEP;
 				end
 			end
+			SLEEP:
+				state <= READY;
+			default:
+				state <= READY;
 		endcase
 	end
 
