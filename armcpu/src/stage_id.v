@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Sun Nov 17 16:40:24 2013 +0800
+ * $Date: Sun Nov 17 17:04:19 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -107,16 +107,39 @@ module stage_id(
 		alu_from_imm(alu_opt, imm);
 	end endtask
 
+    task proc_cond_branch(
+            input set_reg,
+            input [`ALU_OPT_WIDTH-1:0] alu_opt,
+            input [`BRANCH_OPT_WIDTH-1:0] cond); begin
+        if (set_reg) begin
+            assign_reg1();
+            assign_reg2();
+        end
+        alu_from_reg(alu_opt);
+        branch_opt_id2ex <= cond;
+        branch_dest_id2ex <= branch_addr_pc_relative;
+    end endtask
+
+    task invalid_instruction; begin
+        $warning("invalid instruction: %h", instr); // TODO: exception
+    end endtask
+
 	// process itype instructions
 	task proc_itype; begin
 		case (instr_opcode)
-			6'h04: begin // BEQ
-				assign_reg1();
-				assign_reg2();
-				alu_from_reg(`ALU_OPT_SUBU);
-				branch_opt_id2ex <= `BRANCH_ON_ALU_EQZ;
-				branch_dest_id2ex <= branch_addr_pc_relative;
-			end
+            6'h01:
+                case (instr_rt)
+                    5'b00001: begin  // BGEZ
+                        assign_reg1();
+                        proc_cond_branch(1'b0, `ALU_OPT_LT, `BRANCH_ON_ALU_EQZ);
+                    end
+                    default:
+                        invalid_instruction();
+                endcase
+			6'h04:  // BEQ
+                proc_cond_branch(1'b1, `ALU_OPT_XOR, `BRANCH_ON_ALU_EQZ);
+			6'h05:  // BNE
+                proc_cond_branch(1'b1, `ALU_OPT_XOR, `BRANCH_ON_ALU_NEZ);
 			6'h09:	// ADDIU
 				wb_with_alu_imm(`ALU_OPT_ADDU, instr_imm_signext);
 			6'h0d:	// ORI
@@ -128,7 +151,7 @@ module stage_id(
 			6'h2b:	// SW
 				mem_opt(`MEM_OPT_SW);
 			default:
-				$warning("invalid instruction: %h", instr); // TODO: exception
+                invalid_instruction();
 		endcase
 	end endtask
 

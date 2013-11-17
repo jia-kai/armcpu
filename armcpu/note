@@ -20,12 +20,16 @@ implemented instructions:
 
 addu
 subu
+xor
+slt
 
 addiu
 ori
 lui
 
 beq
+bne
+bgez
 
 j
 jr
