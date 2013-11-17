@@ -15,6 +15,59 @@ if access of $ra happens in the delay slot of jal, armcpu would use new value
 of $ra
 
 
+
+===============
+CP0 registers:
+
+usermode:
+Status.KSU = 10
+Status.EXL = 0
+
+kernelmode:
+Status.KSU = 00
+Status.EXL = 1
+
+CP0[0]: Index
+P: prob failure (no need to implement?)
+[3:0] Index
+
+CP0[2:3]: EntryLo0, EntryLo1
+[29:6]	PFN
+[2]		D	1 if page writable; TLB Modified exception
+[1]		V	1 if page valid; TLB Invalid exception
+
+CP0[8]: BadVAddr
+cause of:
+	Address error (AdEL, AdES)
+	TLB Refil
+	TLB Invalid (TLBL, TLBS)
+	TLB Modified
+
+CP0[9]: Count
+
+CP0[10]: EntryHi
+[31:13]	VPN2
+
+CP0[11]: Compare
+
+CP0[12]: Status
+[15:8]	IM[7:0]	interrupt mask
+[4:3]	KSU		
+[1]		EXL		exception level (when exception and in kernel mode)
+[0]		IE		interrupt enable (1 = enable)
+
+CP0[13]: Cause
+[15:8]	IP[7:0]	correspond to Satus.IM
+[6:2]	ExcCode
+
+CP0[14]: EPC
+take care for exception in delay slot
+
+CP0[15]: EBase
+[31]	1
+[30]	0
+[29:12]	Exception Base
+
 =========================
 implemented instructions:
 
@@ -39,3 +92,6 @@ jalr
 
 lw
 sw
+
+
+note for lb: could reside on non-boundary
