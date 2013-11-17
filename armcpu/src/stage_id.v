@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Sat Nov 16 23:40:16 2013 +0800
+ * $Date: Sun Nov 17 15:10:45 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -48,7 +48,7 @@ module stage_id(
 				instr_imm_unsignext = {16'b0, instr_imm};
 
 	wire [31:0] branch_absolute_addr =
-		next_pc + {instr_imm_signext[31:2], 2'b00};
+		next_pc + {instr_imm_signext[29:0], 2'b00};
 
 	register_file uregfile(.clk(clk), .rst(rst),
 		.read1_addr(instr_rs), .read2_addr(instr_rt),
