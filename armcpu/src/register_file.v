@@ -1,6 +1,6 @@
 /*
  * $File: register_file.v
- * $Date: Sat Nov 16 23:15:02 2013 +0800
+ * $Date: Sun Nov 17 17:35:45 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -25,7 +25,7 @@ module register_file(
 	assign data_out2 = (write_addr != 0 && read2_addr == write_addr ?
 		data_in : mem[read2_addr]);
 
-	assign debug_out = mem[7];
+	assign debug_out = mem[26];
 
 	always @(posedge clk)
 		if (rst) begin: RESET_REG

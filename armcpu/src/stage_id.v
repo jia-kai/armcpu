@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Sun Nov 17 17:04:19 2013 +0800
+ * $Date: Sun Nov 17 19:16:11 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -140,6 +140,16 @@ module stage_id(
                 proc_cond_branch(1'b1, `ALU_OPT_XOR, `BRANCH_ON_ALU_EQZ);
 			6'h05:  // BNE
                 proc_cond_branch(1'b1, `ALU_OPT_XOR, `BRANCH_ON_ALU_NEZ);
+			6'h07:
+				case (instr_rt)
+					5'b00000: begin  // BGTZ
+						reg2_addr <= instr_rs;
+						reg2_data <= rf_data1;
+						proc_cond_branch(1'b0, `ALU_OPT_LT, `BRANCH_ON_ALU_NEZ);
+					end
+                    default:
+						invalid_instruction();
+				endcase
 			6'h09:	// ADDIU
 				wb_with_alu_imm(`ALU_OPT_ADDU, instr_imm_signext);
 			6'h0d:	// ORI

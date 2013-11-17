@@ -1,6 +1,6 @@
 /*
  * $File: mmu.v
- * $Date: Sat Nov 16 20:52:00 2013 +0800
+ * $Date: Sun Nov 17 18:16:36 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -37,6 +37,13 @@ module mmu(
 	input dev_mem_busy);
 
 	assign instr_out = dev_mem_data_in;
+
+	always @(*) begin
+		if (instr_addr[1:0])
+			$warning("time=%g unaligned instr_addr: %h", $time, instr_addr);
+		if (data_addr[1:0] && data_opt != `MEM_OPT_NONE)
+			$warning("time=%g unaligned data_addr: %h", $time, data_addr);
+	end
 
 	always @(*)
 		if (data_opt == `MEM_OPT_LW)

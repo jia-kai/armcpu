@@ -1,10 +1,10 @@
 /*
- * $File: test.v
- * $Date: Sun Nov 17 12:32:10 2013 +0800
+ * $File: armcpu.v
+ * $Date: Sun Nov 17 19:48:36 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
-module test(
+module armcpu(
 	input clk50M,
 	input rst,
 	output [0:6] segdisp0,
@@ -39,12 +39,17 @@ module test(
 	end
 
 	wire [31:0] monitor_data;
+	assign write_protect = baseram_addr <= 512;  // XXX: write-protect for code
+	wire baseram_we_set;
+	assign baseram_we = baseram_we_set | write_protect;
 
 	system usys(.clk_cpu(clk_cpu), .clk_mem(clk50M), .rst(~rst),
 		.ram_read_wait(ram_read_wait),
 		.debug_out(monitor_data),
 		.baseram_addr(baseram_addr), .baseram_data(baseram_data),
-		.baseram_ce(baseram_ce), .baseram_oe(baseram_oe), .baseram_we(baseram_we),
+		.baseram_ce(baseram_ce),
+		.baseram_oe(baseram_oe),	
+		.baseram_we(baseram_we_set),
 		.extram_addr(extram_addr), .extram_data(extram_data),
 		.extram_ce(extram_ce), .extram_oe(extram_oe), .extram_we(extram_we));
 

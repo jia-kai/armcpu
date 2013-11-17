@@ -1,9 +1,10 @@
 /*
  * $File: phy_mem_ctrl.v
- * $Date: Sun Nov 17 12:28:39 2013 +0800
+ * $Date: Sun Nov 17 19:28:38 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
+`timescale 1ns/1ps
 
 // physical memory controller
 module phy_mem_ctrl(
@@ -46,7 +47,7 @@ module phy_mem_ctrl(
 
 	always @(*)
 		if (addr[1:0])
-			$warning("access unaligned addr: %h", addr);
+			$warning("time=%g access unaligned addr: %h", $time, addr);
 
 	wire [20:0]
 		addr_to_ram = (ram_oe ? write_addr_latch[22:2] : addr[22:2]);

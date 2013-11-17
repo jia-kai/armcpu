@@ -1,6 +1,6 @@
 /*
  * $File: stage_ex.v
- * $Date: Sun Nov 17 15:51:20 2013 +0800
+ * $Date: Sun Nov 17 19:46:23 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -25,7 +25,7 @@ module stage_ex(
 	input [31:0] reg1_data,
 	input [31:0] reg2_data,
 
-	output do_branch,
+	output reg do_branch,
 	output [31:0] branch_dest,
 	
 	output [`EX2MEM_WIRE_WIDTH-1:0] interstage_ex2mem);
@@ -42,11 +42,14 @@ module stage_ex(
 		.opt(alu_opt), .result(result_from_alu), .illegal_opt());
 
 
-	assign do_branch = (
+	assign do_branch_cond = (
 		(branch_opt_id2ex == `BRANCH_ON_ALU_EQZ && !result_from_alu) ||
 		(branch_opt_id2ex == `BRANCH_ON_ALU_NEZ && result_from_alu) ||
 		(branch_opt_id2ex == `BRANCH_UNCOND));
 	assign branch_dest = branch_dest_id2ex[0] ? reg2_data : branch_dest_id2ex;
+
+	always @(negedge clk)
+		do_branch <= do_branch_cond;	// make sure addr arrives first
 
 	always @(posedge clk) begin
 		if (rst) begin

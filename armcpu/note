@@ -30,6 +30,7 @@ lui
 beq
 bne
 bgez
+bgtz
 
 j
 jr
