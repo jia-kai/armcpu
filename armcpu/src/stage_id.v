@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Sun Nov 17 16:22:29 2013 +0800
+ * $Date: Sun Nov 17 16:40:24 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -147,15 +147,21 @@ module stage_id(
     task proc_instr_jal; begin
         proc_instr_j();
         reg1_data <= next_pc + 32'h4; 
-        reg2_data <= 0;
-        alu_opt <= `ALU_OPT_ADDU;
+        alu_opt <= `ALU_OPT_PASS_OPR1;
         wb_reg_addr_id2ex <= 31;
+    end endtask
+
+    task proc_instr_jalr; begin
+        proc_instr_jal();
+        proc_instr_jr();
+        wb_reg_addr_id2ex <= instr_rd;
     end endtask
 
 	task reset; begin
 		branch_opt_id2ex <= `BRANCH_NONE;
 		wb_reg_addr_id2ex <= 0;
 		alu_opt <= `ALU_OPT_DISABLE;
+        alu_sa_imm <= 0;
 		reg1_addr <= 0;
 		reg2_addr <= 0;
 		mem_opt_id2ex <= `MEM_OPT_NONE;
@@ -167,11 +173,11 @@ module stage_id(
 		else if (!stall) begin
 			reset();
 			case (instr_opcode)
-				6'b000000:
-                    if (instr_func == 6'h08) 
-                        proc_instr_jr();
-                    else
-                        proc_rtype();
+				6'b000000: case(instr_func)
+                    6'h08: proc_instr_jr();
+                    6'h09: proc_instr_jalr();
+                    default: proc_rtype();
+                endcase
 				6'b000010:
 					proc_instr_j();
                 6'b000011:

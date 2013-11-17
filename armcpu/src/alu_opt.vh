@@ -1,6 +1,6 @@
 /*
  * $File: alu_opt.vh
- * $Date: Sun Nov 17 15:37:31 2013 +0800
+ * $Date: Sun Nov 17 16:32:48 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -19,5 +19,6 @@
 `define ALU_OPT_SUBU	7'h23
 `define ALU_OPT_OR		7'h25
 `define ALU_OPT_SETU	7'h40 // extended opt, set upper half of opr1
+`define ALU_OPT_PASS_OPR1	7'h41 // extended opt, result <= first operand
 
 // vim: ft=verilog

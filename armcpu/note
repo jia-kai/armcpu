@@ -26,7 +26,11 @@ ori
 lui
 
 beq
+
 j
+jr
+jal
+jalr
 
 lw
 sw
