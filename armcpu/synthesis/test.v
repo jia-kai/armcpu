@@ -1,6 +1,6 @@
 /*
  * $File: test.v
- * $Date: Sun Nov 17 10:18:14 2013 +0800
+ * $Date: Sun Nov 17 12:09:31 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -11,7 +11,7 @@ module test(
 	output [0:6] segdisp1,
 
 	output reg [15:0] led,
-	input [31:0] cpu_nr_cycle,
+	input [31:0] cpu_speed,
 
 	// ram interface
 	output [19:0] baseram_addr,
@@ -27,15 +27,13 @@ module test(
 
 
 	reg clk_cpu;
-	reg [31:0] cpu_cycle_cnt;
+	reg [31:0] clk50M_cnt;
 	always @(posedge clk50M) begin
-		if (cpu_cycle_cnt < cpu_nr_cycle) begin
+		if (clk50M_cnt >= cpu_speed) begin
+			clk50M_cnt <= 0;
 			clk_cpu <= ~clk_cpu;
-			if (~clk_cpu)
-				cpu_cycle_cnt <= cpu_cycle_cnt + 1'b1;
-		end
-		if (!rst)
-			cpu_cycle_cnt <= 0;
+		end else
+			clk50M_cnt <= clk50M_cnt + 1'b1;
 	end
 
 	wire [31:0] monitor_data;
@@ -47,7 +45,10 @@ module test(
 		.extram_ce(extram_ce), .extram_oe(extram_oe), .extram_we(extram_we));
 
 	always @(posedge clk_cpu)
-		led <= {led[14:0], !led[14:0]};
+		led[7:0] <= {led[6:0], !led[6:0]};
+
+	always @(posedge clk50M)
+		led[15:8] <= monitor_data[7:0];
 
 	digseg_driver useg0(.data(monitor_data[21:18]), .seg(segdisp0));
 	digseg_driver useg1(.data(monitor_data[25:22]), .seg(segdisp1));
