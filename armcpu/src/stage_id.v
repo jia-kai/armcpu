@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Sun Nov 17 15:50:38 2013 +0800
+ * $Date: Sun Nov 17 16:22:29 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -47,8 +47,11 @@ module stage_id(
 	wire [31:0] instr_imm_signext = {{16{instr_imm[15]}}, instr_imm},
 				instr_imm_unsignext = {16'b0, instr_imm};
 
-	wire [31:0] branch_absolute_addr =
-		next_pc + {instr_imm_signext[29:0], 2'b00};
+	wire [31:0]
+        // pc-relative offset address
+        branch_addr_pc_relative = next_pc + {instr_imm_signext[29:0], 2'b00},
+        // absolute jump in 256MB area
+        branch_addr_pc_region = {next_pc[31:28], instr[25:0], 2'b00};
 
 	register_file uregfile(.clk(clk), .rst(rst),
 		.read1_addr(instr_rs), .read2_addr(instr_rt),
@@ -112,7 +115,7 @@ module stage_id(
 				assign_reg2();
 				alu_from_reg(`ALU_OPT_SUBU);
 				branch_opt_id2ex <= `BRANCH_ON_ALU_EQZ;
-				branch_dest_id2ex <= branch_absolute_addr;
+				branch_dest_id2ex <= branch_addr_pc_relative;
 			end
 			6'h09:	// ADDIU
 				wb_with_alu_imm(`ALU_OPT_ADDU, instr_imm_signext);
@@ -131,7 +134,7 @@ module stage_id(
 
 	task proc_instr_j; begin
 		branch_opt_id2ex <= `BRANCH_UNCOND;
-		branch_dest_id2ex <= {next_pc[31:28], instr[25:0], 2'b00};
+		branch_dest_id2ex <= branch_addr_pc_region;
 	end endtask
 
     task proc_instr_jr; begin
@@ -139,6 +142,14 @@ module stage_id(
         branch_dest_id2ex <= 32'b1; // set to reg2_data
 		reg2_addr <= instr_rs;
 		reg2_data <= rf_data1;
+    end endtask
+
+    task proc_instr_jal; begin
+        proc_instr_j();
+        reg1_data <= next_pc + 32'h4; 
+        reg2_data <= 0;
+        alu_opt <= `ALU_OPT_ADDU;
+        wb_reg_addr_id2ex <= 31;
     end endtask
 
 	task reset; begin
@@ -163,6 +174,8 @@ module stage_id(
                         proc_rtype();
 				6'b000010:
 					proc_instr_j();
+                6'b000011:
+                    proc_instr_jal();
 				default:
 					proc_itype();
 			endcase

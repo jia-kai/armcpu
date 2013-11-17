@@ -9,6 +9,12 @@ regfile is written by stage_mem at negedge
 branch: branch_dest_id2ex: lowest bit indicate whether to jump to this
 address(0), or reg2_data(1)
 
+================
+POSSIBLE BUG:
+if access of $ra happens in the delay slot of jal, armcpu would use new value
+of $ra
+
+
 =========================
 implemented instructions:
 
