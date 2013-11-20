@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: gencode.py
-# $Date: Wed Nov 20 08:40:45 2013 +0800
+# $Date: Wed Nov 20 19:22:43 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import os
@@ -22,7 +22,7 @@ trans_id2ex = [
     ('exc_badvaddr_id2ex', 32),
 
     ('branch_opt_id2ex', 'BRANCH_OPT_WIDTH'),
-    ('branch_dest_id2ex', 32),
+    ('branch_dest_id2ex', 33),
 
     ('alu_sa_imm', 32), # shift amout, or immediate opr
     ('alu_src', 'ALU_SRC_WIDTH'),

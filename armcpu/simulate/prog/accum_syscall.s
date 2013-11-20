@@ -2,7 +2,7 @@
 start:
 li $v1, 1
 syscall
-li $k0, 123	# should be skipped by syscall handler
+syscall	# should be skipped by syscall handler
 li $v1, 0
 move $k0, $v0
 b start

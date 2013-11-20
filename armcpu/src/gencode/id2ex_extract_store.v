@@ -2,7 +2,7 @@ reg [`EXC_CODE_WIDTH-1:0] exc_code_id2ex;
 reg [31:0] exc_epc_id2ex;
 reg [31:0] exc_badvaddr_id2ex;
 reg [`BRANCH_OPT_WIDTH-1:0] branch_opt_id2ex;
-reg [31:0] branch_dest_id2ex;
+reg [32:0] branch_dest_id2ex;
 reg [31:0] alu_sa_imm;
 reg [`ALU_SRC_WIDTH-1:0] alu_src;
 reg [`ALU_OPT_WIDTH-1:0] alu_opt;

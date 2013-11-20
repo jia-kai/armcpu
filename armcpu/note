@@ -6,7 +6,7 @@ stall set is "removed"; change at negedge
 
 regfile is written by stage_mem at negedge
 
-branch: branch_dest_id2ex: lowest bit indicate whether to jump to this
+branch: branch_dest_id2ex: highest bit indicate whether to jump to this
 address(0), or reg2_data(1)
 
 access to cp0 registers and interrupt handling occur at mem stage
@@ -31,10 +31,12 @@ CP0 registers
 
 usermode:
 Status.KSU = 10
+and
 Status.EXL = 0
 
 kernelmode:
 Status.KSU = 00
+or
 Status.EXL = 1
 
 CP0[0]: Index
@@ -123,4 +125,12 @@ virtual address mapping
 physical address mapping
 ===============================
 [0x00000000, 0x007FFFFF]	RAM		8MB
+
+
+
+interrupt
+=============
+timer	7
+ps/2	6
+serial	4
 

@@ -1,6 +1,6 @@
 /*
  * $File: stage_ex.v
- * $Date: Wed Nov 20 08:49:54 2013 +0800
+ * $Date: Wed Nov 20 19:32:48 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -28,7 +28,7 @@ module stage_ex(
 
 	// updated on negedge, regardness of stall
 	output reg branch_flag,
-	output [31:0] branch_dest,
+	output reg [31:0] branch_dest,
 	
 	output [`EX2MEM_WIRE_WIDTH-1:0] interstage_ex2mem);
 
@@ -46,14 +46,17 @@ module stage_ex(
 		.illegal_opt(alu_illegal_opt));
 
 
-	assign branch_flag_cond = (
+	assign branch_flag_comb = (
 		(branch_opt_id2ex == `BRANCH_ON_ALU_EQZ && !result_from_alu) ||
 		(branch_opt_id2ex == `BRANCH_ON_ALU_NEZ && result_from_alu) ||
 		(branch_opt_id2ex == `BRANCH_UNCOND));
-	assign branch_dest = branch_dest_id2ex[0] ? reg2_data : branch_dest_id2ex;
+	wire [31:0] branch_dest_comb =
+		branch_dest_id2ex[32] ? reg2_data : branch_dest_id2ex;
 
-	always @(negedge clk)
-		branch_flag <= branch_flag_cond;	// make sure addr arrives first
+	always @(negedge clk) begin
+		branch_flag <= branch_flag_comb;
+		branch_dest <= branch_dest_comb;
+	end
 
 	always @(posedge clk) begin
 		if (rst || !stall || clear) begin

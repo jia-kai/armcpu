@@ -1,6 +1,6 @@
 /*
  * $File: cp0.v
- * $Date: Wed Nov 20 16:47:17 2013 +0800
+ * $Date: Wed Nov 20 19:42:08 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -52,7 +52,7 @@ module cp0(
 
 
 	task setup_exc; begin
-		$display("time=%g: impending exception: ip=%b code=%h epc=%h",
+		$display("time=%g impending exception: ip=%b code=%h epc=%h",
 			$time, exc_ip, exc_code, exc_epc);
 
 		// no other modification when EXL = 1,
@@ -83,6 +83,7 @@ module cp0(
 		regmem[`CP0_STATUS][1] <= 0;	// EXL
 		exc_jmp_flag <= 1;
 		exc_jmp_dest <= regmem[`CP0_EPC];
+		$display("time=%g eret: %h", $time, regmem[`CP0_EPC]);
 	end endtask
 
 	always @(posedge clk) begin
@@ -91,7 +92,7 @@ module cp0(
 			integer i;
 			for (i = 0; i < `CP0_NR_REG; i = i + 1)
 				regmem[i] <= 0;
-		end begin
+		end else begin
 			if (add_counter)
 				regmem[`CP0_COUNT] <= regmem[`CP0_COUNT] + 1'b1;
 

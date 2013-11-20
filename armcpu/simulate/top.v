@@ -1,10 +1,12 @@
 /*
  * $File: top.v
- * $Date: Wed Nov 20 16:51:45 2013 +0800
+ * $Date: Wed Nov 20 19:02:18 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 `timescale 1ns/1ps
+
+`include "src/cp0_def.vh"
 
 module top;
 	reg clk = 0, clk_half = 0;
@@ -89,6 +91,23 @@ module top;
 		$display("time=%g reg31($ra)=%h", $time,
 			usystem.ucpu.uid.uregfile.mem[31]);
 
+
+	wire is_user_mode = usystem.ucpu.is_user_mode;
+	always @(is_user_mode)
+		if (is_user_mode)
+			$display("time=%g cpu entered user mode", $time);
+		else
+			$display("time=%g cpu entered kernel mode", $time);
+
+	wire [31:0]
+		cp0_status = usystem.ucpu.umem.ucp0.regmem[`CP0_STATUS],
+		cp0_cause = usystem.ucpu.umem.ucp0.regmem[`CP0_CAUSE];
+	always @(cp0_status)
+		$display("time=%g cp0_status: IM=%b KSU=%b EXC=%b IE=%b",
+			$time, cp0_status[15:8], cp0_status[4:3], cp0_status[1], cp0_status[0]);
+	always @(cp0_cause)
+		$display("time=%g cp0_cause: IP=%b ExcCode=%h",
+			$time, cp0_cause[15:8], cp0_cause[6:2]);
 
 endmodule
 

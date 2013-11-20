@@ -74,7 +74,7 @@ f:
 
 
 main:
-	li $sp, 4 * 1024 * 1024 + 40
+	li $sp, 4 * 1024 * 1024 + 40 + 0x80000000
 	move $fp, $sp
 
 	addiu	$sp,$sp,-24

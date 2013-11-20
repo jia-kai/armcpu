@@ -1,12 +1,13 @@
 /*
  * $File: stage_mem.v
- * $Date: Wed Nov 20 14:29:40 2013 +0800
+ * $Date: Wed Nov 20 19:51:28 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 `include "common.vh"
 `include "mem_opt.vh"
 `include "gencode/ex2mem_param.v"
+`include "int_def.vh"
 
 // memory read/write
 module stage_mem(
@@ -43,7 +44,7 @@ module stage_mem(
 	`include "gencode/ex2mem_extract_load.v"
 
 	reg state;
-	localparam READY = 1'b0, WAIT_MMU = 1'b1;
+	localparam READY = 1'b0, WAIT = 1'b1;
 
 	reg [`REGADDR_WIDTH-1:0] wb_reg_addr_latch;
 
@@ -92,6 +93,7 @@ module stage_mem(
 			READY: begin
 				cp0_exc_epc <= exc_epc_ex2mem;
 				cp0_exc_ip <= 0;
+				wb_reg_addr_latch <= wb_reg_addr_ex2mem;
 				if (exc_code_ex2mem != `EC_NONE) begin
 					cp0_exc_code <= exc_code_ex2mem;
 					cp0_exc_badvaddr <= exc_badvaddr_ex2mem;
@@ -104,22 +106,26 @@ module stage_mem(
 					wb_reg_addr <= wb_reg_addr_ex2mem;
 					wb_reg_data <= alu_result;
 					if (mem_opt_ex2mem == `MEM_OPT_WRITE_SPECIAL) begin
-						state <= WAIT_MMU;
+						state <= WAIT;
 						cp0_write_addr <= mem_addr_ex2mem[`CP0_REG_ADDR_WIDTH-1:0];
 						cp0_write_data <= mem_data_ex2mem;
+
+						// fire a timer ack when writing to compare to clear
+						// interrupt
+						if (mem_addr_ex2mem[`CP0_REG_ADDR_WIDTH-1:0] == `CP0_COMPARE)
+							int_ack[`INT_TIMER] <= 1;
 					end else if (mem_opt_ex2mem == `MEM_OPT_READ_SPECIAL)
 						wb_reg_data <= cp0_reg_unwind[mem_addr_ex2mem];
 					else if (mem_opt_ex2mem != `MEM_OPT_NONE) begin
-						state <= WAIT_MMU;
+						state <= WAIT;
 						mmu_opt <= mem_opt_ex2mem;
 						mmu_addr <= mem_addr_ex2mem;
 						mmu_data_out <= mem_data_ex2mem;
-						wb_reg_addr_latch <= wb_reg_addr_ex2mem;
 						wb_reg_addr <= 0;
 					end
 				end
 			end
-			WAIT_MMU:
+			WAIT:
 				if (mmu_exc_code != `EC_NONE) begin
 					state <= READY;
 					cp0_exc_code <= mmu_exc_code;

@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Wed Nov 20 16:26:47 2013 +0800
+ * $Date: Wed Nov 20 19:24:25 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -52,11 +52,11 @@ module stage_id(
 				instr_imm_unsignext = {16'b0, instr_imm};
 
 	
-	wire [31:0]
+	wire [32:0]
         // pc-relative offset address
-        branch_addr_pc_relative = next_pc + {instr_imm_signext[29:0], 2'b00},
+        branch_dest_pc_relative = {1'b0, next_pc + {instr_imm_signext[29:0], 2'b00}},
         // absolute jump in 256MB area
-        branch_addr_pc_region = {next_pc[31:28], instr[25:0], 2'b00};
+        branch_dest_pc_region = {1'b0, next_pc[31:28], instr[25:0], 2'b00};
 
 	register_file uregfile(.clk(clk), .rst(rst),
 		.read1_addr(instr_rs), .read2_addr(instr_rt),
@@ -144,7 +144,7 @@ module stage_id(
         end
         alu_from_reg(alu_opt);
         branch_opt_id2ex <= cond;
-        branch_dest_id2ex <= branch_addr_pc_relative;
+        branch_dest_id2ex <= branch_dest_pc_relative;
     end endtask
 
     // set exception for invalid instruction
@@ -196,12 +196,12 @@ module stage_id(
 
 	task proc_instr_j; begin
 		branch_opt_id2ex <= `BRANCH_UNCOND;
-		branch_dest_id2ex <= branch_addr_pc_region;
+		branch_dest_id2ex <= branch_dest_pc_region;
 	end endtask
 
     task proc_instr_jr; begin
         branch_opt_id2ex <= `BRANCH_UNCOND;
-        branch_dest_id2ex <= 32'b1; // set to reg2_data
+        branch_dest_id2ex[32] <= 1; // set to reg2_data
 		reg2_addr <= instr_rs;
 		reg2_data <= rf_data1;
     end endtask

@@ -1,6 +1,6 @@
 /*
  * $File: cpu.v
- * $Date: Wed Nov 20 14:23:45 2013 +0800
+ * $Date: Wed Nov 20 18:29:21 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -14,6 +14,8 @@
 `include "gencode/if2id_param.v"
 `include "gencode/id2ex_param.v"
 `include "gencode/ex2mem_param.v"
+
+`include "int_def.vh"
 
 module cpu(
 	input clk,
@@ -56,8 +58,28 @@ module cpu(
 	reg [31:0] jmp_dest;
 
 	wire [`CP0_REG_TOT_WIDTH-1:0] cp0_reg;
+	wire [31:0] cp0_reg_unwind [0:`CP0_NR_REG-1];
+
+	genvar i;
+	generate
+		for (i = 0; i < `CP0_NR_REG; i = i + 1) begin: CP0_REG_UNWIND
+			assign cp0_reg_unwind[i] = `CP0_VISIT_REG(cp0_reg, i);
+		end
+	endgenerate
 
 	wire stall, clear;
+
+	wire [7:0] int_req, int_ack;
+
+	assign is_user_mode = cp0_reg_unwind[`CP0_STATUS][4:3] &&
+						!cp0_reg_unwind[`CP0_STATUS][1];
+			
+	generate
+		for (i = 0; i < `INT_MASK_WIDTH; i = i + 1) begin: SET_INT_REQ
+			if (i != `INT_TIMER)
+				assign int_req[i] = 0;
+		end
+	endgenerate
 
 	assign {ex2mem_mem_opt, ex2mem_wb_reg_addr} = 
 		interstage_ex2mem[`MEM_OPT_WIDTH+`REGADDR_WIDTH+31:32];
@@ -121,7 +143,7 @@ module cpu(
 		.set_stall(stall), .set_clear(clear),
 		.exc_jmp_flag(exc_jmp_flag), .exc_jmp_dest(exc_jmp_dest),
 		.cp0_reg(cp0_reg),
-		.int_req(8'b0), .int_ack(),
+		.int_req(int_req), .int_ack(int_ack),
 		.mmu_addr(mmu_data_addr),
 		.mmu_data_in(mmu_data_from_mmu),
 		.mmu_data_out(mmu_data_to_mmu),
@@ -140,5 +162,12 @@ module cpu(
 		.dev_mem_data_out(dev_mem_data_out),
 		.dev_mem_is_write(dev_mem_is_write),
 		.dev_mem_busy(dev_mem_busy));
+
+	timer utimer(.clk(clk), .rst(rst),
+		.cp0_count(cp0_reg_unwind[`CP0_COUNT]),
+		.cp0_compare(cp0_reg_unwind[`CP0_COMPARE]),
+		.int_req(int_req[`INT_TIMER]),
+		.int_ack(int_ack[`INT_TIMER]));
+
 endmodule
 

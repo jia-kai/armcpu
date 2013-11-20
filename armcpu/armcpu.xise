@@ -21,15 +21,15 @@
     </file>
     <file xil_pn:name="src/stage_mem.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="2"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="4"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="5"/>
     </file>
     <file xil_pn:name="src/cpu.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="3"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="11"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="12"/>
     </file>
     <file xil_pn:name="src/forward.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="4"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="9"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="10"/>
     </file>
     <file xil_pn:name="src/register_file.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="5"/>
@@ -37,19 +37,19 @@
     </file>
     <file xil_pn:name="src/stage_ex.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="6"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="7"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="8"/>
     </file>
     <file xil_pn:name="src/stage_id.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="7"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="6"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="7"/>
     </file>
     <file xil_pn:name="src/stage_if.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="8"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="5"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="6"/>
     </file>
     <file xil_pn:name="synthesis/digseg_driver.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="24"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="12"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="13"/>
     </file>
     <file xil_pn:name="synthesis/misc.ucf" xil_pn:type="FILE_UCF">
       <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
@@ -59,15 +59,15 @@
     </file>
     <file xil_pn:name="src/system.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="112"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="13"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="14"/>
     </file>
     <file xil_pn:name="src/mmu.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="115"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="8"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="9"/>
     </file>
     <file xil_pn:name="src/phy_mem_ctrl.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="116"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="10"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="11"/>
     </file>
     <file xil_pn:name="synthesis/led.ucf" xil_pn:type="FILE_UCF">
       <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
@@ -77,11 +77,15 @@
     </file>
     <file xil_pn:name="synthesis/armcpu.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="132"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="14"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="15"/>
     </file>
     <file xil_pn:name="src/cp0.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="171"/>
       <association xil_pn:name="Implementation" xil_pn:seqID="2"/>
+    </file>
+    <file xil_pn:name="src/timer.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="83"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="4"/>
     </file>
   </files>
 
@@ -422,19 +426,20 @@
     <!-- project is analyzed based on files automatically identified as       -->
     <!-- include files.                                                       -->
     <file xil_pn:name="src/alu_opt.vh" xil_pn:type="FILE_VERILOG"/>
+    <file xil_pn:name="src/cp0_def.vh" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/common.vh" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/branch_opt.vh" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/mem_opt.vh" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/if2id_param.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/id2ex_param.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/ex2mem_param.v" xil_pn:type="FILE_VERILOG"/>
+    <file xil_pn:name="src/int_def.vh" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/id2ex_extract_load.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/ex2mem_extract_store.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/if2id_extract_load.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/id2ex_extract_store.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/if2id_extract_store.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/ex2mem_extract_load.v" xil_pn:type="FILE_VERILOG"/>
-    <file xil_pn:name="src/cp0_def.vh" xil_pn:type="FILE_VERILOG"/>
   </autoManagedFiles>
 
 </project>
