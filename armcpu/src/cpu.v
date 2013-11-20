@@ -1,6 +1,6 @@
 /*
  * $File: cpu.v
- * $Date: Sat Nov 16 23:47:01 2013 +0800
+ * $Date: Wed Nov 20 14:23:45 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -30,11 +30,11 @@ module cpu(
 
 	// -------------------------------------------------------------------
 
-	wire [31:0] instrmem_addr, instrmem_data,
-		datamem_addr,
-		datamem_data_to_mem, datamem_data_from_mem;
+	wire [31:0] mmu_instr_addr, mmu_instr_data,
+		mmu_data_addr, mmu_data_to_mmu, mmu_data_from_mmu;
 	wire mmu_busy;
-	wire [`MEM_OPT_WIDTH-1:0] datamem_opt;
+	wire [`EXC_CODE_WIDTH-1:0] mmu_exc_code;
+	wire [`MEM_OPT_WIDTH-1:0] mmu_data_opt;
 
 	wire [`IF2ID_WIRE_WIDTH-1:0] interstage_if2id;
 	wire [`ID2EX_WIRE_WIDTH-1:0] interstage_id2ex;
@@ -50,13 +50,29 @@ module cpu(
 		id2ex_reg2_data, id2ex_reg2_forward_data;
 	wire [31:0] ex2mem_alu_result = interstage_ex2mem[31:0];
 
-	wire branch;
-	wire [31:0] branch_dest;
+	wire branch_flag, exc_jmp_flag;
+	reg jmp_flag;
+	wire [31:0] branch_dest, exc_jmp_dest;
+	reg [31:0] jmp_dest;
 
-	wire stall;
+	wire [`CP0_REG_TOT_WIDTH-1:0] cp0_reg;
+
+	wire stall, clear;
 
 	assign {ex2mem_mem_opt, ex2mem_wb_reg_addr} = 
 		interstage_ex2mem[`MEM_OPT_WIDTH+`REGADDR_WIDTH+31:32];
+
+	always @(*) begin
+		jmp_flag = 0;
+		jmp_dest = 0;
+		if (exc_jmp_flag) begin
+			jmp_flag = 1;
+			jmp_dest = exc_jmp_dest;
+		end else if (branch_flag) begin
+			jmp_flag = 1;
+			jmp_dest = branch_dest;
+		end
+	end
 
 	forward ufwd1(
 		.opr_reg_addr(id2ex_reg1_addr),
@@ -77,41 +93,48 @@ module cpu(
 		.regfile_write_data(wb_data),
 		.forward_data(id2ex_reg2_forward_data));
 
-	stage_if uif(.clk(clk), .rst(rst), .stall(stall),
-		.branch(branch), .branch_dest(branch_dest),
+	stage_if uif(.clk(clk), .rst(rst), .stall(stall), .clear(clear),
+		.jmp_flag(jmp_flag), .jmp_dest(jmp_dest),
 		.interstage_if2id(interstage_if2id), 
-		.mem_addr(instrmem_addr), .mem_data(instrmem_data));
+		.mem_addr(mmu_instr_addr), .mem_data(mmu_instr_data),
+		.mem_exc_code(mmu_exc_code));
 
-	stage_id uid(.clk(clk), .rst(rst), .stall(stall),
+	stage_id uid(.clk(clk), .rst(rst), .stall(stall), .clear(clear),
 		.interstage_if2id(interstage_if2id),
+		.cur_if_branch(branch_flag),
 		.reg_write_addr(wb_addr), .reg_write_data(wb_data),
 		.reg1_addr(id2ex_reg1_addr), .reg1_data(id2ex_reg1_data),
 		.reg2_addr(id2ex_reg2_addr), .reg2_data(id2ex_reg2_data),
 		.interstage_id2ex(interstage_id2ex),
 		.debug_out(debug_out));
 
-	stage_ex uex(.clk(clk), .rst(rst), .stall(stall),
+	stage_ex uex(.clk(clk), .rst(rst), .stall(stall), .clear(clear),
 		.interstage_id2ex(interstage_id2ex),
 		.reg1_data(id2ex_reg1_forward_data),
 		.reg2_data(id2ex_reg2_forward_data),
-		.do_branch(branch), .branch_dest(branch_dest),
+		.branch_flag(branch_flag), .branch_dest(branch_dest),
 		.interstage_ex2mem(interstage_ex2mem));
 
 	stage_mem umem(.clk(clk), .rst(rst),
 		.interstage_ex2mem(interstage_ex2mem),
 		.wb_reg_addr(wb_addr), .wb_reg_data(wb_data),
-		.set_stall(stall),
-		.mmu_addr(datamem_addr),
-		.mmu_data_in(datamem_data_from_mem),
-		.mmu_data_out(datamem_data_to_mem),
-		.mmu_opt(datamem_opt),
+		.set_stall(stall), .set_clear(clear),
+		.exc_jmp_flag(exc_jmp_flag), .exc_jmp_dest(exc_jmp_dest),
+		.cp0_reg(cp0_reg),
+		.int_req(8'b0), .int_ack(),
+		.mmu_addr(mmu_data_addr),
+		.mmu_data_in(mmu_data_from_mmu),
+		.mmu_data_out(mmu_data_to_mmu),
+		.mmu_opt(mmu_data_opt),
+		.mmu_exc_code(mmu_exc_code),
 		.mmu_busy(mmu_busy));
 
 	mmu ummu(.clk(clk), .rst(rst),
-		.instr_addr(instrmem_addr), .instr_out(instrmem_data),
-		.data_opt(datamem_opt), .data_addr(datamem_addr),
-		.data_in(datamem_data_to_mem), .data_out(datamem_data_from_mem),
+		.instr_addr(mmu_instr_addr), .instr_out(mmu_instr_data),
+		.data_opt(mmu_data_opt), .data_addr(mmu_data_addr),
+		.data_in(mmu_data_to_mmu), .data_out(mmu_data_from_mmu),
 		.busy(mmu_busy),
+		.exc_code(mmu_exc_code),
 		.dev_mem_addr(dev_mem_addr),
 		.dev_mem_data_in(dev_mem_data_in),
 		.dev_mem_data_out(dev_mem_data_out),

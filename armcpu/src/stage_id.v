@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Sun Nov 17 19:16:11 2013 +0800
+ * $Date: Wed Nov 20 08:44:49 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -19,8 +19,12 @@ module stage_id(
 	input clk,
 	input rst,
 	input stall,
+    input clear,
 
 	input [`IF2ID_WIRE_WIDTH-1:0] interstage_if2id,
+
+    // to determine whether current instruction is in branch delay slot
+    input cur_if_branch,
 
 	// since reg[0] is always 0, no need for write enable signal;
 	input [`REGADDR_WIDTH-1:0] reg_write_addr,
@@ -80,18 +84,20 @@ module stage_id(
 		alu_opt <= instr_func;
 	end endtask
 
+    // set alu_opr2 from reg data
 	task alu_from_reg(input [`ALU_OPT_WIDTH-1:0] opt); begin
 		alu_src <= `ALU_SRC_REG;
 		alu_opt <= opt;
 	end endtask
 
+    // set alu_opr2 from imm
 	task alu_from_imm(input [`ALU_OPT_WIDTH-1:0] opt, input [31:0] imm); begin
 		alu_src <= `ALU_SRC_IMM;
 		alu_opt <= opt;
 		alu_sa_imm <= imm;
 	end endtask
 
-
+    // setup for memory operations
 	task mem_opt(input [`MEM_OPT_WIDTH-1:0] opt); begin
 		assign_reg1();
 		assign_reg2();
@@ -101,12 +107,14 @@ module stage_id(
 		mem_opt_id2ex <= opt;
 	end endtask
 
+    // write back, data from alu with imm opr
 	task wb_with_alu_imm(input [`ALU_OPT_WIDTH-1:0] alu_opt, input [31:0] imm); begin
 		wb_reg_addr_id2ex <= instr_rt;
 		assign_reg1();
 		alu_from_imm(alu_opt, imm);
 	end endtask
 
+    // helper for implementing conditional branch
     task proc_cond_branch(
             input set_reg,
             input [`ALU_OPT_WIDTH-1:0] alu_opt,
@@ -120,8 +128,10 @@ module stage_id(
         branch_dest_id2ex <= branch_addr_pc_relative;
     end endtask
 
+    // set exception for invalid instruction
     task invalid_instruction; begin
-        $warning("invalid instruction: %h", instr); // TODO: exception
+        $warning("invalid instruction: %h", instr);
+        exc_code_id2ex <= `EC_RI;
     end endtask
 
 	// process itype instructions
@@ -198,28 +208,42 @@ module stage_id(
 		reg1_addr <= 0;
 		reg2_addr <= 0;
 		mem_opt_id2ex <= `MEM_OPT_NONE;
+        exc_code_id2ex <= `EC_NONE;
 	end endtask
+
+    task do_decode; begin
+        case (instr_opcode)
+            6'b000000: case(instr_func)
+                6'h08: proc_instr_jr();
+                6'h09: proc_instr_jalr();
+                default: proc_rtype();
+            endcase
+            6'b000010:
+                proc_instr_j();
+            6'b000011:
+                proc_instr_jal();
+            default:
+                proc_itype();
+        endcase
+        $display("\033[32m < -- id -- > time=%g got instruction: pc=%h instr=%h \033[0m",
+            $time, next_pc - 4, instr);
+    end endtask
 
 	always @(posedge clk) begin
 		if (rst)
 			reset();
 		else if (!stall) begin
 			reset();
-			case (instr_opcode)
-				6'b000000: case(instr_func)
-                    6'h08: proc_instr_jr();
-                    6'h09: proc_instr_jalr();
-                    default: proc_rtype();
-                endcase
-				6'b000010:
-					proc_instr_j();
-                6'b000011:
-                    proc_instr_jal();
-				default:
-					proc_itype();
-			endcase
-			$display("\033[32m < -- id -- > time=%g got instruction: pc=%h instr=%h \033[0m",
-				$time, next_pc - 4, instr);
+            if (!clear) begin
+                if (exc_code_if2id != `EC_NONE) begin
+                    exc_code_id2ex <= exc_code_if2id;
+                    exc_epc_id2ex <= exc_addr_if2id;
+                    exc_badvaddr_id2ex <= exc_addr_if2id;
+                end else begin
+                    exc_epc_id2ex <= cur_if_branch ? next_pc - 8 : next_pc - 4;
+                    do_decode();
+                end
+            end
 		end
 	end
 

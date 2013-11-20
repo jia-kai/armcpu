@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: gencode.py
-# $Date: Sat Nov 16 23:33:01 2013 +0800
+# $Date: Wed Nov 20 08:40:45 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import os
@@ -9,11 +9,18 @@ import os.path
 from collections import namedtuple
 
 trans_if2id = [
+    ('exc_code_if2id', 'EXC_CODE_WIDTH'),
+    ('exc_addr_if2id', 32), # epc and badvaddr should all be set to this
+
     ('next_pc', 32),
     ('instr', 32)
 ]
 
 trans_id2ex = [
+    ('exc_code_id2ex', 'EXC_CODE_WIDTH'),
+    ('exc_epc_id2ex', 32),
+    ('exc_badvaddr_id2ex', 32),
+
     ('branch_opt_id2ex', 'BRANCH_OPT_WIDTH'),
     ('branch_dest_id2ex', 32),
 
@@ -27,6 +34,10 @@ trans_id2ex = [
 ]
 
 trans_ex2mem = [
+    ('exc_code_ex2mem', 'EXC_CODE_WIDTH'),
+    ('exc_epc_ex2mem', 32),
+    ('exc_badvaddr_ex2mem', 32),
+
     ('mem_addr_ex2mem', 32),
     ('mem_data_ex2mem', 32),
 

@@ -1,6 +1,6 @@
 /*
  * $File: phy_mem_ctrl.v
- * $Date: Sun Nov 17 20:18:42 2013 +0800
+ * $Date: Wed Nov 20 10:43:42 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -46,8 +46,10 @@ module phy_mem_ctrl(
 	assign busy = (state != READ_RAM || is_write);
 
 	always @(*)
-		if (addr[1:0])
+        if (addr[1:0]) begin
 			$warning("time=%g access unaligned addr: %h", $time, addr);
+            $fatal("exit due to previous error");
+        end
 
 	wire [20:0]
 		addr_to_ram = (ram_oe ? write_addr_latch[22:2] : addr[22:2]);

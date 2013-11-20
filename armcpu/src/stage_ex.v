@@ -1,6 +1,6 @@
 /*
  * $File: stage_ex.v
- * $Date: Sun Nov 17 19:46:23 2013 +0800
+ * $Date: Wed Nov 20 08:49:54 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -19,13 +19,15 @@ module stage_ex(
 	input clk,
 	input rst,
 	input stall,
+	input clear,
 
 	input [`ID2EX_WIRE_WIDTH-1:0] interstage_id2ex,
 
 	input [31:0] reg1_data,
 	input [31:0] reg2_data,
 
-	output reg do_branch,
+	// updated on negedge, regardness of stall
+	output reg branch_flag,
 	output [31:0] branch_dest,
 	
 	output [`EX2MEM_WIRE_WIDTH-1:0] interstage_ex2mem);
@@ -34,34 +36,45 @@ module stage_ex(
 	`include "gencode/ex2mem_extract_store.v"
 
 	wire [31:0] result_from_alu;
+	wire alu_illegal_opt;
 
 	alu ualu(
 		.opr1(reg1_data),
 		.opr2(alu_src == `ALU_SRC_IMM ? alu_sa_imm : reg2_data),
 		.sa_imm(alu_sa_imm),
-		.opt(alu_opt), .result(result_from_alu), .illegal_opt());
+		.opt(alu_opt), .result(result_from_alu),
+		.illegal_opt(alu_illegal_opt));
 
 
-	assign do_branch_cond = (
+	assign branch_flag_cond = (
 		(branch_opt_id2ex == `BRANCH_ON_ALU_EQZ && !result_from_alu) ||
 		(branch_opt_id2ex == `BRANCH_ON_ALU_NEZ && result_from_alu) ||
 		(branch_opt_id2ex == `BRANCH_UNCOND));
 	assign branch_dest = branch_dest_id2ex[0] ? reg2_data : branch_dest_id2ex;
 
 	always @(negedge clk)
-		do_branch <= do_branch_cond;	// make sure addr arrives first
+		branch_flag <= branch_flag_cond;	// make sure addr arrives first
 
 	always @(posedge clk) begin
-		if (rst) begin
+		if (rst || !stall || clear) begin
 			mem_opt_ex2mem <= `MEM_OPT_NONE;
 			wb_reg_addr_ex2mem <= 0;
+			exc_code_ex2mem <= `EC_NONE;
 		end
-		if (!stall) begin
-			alu_result <= result_from_alu;
-			wb_reg_addr_ex2mem <= wb_reg_addr_id2ex;
-			mem_opt_ex2mem <= mem_opt_id2ex;
-			mem_addr_ex2mem <= result_from_alu;
-			mem_data_ex2mem <= reg2_data;
+		if (!stall && !clear) begin
+			exc_epc_ex2mem <= exc_epc_id2ex;
+			exc_badvaddr_ex2mem <= exc_badvaddr_id2ex;
+			if (exc_code_id2ex != `EC_NONE)
+				exc_code_ex2mem <= exc_code_id2ex;
+			else if (alu_illegal_opt)
+				exc_code_ex2mem <= `EC_RI;
+			else begin
+				alu_result <= result_from_alu;
+				wb_reg_addr_ex2mem <= wb_reg_addr_id2ex;
+				mem_opt_ex2mem <= mem_opt_id2ex;
+				mem_addr_ex2mem <= result_from_alu;
+				mem_data_ex2mem <= reg2_data;
+			end
 		end
 	end
 

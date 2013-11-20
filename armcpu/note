@@ -2,18 +2,24 @@ regfile is always written when addr != 0 on posedge, regardless of stall
 branch flag and set_stall should be set by combinational logic
 
 stall: the state of whole system should be identical to that where time during
-stall set is "removed"
+stall set is "removed"; change at negedge
 
 regfile is written by stage_mem at negedge
 
 branch: branch_dest_id2ex: lowest bit indicate whether to jump to this
 address(0), or reg2_data(1)
 
+access to cp0 registers and interrupt handling occur at mem stage
+
+exc_epc_id2ex is always set regardless of whether exception actually happens;
+so in later stages corrent epc could be retrieved
+
+int_req updated on posedge, and int_ack on negedge
+
 ================
 POSSIBLE BUG:
 if access of $ra happens in the delay slot of jal, armcpu would use new value
 of $ra
-
 
 
 ===============
@@ -53,7 +59,7 @@ CP0[11]: Compare
 CP0[12]: Status
 [15:8]	IM[7:0]	interrupt mask
 [4:3]	KSU		
-[1]		EXL		exception level (when exception and in kernel mode)
+[1]		EXL		exception level (set when exception and in kernel mode)
 [0]		IE		interrupt enable (1 = enable)
 
 CP0[13]: Cause
@@ -94,4 +100,5 @@ lw
 sw
 
 
-note for lb: could reside on non-boundary
+TODO: sb, lb: could reside on non-boundary
+

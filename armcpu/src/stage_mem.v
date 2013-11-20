@@ -1,6 +1,6 @@
 /*
  * $File: stage_mem.v
- * $Date: Sun Nov 17 14:18:14 2013 +0800
+ * $Date: Wed Nov 20 14:29:40 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -19,53 +19,116 @@ module stage_mem(
 	output reg [31:0] wb_reg_data,
 
 	output set_stall,
+	output set_clear,
+
+	output exc_jmp_flag,
+	output [31:0] exc_jmp_dest,
+
+	output [`CP0_REG_TOT_WIDTH-1:0] cp0_reg,
+
+	// handle interrupt; interface to misc divices
+	input [`INT_MASK_WIDTH-1:0] int_req,
+	output reg [`INT_MASK_WIDTH-1:0] int_ack,
 
 	// interface to MMU
 	output reg [31:0] mmu_addr,
 	input [31:0] mmu_data_in,
 	output reg [31:0] mmu_data_out,
 	output reg [`MEM_OPT_WIDTH-1:0] mmu_opt,
+	input [`EXC_CODE_WIDTH-1:0] mmu_exc_code,
 	input mmu_busy);
+
+	// ------------------------------------------------------------------
 
 	`include "gencode/ex2mem_extract_load.v"
 
-	reg [1:0] state;
-	localparam READY = 2'b00, WAIT_UNBUSY = 2'b01, SLEEP = 2'b10;
+	reg state;
+	localparam READY = 1'b0, WAIT_MMU = 1'b1;
 
 	reg [`REGADDR_WIDTH-1:0] wb_reg_addr_latch;
 
+	reg [`INT_MASK_WIDTH-1:0] cp0_exc_ip;
+	reg [`EXC_CODE_WIDTH-1:0] cp0_exc_code;
+	reg [`CP0_REG_ADDR_WIDTH-1:0] cp0_write_addr;
+	reg [31:0] cp0_exc_epc, cp0_exc_badvaddr, cp0_write_data;
+
 	assign set_stall = (state != READY);
+	assign set_clear = (cp0_exc_code != `EC_NONE);
+
+	wire [31:0] cp0_reg_unwind [0:`CP0_NR_REG];
+	wire [31:0] cp0_status = cp0_reg_unwind[`CP0_STATUS];
+
+	genvar i;
+	generate
+		for (i = 0; i < `CP0_NR_REG; i = i + 1) begin: CP0_REG_UNWIND
+			assign cp0_reg_unwind[i] = `CP0_VISIT_REG(cp0_reg, i);
+		end
+	endgenerate
+
+	wire [`INT_MASK_WIDTH-1:0] int_pending_mask = int_req & cp0_status[15:8];
+
+	assign has_int_pending = (int_pending_mask &&
+		cp0_status[0] /* IE */ && !cp0_status[1] /* EXL */);
+
+	cp0 ucp0(.clk(clk), .rst(rst), .add_counter(!set_stall),
+		.cp0_reg(cp0_reg),
+		.reg_write_addr(cp0_write_addr), .reg_write_data(cp0_write_data),
+		.exc_ip(cp0_exc_ip), .exc_code(cp0_exc_code),
+		.exc_epc(cp0_exc_epc), .exc_badvaddr(cp0_exc_badvaddr),
+		.exc_jmp_flag(exc_jmp_flag), .exc_jmp_dest(exc_jmp_dest));
+
 
 	always @(negedge clk) begin
+		// int_ack, mmu_opt and cp0_write_addr would be asserted for at most
+		// 1 cycle
+		int_ack <= 0;
+		mmu_opt <= `MEM_OPT_NONE;
+		cp0_write_addr <= 0;
+
 		if (rst) begin
 			state <= READY;
-			mmu_opt <= `MEM_OPT_NONE;
-		end
-		else case (state)
+			cp0_exc_code <= `EC_NONE;
+		end else case (state)
 			READY: begin
-				wb_reg_addr <= wb_reg_addr_ex2mem;
-				wb_reg_data <= alu_result;
-				mmu_opt <= mem_opt_ex2mem;
-				mmu_addr <= mem_addr_ex2mem;
-				mmu_data_out <= mem_data_ex2mem;
-				if (mem_opt_ex2mem != `MEM_OPT_NONE) begin
-					state <= WAIT_UNBUSY;
-					wb_reg_addr_latch <= wb_reg_addr_ex2mem;
-					wb_reg_addr <= 0;
+				cp0_exc_epc <= exc_epc_ex2mem;
+				cp0_exc_ip <= 0;
+				if (exc_code_ex2mem != `EC_NONE) begin
+					cp0_exc_code <= exc_code_ex2mem;
+					cp0_exc_badvaddr <= exc_badvaddr_ex2mem;
+				end else if (has_int_pending) begin
+					cp0_exc_code <= `EC_INT;
+					cp0_exc_ip <= int_pending_mask;
+					int_ack <= int_pending_mask;
+				end else begin
+					cp0_exc_code <= `EC_NONE;
+					wb_reg_addr <= wb_reg_addr_ex2mem;
+					wb_reg_data <= alu_result;
+					if (mem_opt_ex2mem == `MEM_OPT_WRITE_SPECIAL) begin
+						state <= WAIT_MMU;
+						cp0_write_addr <= mem_addr_ex2mem[`CP0_REG_ADDR_WIDTH-1:0];
+						cp0_write_data <= mem_data_ex2mem;
+					end else if (mem_opt_ex2mem == `MEM_OPT_READ_SPECIAL)
+						wb_reg_data <= cp0_reg_unwind[mem_addr_ex2mem];
+					else if (mem_opt_ex2mem != `MEM_OPT_NONE) begin
+						state <= WAIT_MMU;
+						mmu_opt <= mem_opt_ex2mem;
+						mmu_addr <= mem_addr_ex2mem;
+						mmu_data_out <= mem_data_ex2mem;
+						wb_reg_addr_latch <= wb_reg_addr_ex2mem;
+						wb_reg_addr <= 0;
+					end
 				end
 			end
-			WAIT_UNBUSY: begin
-				mmu_opt <= `MEM_OPT_NONE;
-				if (!mmu_busy) begin
+			WAIT_MMU:
+				if (mmu_exc_code != `EC_NONE) begin
+					state <= READY;
+					cp0_exc_code <= mmu_exc_code;
+					cp0_exc_badvaddr <= mmu_addr;
+				end else if (!mmu_busy) begin
+					state <= READY;
 					wb_reg_data <= mmu_data_in;
 					wb_reg_addr <= wb_reg_addr_latch;
-					state <= SLEEP;
 				end
-			end
-			SLEEP:
-				state <= READY;
-			default:
-				state <= READY;
 		endcase
 	end
 
