@@ -1,6 +1,6 @@
 /*
  * $File: stage_if.v
- * $Date: Wed Nov 20 11:13:29 2013 +0800
+ * $Date: Wed Nov 20 15:55:07 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -34,7 +34,7 @@ module stage_if(
 	always @(posedge clk) begin
 		if (rst) begin
 			instr <= 0;
-			pc <= 0;
+			pc <= `SYSTEM_STARTUP_ADDR;
             exc_code_if2id <= `EC_NONE;
 		end else if (!stall) begin
             pc <= mem_addr_plus_4;

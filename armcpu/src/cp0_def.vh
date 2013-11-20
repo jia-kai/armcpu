@@ -1,6 +1,6 @@
 /*
- * $File: cp0_regdef.vh
- * $Date: Wed Nov 20 14:28:14 2013 +0800
+ * $File: cp0_def.vh
+ * $Date: Wed Nov 20 16:25:43 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -10,20 +10,21 @@
 `define CP0_ENTRY_LO1	2
 `define CP0_BADVADDR	3
 `define CP0_COUNT		4
-`define CP0_COMPARE		5
-`define CP0_STATUS		6
-`define CP0_CAUSE		7
-`define CP0_EPC			8
-`define CP0_EBASE		9
+`define CP0_ENTRY_HI    5
+`define CP0_COMPARE		6
+`define CP0_STATUS		7
+`define CP0_CAUSE		8
+`define CP0_EPC			9
+`define CP0_EBASE	    10	
 
 // dummy entry for unimplemented registeres
 // (or better to cause exception when accessing?)
-`define CP0_UNIMPLEMENTED	10	
+`define CP0_UNIMPLEMENTED	11
 
 // dummy entry to disable writing to a register
-`define CP0_REG_NONE	10
+`define CP0_REG_NONE	11
 
-`define CP0_NR_REG		10
+`define CP0_NR_REG		11
 
 `define CP0_REG_TOT_WIDTH	(32 * `CP0_NR_REG)
 

@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Wed Nov 20 08:44:49 2013 +0800
+ * $Date: Wed Nov 20 16:26:47 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -51,6 +51,7 @@ module stage_id(
 	wire [31:0] instr_imm_signext = {{16{instr_imm[15]}}, instr_imm},
 				instr_imm_unsignext = {16'b0, instr_imm};
 
+	
 	wire [31:0]
         // pc-relative offset address
         branch_addr_pc_relative = next_pc + {instr_imm_signext[29:0], 2'b00},
@@ -63,6 +64,24 @@ module stage_id(
 		.data_in(reg_write_data),
 		.data_out1(rf_data1), .data_out2(rf_data2),
 		.debug_out(debug_out));
+
+	reg [`CP0_REG_ADDR_WIDTH-1:0] instr_rd_cp0_regnum;
+	always @(*)
+		case (instr_rd)
+			0: instr_rd_cp0_regnum = `CP0_INDEX;
+			2: instr_rd_cp0_regnum = `CP0_ENTRY_LO0;
+			3: instr_rd_cp0_regnum = `CP0_ENTRY_LO1;
+			8: instr_rd_cp0_regnum = `CP0_BADVADDR;
+			9: instr_rd_cp0_regnum = `CP0_COUNT;
+			10: instr_rd_cp0_regnum = `CP0_ENTRY_HI;
+			11: instr_rd_cp0_regnum = `CP0_COMPARE;
+			12: instr_rd_cp0_regnum = `CP0_STATUS;
+			13: instr_rd_cp0_regnum = `CP0_CAUSE;
+			14: instr_rd_cp0_regnum = `CP0_EPC;
+			15: instr_rd_cp0_regnum = `CP0_EBASE;
+			default:
+				instr_rd_cp0_regnum = `CP0_UNIMPLEMENTED;
+		endcase
 
 	task assign_reg1; begin
 		reg1_addr <= instr_rs;
@@ -200,6 +219,10 @@ module stage_id(
         wb_reg_addr_id2ex <= instr_rd;
     end endtask
 
+	task proc_instr_syscall; begin
+		exc_code_id2ex <= `EC_SYS;
+	end endtask
+
 	task reset; begin
 		branch_opt_id2ex <= `BRANCH_NONE;
 		wb_reg_addr_id2ex <= 0;
@@ -211,17 +234,37 @@ module stage_id(
         exc_code_id2ex <= `EC_NONE;
 	end endtask
 
+	task proc_cp0;
+		if (instr_func == 6'h18)	// ERET
+			exc_code_id2ex <= `EC_ERET;
+		else if (instr_rs == 0) begin	// MFC0
+			mem_opt_id2ex <= `MEM_OPT_READ_SPECIAL;
+			reg1_data <= instr_rd_cp0_regnum;
+			alu_opt <= `ALU_OPT_PASS_OPR1;
+			wb_reg_addr_id2ex <= instr_rt;
+		end else if (instr_rs == 5'b00100)	begin // MTC0
+			mem_opt_id2ex <= `MEM_OPT_WRITE_SPECIAL;
+			reg1_data <= instr_rd_cp0_regnum;
+			assign_reg2();
+			alu_opt <= `ALU_OPT_PASS_OPR1;
+		end else
+			invalid_instruction();
+	endtask
+
     task do_decode; begin
         case (instr_opcode)
             6'b000000: case(instr_func)
                 6'h08: proc_instr_jr();
                 6'h09: proc_instr_jalr();
+				6'h0c: proc_instr_syscall();
                 default: proc_rtype();
             endcase
             6'b000010:
                 proc_instr_j();
             6'b000011:
                 proc_instr_jal();
+			6'b010000:
+				proc_cp0();
             default:
                 proc_itype();
         endcase

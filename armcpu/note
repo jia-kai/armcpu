@@ -16,14 +16,18 @@ so in later stages corrent epc could be retrieved
 
 int_req updated on posedge, and int_ack on negedge
 
+in stage ex, mem_addr and alu_result all come from alu_result
+mem_data come from alu opr2
+
+
+POSSIBLE BUG
 ================
-POSSIBLE BUG:
 if access of $ra happens in the delay slot of jal, armcpu would use new value
 of $ra
 
 
+CP0 registers
 ===============
-CP0 registers:
 
 usermode:
 Status.KSU = 10
@@ -74,8 +78,10 @@ CP0[15]: EBase
 [30]	0
 [29:12]	Exception Base
 
-=========================
+
+
 implemented instructions:
+=========================
 
 addu
 subu
@@ -99,6 +105,22 @@ jalr
 lw
 sw
 
+syscall
+eret
 
-TODO: sb, lb: could reside on non-boundary
+TODO: test: sb, lb: could reside on non-boundary
+
+
+virtual address mapping
+===============================
+# addr						name	permission	physical address
+[0x00000000, 0x7FFFFFFF]	kuseg	user/kernel	MMU
+[0x80000000, 0x9FFFFFFF]	kseg0	kernel		[0x00000000, 0x1FFFFFFF]
+[0xA0000000, 0xBFFFFFFF]	kseg1	kernel		[0x00000000, 0x1FFFFFFF]
+[0xC0000000, 0xFFFFFFFF]	kseg2	kernel		MMU
+
+
+physical address mapping
+===============================
+[0x00000000, 0x007FFFFF]	RAM		8MB
 

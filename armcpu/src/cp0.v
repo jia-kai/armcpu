@@ -1,10 +1,11 @@
 /*
  * $File: cp0.v
- * $Date: Wed Nov 20 14:29:04 2013 +0800
+ * $Date: Wed Nov 20 16:47:17 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
-`include "cp0_regdef.vh"
+`timescale 1ns/1ps
+`include "cp0_def.vh"
 
 // coprocessor 0
 // this implementation differs from MIPS standard in following ways:
@@ -63,7 +64,7 @@ module cp0(
 			regmem[`CP0_BADVADDR] <= exc_badvaddr;
 			regmem[`CP0_CAUSE][15:8] <= exc_ip;
 			regmem[`CP0_CAUSE][6:2] <= exc_code;
-			regmem[`CP0_STATUS][1] <= 1'b1;	// EXL
+			regmem[`CP0_STATUS][1] <= 1;	// EXL
 
 			/*
 			if (`EC_IS_TLB_REFILL(exc_code))
@@ -78,9 +79,15 @@ module cp0(
 
 	end endtask
 
+	task perform_eret; begin
+		regmem[`CP0_STATUS][1] <= 0;	// EXL
+		exc_jmp_flag <= 1;
+		exc_jmp_dest <= regmem[`CP0_EPC];
+	end endtask
+
 	always @(posedge clk) begin
 		exc_jmp_flag <= 0; // only assert exc_jmp_flag for 1 cycle
-		if (rst) begin: SET_REG_ZERO
+		if (rst) begin: RESET_CP0
 			integer i;
 			for (i = 0; i < `CP0_NR_REG; i = i + 1)
 				regmem[i] <= 0;
@@ -88,15 +95,20 @@ module cp0(
 			if (add_counter)
 				regmem[`CP0_COUNT] <= regmem[`CP0_COUNT] + 1'b1;
 
-			if (exc_code != `EC_NONE)
-				setup_exc();
-			else if (reg_write_addr != `CP0_REG_NONE) begin
-				regmem[reg_write_addr] <= reg_write_data;
+			case (exc_code)
+				`EC_NONE:
+					if (reg_write_addr != `CP0_REG_NONE) begin
+						regmem[reg_write_addr] <= reg_write_data;
 
-				// clear timer interrupt when writing to compare
-				if (reg_write_addr == `CP0_COMPARE)
-					regmem[`CP0_CAUSE][15] <= 0;
-			end
+						// clear timer interrupt when writing to compare
+						if (reg_write_addr == `CP0_COMPARE)
+							regmem[`CP0_CAUSE][15] <= 0;
+					end
+				`EC_ERET:
+					perform_eret();
+				default:
+					setup_exc();
+			endcase
 		end
 	end
 

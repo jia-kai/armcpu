@@ -1,6 +1,6 @@
 /*
  * $File: mmu.v
- * $Date: Wed Nov 20 14:21:02 2013 +0800
+ * $Date: Wed Nov 20 15:05:00 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -35,7 +35,7 @@ module mmu(
 	// it is required to response before next posedge
 	// and also latch both data and addr, if multiple-cycle for one operation
 	// needed
-	output [31:0] dev_mem_addr,
+	output reg [31:0] dev_mem_addr,
 	input [31:0] dev_mem_data_in,
 	output reg [31:0] dev_mem_data_out,
 	output dev_mem_is_write,
@@ -48,8 +48,6 @@ module mmu(
 	always @(*) begin
 		if (instr_addr[1:0])
 			$warning("time=%g unaligned instr_addr: %h", $time, instr_addr);
-		if (data_addr[1:0] && data_opt != `MEM_OPT_NONE)
-			$warning("time=%g unaligned data_addr: %h", $time, data_addr);
 	end
 
 
@@ -62,14 +60,18 @@ module mmu(
 		(state != READ || dev_mem_busy || `MEM_OPT_IS_WRITE(data_opt)) &&
         exc_code == `EC_NONE;
 
-    wire [31:0] mem_unaligned_addr =
-        state == READ && data_opt == `MEM_OPT_NONE ? instr_addr : data_addr;
 
-    reg [7:0] dev_mem_data_in_selected_byte;
-	assign dev_mem_addr = {mem_unaligned_addr[31:2], 2'b00};
+    wire [31:0]
+		mem_unaligned_addr =
+			state == READ && data_opt == `MEM_OPT_NONE ? instr_addr : data_addr,
+		mem_virtual_addr = {mem_unaligned_addr[31:2], 2'b00};
+
 
 	assign dev_mem_is_write = state == WRITE_DO_WRITE;
 
+
+	// select a byte in input word according to addr
+    reg [7:0] dev_mem_data_in_selected_byte;
     always @(*)
         case (mem_unaligned_addr[1:0])
             0: dev_mem_data_in_selected_byte = dev_mem_data_in[7:0];
@@ -78,16 +80,34 @@ module mmu(
             3: dev_mem_data_in_selected_byte = dev_mem_data_in[31:24];
         endcase
 
+	// handle exception
     always @(*) begin
+		// TODO: TLB
         exc_code = `EC_NONE;
         if (mem_unaligned_addr[1:0]) begin
-            if (data_opt == `MEM_OPT_LW || data_opt == `MEM_OPT_NONE)
+			if (data_opt == `MEM_OPT_LW || data_opt == `MEM_OPT_NONE) begin
                 exc_code = `EC_ADEL;
-            if (data_opt == `MEM_OPT_SW)
+				$warning("time=%g unaligned mem_addr read: %h", $time,
+					mem_unaligned_addr);
+			end
+			if (data_opt == `MEM_OPT_SW) begin
                 exc_code = `EC_ADES;
+				$warning("time=%g unaligned mem_addr write: %h", $time,
+					mem_unaligned_addr);
+			end
         end
     end
 
+	// virtual addr to physical addr
+	always @(*) begin
+		// TODO: TLB
+		dev_mem_addr <= 0;
+		if (mem_virtual_addr[31:28] >= 4'h8 &&
+				mem_virtual_addr[31:28] <= 4'hb)	// direct mapping, no cache
+			dev_mem_addr <= {3'b0, mem_virtual_addr[28:0]};
+	end
+
+	// handle data output
 	always @(*)
 		if (data_opt == `MEM_OPT_LW)
 			data_out = dev_mem_data_in;

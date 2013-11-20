@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Sun Nov 17 20:13:18 2013 +0800
+ * $Date: Wed Nov 20 16:51:45 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -79,6 +79,9 @@ module top;
 	always @(usystem.ucpu.uid.uregfile.mem[26])
 		$display("time=%g reg26($k0)=%h", $time,
 			usystem.ucpu.uid.uregfile.mem[26]);
+	always @(usystem.ucpu.uid.uregfile.mem[27])
+		$display("time=%g reg26($k1)=%h", $time,
+			usystem.ucpu.uid.uregfile.mem[27]);
 	always @(usystem.ucpu.uid.uregfile.mem[29])
 		$display("time=%g reg29($sp)=%h", $time,
 			usystem.ucpu.uid.uregfile.mem[29]);
