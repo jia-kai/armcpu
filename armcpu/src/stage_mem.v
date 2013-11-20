@@ -1,6 +1,6 @@
 /*
  * $File: stage_mem.v
- * $Date: Wed Nov 20 22:08:44 2013 +0800
+ * $Date: Wed Nov 20 23:15:52 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -57,7 +57,7 @@ module stage_mem(
 	assign set_stall = (state != READY);
 	assign set_clear = (cp0_exc_code != `EC_NONE);
 
-	wire [31:0] cp0_reg_unwind [0:`CP0_NR_REG];
+	wire [31:0] cp0_reg_unwind [0:`CP0_NR_REG-1];
 	wire [31:0] cp0_status = cp0_reg_unwind[`CP0_STATUS];
 
 	genvar i;
@@ -83,8 +83,10 @@ module stage_mem(
 	reg tlb_write_enable;
 	reg [`TLB_ENTRY_WIDTH-1:0] tlb_entry;
 	reg [`TLB_INDEX_WIDTH-1:0] tlb_index;
-	assign tlb_write_struct = {tlb_write_enable, tlb_index, tlb_entry};
+	assign mmu_tlb_write_struct = {tlb_write_enable, tlb_index, tlb_entry};
 	
+	always @(posedge clk)
+		$display("idx=%h", cp0_reg_unwind[`CP0_INDEX]);
 
 	task proc_mem_opt; 
 		case (mem_opt_ex2mem) 
@@ -101,6 +103,7 @@ module stage_mem(
 			`MEM_OPT_READ_CP0:
 				wb_reg_data <= cp0_reg_unwind[mem_addr_ex2mem];
 			`MEM_OPT_WRITE_TLB_IDX: begin
+				state <= WAIT;
 				tlb_write_enable <= 1;
 				tlb_index <= cp0_reg_unwind[`CP0_INDEX][`TLB_INDEX_WIDTH-1:0];
 				tlb_entry <= {cp0_reg_unwind[`CP0_ENTRY_HI][31:13],
@@ -123,7 +126,7 @@ module stage_mem(
 		// thoses signals should be asserted for at most 1 cycle
 		int_ack <= 0;
 		mmu_opt <= `MEM_OPT_NONE;
-		cp0_write_addr <= 0;
+		cp0_write_addr <= `CP0_REG_NONE;
 		tlb_write_enable <= 0;
 
 		if (rst) begin

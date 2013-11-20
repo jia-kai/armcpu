@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Wed Nov 20 22:07:59 2013 +0800
+ * $Date: Wed Nov 20 22:54:09 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -237,6 +237,8 @@ module stage_id(
 	task proc_cp0;
 		if (instr_func == 6'h18)	// ERET
 			exc_code_id2ex <= `EC_ERET;
+		else if (instr_func == 6'h02)	// TLBWI
+			mem_opt_id2ex <= `MEM_OPT_WRITE_TLB_IDX;
 		else if (instr_rs == 0) begin	// MFC0
 			mem_opt_id2ex <= `MEM_OPT_READ_CP0;
 			reg1_data <= instr_rd_cp0_regnum;
