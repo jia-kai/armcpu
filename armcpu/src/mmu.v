@@ -1,6 +1,6 @@
 /*
  * $File: mmu.v
- * $Date: Wed Nov 20 15:05:00 2013 +0800
+ * $Date: Wed Nov 20 22:07:41 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -11,6 +11,9 @@
 module mmu(
 	input clk,
 	input rst,
+
+	input [`TLB_WRITE_STRUCT_WIDTH-1:0] tlb_write_struct,
+
 	input [31:0] instr_addr,
 	output [31:0] instr_out,
 
@@ -43,13 +46,21 @@ module mmu(
 
 	// ------------------------------------------------------------------
 
-	assign instr_out = dev_mem_data_in;
-
 	always @(*) begin
 		if (instr_addr[1:0])
 			$warning("time=%g unaligned instr_addr: %h", $time, instr_addr);
 	end
 
+	wire tlb_write_enable;
+	wire [`TLB_INDEX_WIDTH-1:0] tlb_write_index;
+	wire [`TLB_ENTRY_WIDTH-1:0] tlb_write_entry;
+	reg tlb_missing, tlb_writable;
+	reg [`TLB_ENTRY_WIDTH-1:0] tlb_mem[0:`TLB_NR_ENTRY-1];
+
+	assign {tlb_write_enable, tlb_write_index, tlb_write_entry} = tlb_write_struct;
+
+
+	assign instr_out = dev_mem_data_in;
 
 	localparam READ = 2'b00, WRITE_SB = 2'b01, WRITE_DO_WRITE = 2'b10;
 	reg [1:0] state;
@@ -64,7 +75,7 @@ module mmu(
     wire [31:0]
 		mem_unaligned_addr =
 			state == READ && data_opt == `MEM_OPT_NONE ? instr_addr : data_addr,
-		mem_virtual_addr = {mem_unaligned_addr[31:2], 2'b00};
+		mem_vrt_addr = {mem_unaligned_addr[31:2], 2'b00};
 
 
 	assign dev_mem_is_write = state == WRITE_DO_WRITE;
@@ -80,9 +91,10 @@ module mmu(
             3: dev_mem_data_in_selected_byte = dev_mem_data_in[31:24];
         endcase
 
+
 	// handle exception
     always @(*) begin
-		// TODO: TLB
+		// TODO: check user/kernel permission
         exc_code = `EC_NONE;
         if (mem_unaligned_addr[1:0]) begin
 			if (data_opt == `MEM_OPT_LW || data_opt == `MEM_OPT_NONE) begin
@@ -95,19 +107,54 @@ module mmu(
 				$warning("time=%g unaligned mem_addr write: %h", $time,
 					mem_unaligned_addr);
 			end
-        end
+		end else if (tlb_missing) begin
+			if (`MEM_OPT_IS_WRITE(data_opt)) begin
+				exc_code = `EC_TLBS;
+				$warning("time=%g TLB write missing, vaddr=%h",
+					$time, mem_vrt_addr);
+			end else begin
+				exc_code = `EC_TLBL;
+				$warning("time=%g TLB read missing, vaddr=%h",
+					$time, mem_vrt_addr);
+			end
+		end else if (!tlb_writable && `MEM_OPT_IS_WRITE(data_opt)) begin
+			exc_code = `EC_TLBL;
+			$warning("time=%g write to read-only page, vaddr=%h",
+				$time, mem_vrt_addr);
+		end
     end
 
 	// virtual addr to physical addr
 	always @(*) begin
-		// TODO: TLB
-		dev_mem_addr <= 0;
-		if (mem_virtual_addr[31:28] >= 4'h8 &&
-				mem_virtual_addr[31:28] <= 4'hb)	// direct mapping, no cache
-			dev_mem_addr <= {3'b0, mem_virtual_addr[28:0]};
+		// TODO: user/kernel permission check
+		dev_mem_addr = 0;
+		tlb_missing = 0;
+		if (mem_vrt_addr[31:28] >= 4'h8 && mem_vrt_addr[31:28] <= 4'hb) begin
+			// direct mapping; cache unimplemented
+			dev_mem_addr = {3'b0, mem_vrt_addr[28:0]};
+		end else begin: TLB_LOOKUP
+			integer i;
+			tlb_missing = 1;
+			for (i = 0; i < `TLB_NR_ENTRY; i = i + 1) begin
+				if (tlb_mem[i][62:44] == mem_vrt_addr[31:13]) begin
+					if (mem_vrt_addr[12] && tlb_mem[i][22]) begin
+						tlb_missing = 0;
+						tlb_writable = tlb_mem[i][23];
+						dev_mem_addr = {tlb_mem[i][43:24], dev_mem_addr[11:0]};
+					end else if (!mem_vrt_addr[12] && tlb_mem[i][0]) begin
+						tlb_missing = 0;
+						tlb_writable = tlb_mem[i][1];
+						dev_mem_addr = {tlb_mem[i][21:2], dev_mem_addr[11:0]};
+					end
+
+					i = `TLB_NR_ENTRY;
+					// XXX: verilog has no break ...
+				end
+			end
+		end
 	end
 
-	// handle data output
+	// assign data output
 	always @(*)
 		if (data_opt == `MEM_OPT_LW)
 			data_out = dev_mem_data_in;
@@ -119,6 +166,7 @@ module mmu(
 			data_out = 0;
 
 
+	// main fsm
 	always @(posedge clk)
 		if (rst)
 			state <= READ;
@@ -148,6 +196,21 @@ module mmu(
 			default:
 				state <= READ;
 		endcase
+
+
+	// handl tlb write
+	always @(posedge clk)
+		if (rst) begin: INIT_TLB
+			integer i;
+			for (i = 0; i < `TLB_NR_ENTRY; i = i + 1)
+				tlb_mem[i] <= 0;
+		end else if (tlb_write_enable) begin
+			tlb_mem[tlb_write_index] <= tlb_write_entry;
+			$display("time=%g write TLB: index=%h VPN2=%h P1=(%h, %b) P2=(%h, %b)",
+				$time, tlb_write_index, tlb_write_entry[62:44],
+				tlb_write_entry[43:24], tlb_write_entry[23:22],
+				tlb_write_entry[21:2], tlb_write_entry[1:0]);
+		end
 
 endmodule
 

@@ -1,6 +1,6 @@
 /*
  * $File: cpu.v
- * $Date: Wed Nov 20 18:29:21 2013 +0800
+ * $Date: Wed Nov 20 22:04:53 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -37,6 +37,7 @@ module cpu(
 	wire mmu_busy;
 	wire [`EXC_CODE_WIDTH-1:0] mmu_exc_code;
 	wire [`MEM_OPT_WIDTH-1:0] mmu_data_opt;
+	wire [`TLB_WRITE_STRUCT_WIDTH-1:0] mmu_tlb_write_struct;
 
 	wire [`IF2ID_WIRE_WIDTH-1:0] interstage_if2id;
 	wire [`ID2EX_WIRE_WIDTH-1:0] interstage_id2ex;
@@ -144,6 +145,7 @@ module cpu(
 		.exc_jmp_flag(exc_jmp_flag), .exc_jmp_dest(exc_jmp_dest),
 		.cp0_reg(cp0_reg),
 		.int_req(int_req), .int_ack(int_ack),
+		.mmu_tlb_write_struct(mmu_tlb_write_struct),
 		.mmu_addr(mmu_data_addr),
 		.mmu_data_in(mmu_data_from_mmu),
 		.mmu_data_out(mmu_data_to_mmu),
@@ -152,6 +154,7 @@ module cpu(
 		.mmu_busy(mmu_busy));
 
 	mmu ummu(.clk(clk), .rst(rst),
+		.tlb_write_struct(mmu_tlb_write_struct),
 		.instr_addr(mmu_instr_addr), .instr_out(mmu_instr_data),
 		.data_opt(mmu_data_opt), .data_addr(mmu_data_addr),
 		.data_in(mmu_data_to_mmu), .data_out(mmu_data_from_mmu),

@@ -40,7 +40,7 @@ or
 Status.EXL = 1
 
 CP0[0]: Index
-P: prob failure (no need to implement?)
+P: prob failure (no need to implement)
 [3:0] Index
 
 CP0[2:3]: EntryLo0, EntryLo1
@@ -134,3 +134,13 @@ timer	7
 ps/2	6
 serial	4
 
+
+TLB
+================
+VPN2	[62:44]
+PFN1	[43:24]
+D1		[23]
+V1		[22]
+PFN0	[21:2]
+D0		[1]
+V0		[0]

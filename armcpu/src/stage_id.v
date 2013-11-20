@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Wed Nov 20 19:24:25 2013 +0800
+ * $Date: Wed Nov 20 22:07:59 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -238,12 +238,12 @@ module stage_id(
 		if (instr_func == 6'h18)	// ERET
 			exc_code_id2ex <= `EC_ERET;
 		else if (instr_rs == 0) begin	// MFC0
-			mem_opt_id2ex <= `MEM_OPT_READ_SPECIAL;
+			mem_opt_id2ex <= `MEM_OPT_READ_CP0;
 			reg1_data <= instr_rd_cp0_regnum;
 			alu_opt <= `ALU_OPT_PASS_OPR1;
 			wb_reg_addr_id2ex <= instr_rt;
 		end else if (instr_rs == 5'b00100)	begin // MTC0
-			mem_opt_id2ex <= `MEM_OPT_WRITE_SPECIAL;
+			mem_opt_id2ex <= `MEM_OPT_WRITE_CP0;
 			reg1_data <= instr_rd_cp0_regnum;
 			assign_reg2();
 			alu_opt <= `ALU_OPT_PASS_OPR1;

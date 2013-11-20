@@ -1,6 +1,6 @@
 /*
  * $File: stage_mem.v
- * $Date: Wed Nov 20 19:51:28 2013 +0800
+ * $Date: Wed Nov 20 22:08:44 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -32,6 +32,7 @@ module stage_mem(
 	output reg [`INT_MASK_WIDTH-1:0] int_ack,
 
 	// interface to MMU
+	output [`TLB_WRITE_STRUCT_WIDTH-1:0] mmu_tlb_write_struct,
 	output reg [31:0] mmu_addr,
 	input [31:0] mmu_data_in,
 	output reg [31:0] mmu_data_out,
@@ -78,13 +79,52 @@ module stage_mem(
 		.exc_epc(cp0_exc_epc), .exc_badvaddr(cp0_exc_badvaddr),
 		.exc_jmp_flag(exc_jmp_flag), .exc_jmp_dest(exc_jmp_dest));
 
+	
+	reg tlb_write_enable;
+	reg [`TLB_ENTRY_WIDTH-1:0] tlb_entry;
+	reg [`TLB_INDEX_WIDTH-1:0] tlb_index;
+	assign tlb_write_struct = {tlb_write_enable, tlb_index, tlb_entry};
+	
+
+	task proc_mem_opt; 
+		case (mem_opt_ex2mem) 
+			`MEM_OPT_WRITE_CP0: begin
+				state <= WAIT;
+				cp0_write_addr <= mem_addr_ex2mem[`CP0_REG_ADDR_WIDTH-1:0];
+				cp0_write_data <= mem_data_ex2mem;
+
+				// fire a timer ack when writing to compare to clear
+				// interrupt
+				if (mem_addr_ex2mem[`CP0_REG_ADDR_WIDTH-1:0] == `CP0_COMPARE)
+					int_ack[`INT_TIMER] <= 1;
+			end
+			`MEM_OPT_READ_CP0:
+				wb_reg_data <= cp0_reg_unwind[mem_addr_ex2mem];
+			`MEM_OPT_WRITE_TLB_IDX: begin
+				tlb_write_enable <= 1;
+				tlb_index <= cp0_reg_unwind[`CP0_INDEX][`TLB_INDEX_WIDTH-1:0];
+				tlb_entry <= {cp0_reg_unwind[`CP0_ENTRY_HI][31:13],
+					cp0_reg_unwind[`CP0_ENTRY_LO1][25:6],
+					cp0_reg_unwind[`CP0_ENTRY_LO1][2:1],
+					cp0_reg_unwind[`CP0_ENTRY_LO0][25:6],
+					cp0_reg_unwind[`CP0_ENTRY_LO0][2:1]};
+			end
+			default: if (mem_opt_ex2mem != `MEM_OPT_NONE) begin
+				state <= WAIT;
+				mmu_opt <= mem_opt_ex2mem;
+				mmu_addr <= mem_addr_ex2mem;
+				mmu_data_out <= mem_data_ex2mem;
+				wb_reg_addr <= 0;
+			end
+		endcase
+	endtask
 
 	always @(negedge clk) begin
-		// int_ack, mmu_opt and cp0_write_addr would be asserted for at most
-		// 1 cycle
+		// thoses signals should be asserted for at most 1 cycle
 		int_ack <= 0;
 		mmu_opt <= `MEM_OPT_NONE;
 		cp0_write_addr <= 0;
+		tlb_write_enable <= 0;
 
 		if (rst) begin
 			state <= READY;
@@ -105,24 +145,7 @@ module stage_mem(
 					cp0_exc_code <= `EC_NONE;
 					wb_reg_addr <= wb_reg_addr_ex2mem;
 					wb_reg_data <= alu_result;
-					if (mem_opt_ex2mem == `MEM_OPT_WRITE_SPECIAL) begin
-						state <= WAIT;
-						cp0_write_addr <= mem_addr_ex2mem[`CP0_REG_ADDR_WIDTH-1:0];
-						cp0_write_data <= mem_data_ex2mem;
-
-						// fire a timer ack when writing to compare to clear
-						// interrupt
-						if (mem_addr_ex2mem[`CP0_REG_ADDR_WIDTH-1:0] == `CP0_COMPARE)
-							int_ack[`INT_TIMER] <= 1;
-					end else if (mem_opt_ex2mem == `MEM_OPT_READ_SPECIAL)
-						wb_reg_data <= cp0_reg_unwind[mem_addr_ex2mem];
-					else if (mem_opt_ex2mem != `MEM_OPT_NONE) begin
-						state <= WAIT;
-						mmu_opt <= mem_opt_ex2mem;
-						mmu_addr <= mem_addr_ex2mem;
-						mmu_data_out <= mem_data_ex2mem;
-						wb_reg_addr <= 0;
-					end
+					proc_mem_opt();
 				end
 			end
 			WAIT:
