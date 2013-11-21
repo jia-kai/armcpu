@@ -1,6 +1,6 @@
 /*
  * $File: cp0.v
- * $Date: Wed Nov 20 19:42:08 2013 +0800
+ * $Date: Thu Nov 21 11:36:06 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -16,7 +16,6 @@
 module cp0(
 	input clk,
 	input rst,
-	input add_counter,	// whether to add counter reg in this cycle
 	output [`CP0_REG_TOT_WIDTH-1:0] cp0_reg,
 
 	// set to other than CP0_REG_NONE before posedge to write into cp0
@@ -93,8 +92,7 @@ module cp0(
 			for (i = 0; i < `CP0_NR_REG; i = i + 1)
 				regmem[i] <= 0;
 		end else begin
-			if (add_counter)
-				regmem[`CP0_COUNT] <= regmem[`CP0_COUNT] + 1'b1;
+			regmem[`CP0_COUNT] <= regmem[`CP0_COUNT] + 1'b1;
 
 			case (exc_code)
 				`EC_NONE:

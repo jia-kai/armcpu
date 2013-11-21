@@ -1,6 +1,6 @@
 /*
  * $File: mmu.v
- * $Date: Wed Nov 20 23:17:19 2013 +0800
+ * $Date: Thu Nov 21 11:44:24 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -60,6 +60,7 @@ module mmu(
 	assign {tlb_write_enable, tlb_write_index, tlb_write_entry} = tlb_write_struct;
 
 
+	assign mem_opt_is_write = `MEM_OPT_IS_WRITE(data_opt);
 	assign instr_out = dev_mem_data_in;
 
 	localparam READ = 2'b00, WRITE_SB = 2'b01, WRITE_DO_WRITE = 2'b10;
@@ -68,7 +69,7 @@ module mmu(
 	// if multiple-cycle read is needed, dev_mem_busy should be set before
 	// next posedge, so busy is also set
 	assign busy =
-		(state != READ || dev_mem_busy || `MEM_OPT_IS_WRITE(data_opt)) &&
+		(state != READ || dev_mem_busy || mem_opt_is_write) &&
         exc_code == `EC_NONE;
 
 
@@ -108,7 +109,7 @@ module mmu(
 					mem_unaligned_addr);
 			end
 		end else if (tlb_missing) begin
-			if (`MEM_OPT_IS_WRITE(data_opt)) begin
+			if (mem_opt_is_write) begin
 				exc_code = `EC_TLBS;
 				$warning("time=%g TLB write missing, vaddr=%h",
 					$time, mem_vrt_addr);
@@ -117,7 +118,7 @@ module mmu(
 				$warning("time=%g TLB read missing, vaddr=%h",
 					$time, mem_vrt_addr);
 			end
-		end else if (!tlb_writable && `MEM_OPT_IS_WRITE(data_opt)) begin
+		end else if (!tlb_writable && mem_opt_is_write) begin
 			exc_code = `EC_TLBL;
 			$warning("time=%g write to read-only page, vaddr=%h",
 				$time, mem_vrt_addr);
@@ -133,6 +134,7 @@ module mmu(
 		if (mem_vrt_addr[31:28] >= 4'h8 && mem_vrt_addr[31:28] <= 4'hb) begin
 			// direct mapping; cache unimplemented
 			dev_mem_addr = {3'b0, mem_vrt_addr[28:0]};
+			tlb_writable = 1;
 		end else begin: TLB_LOOKUP
 			integer i;
 			tlb_missing = 1;

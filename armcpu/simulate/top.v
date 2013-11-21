@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Wed Nov 20 19:02:18 2013 +0800
+ * $Date: Thu Nov 21 11:49:34 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -19,11 +19,11 @@ module top;
 
 	wire [31:0] debug_out;
 
-	ram_sim #(.IMAGE_FILE("prog.bin"))
+	ram_sim #(.NAME("base"), .IMAGE_FILE("prog.bin"))
 		ubaseram(
 		.addr(baseram_addr), .data(baseram_data),
 		.ce(baseram_ce), .oe(baseram_oe), .we(baseram_we));
-	ram_sim 
+	ram_sim #(.NAME("ext")) 
 		uextram(
 		.addr(extram_addr), .data(extram_data),
 		.ce(extram_ce), .oe(extram_oe), .we(extram_we));

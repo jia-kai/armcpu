@@ -1,6 +1,6 @@
 /*
  * $File: ram_sim.v
- * $Date: Sat Nov 16 20:18:36 2013 +0800
+ * $Date: Thu Nov 21 11:50:08 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -8,7 +8,7 @@
 
 // simulate ram device
 module ram_sim
-	#(parameter IMAGE_FILE = "", parameter ADDR_WIDTH = 20)
+	#(parameter NAME, parameter IMAGE_FILE = "", parameter ADDR_WIDTH = 20)
 
 	(input [ADDR_WIDTH-1:0] addr,
 	inout [31:0] data,
@@ -19,8 +19,8 @@ module ram_sim
 	always @(negedge we)
 		if (!ce) begin
 			storage[addr] <= data;
-			$display("\033[31m <-- mem --> time=%g write: addr=%h data=%h\033[0m",
-				$time, addr, data);
+			$display("\033[31m <-- mem %s --> time=%g write: addr=%h data=%h\033[0m",
+				NAME, $time, addr, data);
 		end
 
 	wire [31:0] data_from_mem = storage[addr];
@@ -43,7 +43,7 @@ module ram_sim
 			storage[i] = {tmp[7:0], tmp[15:8], tmp[23:16], tmp[31:24]};
 		end
 		for (i = 0; i < nr_read; i = i + 1)
-			$display("initial mem dump: %h: %h", i, storage[i]);
+			$display("initial mem %s dump: %h: %h", NAME, i, storage[i]);
 	end
 
 endmodule

@@ -1,6 +1,6 @@
 /*
  * $File: stage_mem.v
- * $Date: Wed Nov 20 23:15:52 2013 +0800
+ * $Date: Thu Nov 21 11:36:13 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -72,7 +72,7 @@ module stage_mem(
 	assign has_int_pending = (int_pending_mask &&
 		cp0_status[0] /* IE */ && !cp0_status[1] /* EXL */);
 
-	cp0 ucp0(.clk(clk), .rst(rst), .add_counter(!set_stall),
+	cp0 ucp0(.clk(clk), .rst(rst),
 		.cp0_reg(cp0_reg),
 		.reg_write_addr(cp0_write_addr), .reg_write_data(cp0_write_data),
 		.exc_ip(cp0_exc_ip), .exc_code(cp0_exc_code),
@@ -85,9 +85,6 @@ module stage_mem(
 	reg [`TLB_INDEX_WIDTH-1:0] tlb_index;
 	assign mmu_tlb_write_struct = {tlb_write_enable, tlb_index, tlb_entry};
 	
-	always @(posedge clk)
-		$display("idx=%h", cp0_reg_unwind[`CP0_INDEX]);
-
 	task proc_mem_opt; 
 		case (mem_opt_ex2mem) 
 			`MEM_OPT_WRITE_CP0: begin
