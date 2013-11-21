@@ -1,17 +1,14 @@
 #!/bin/bash -e
 # $File: run.sh
-# $Date: Sun Nov 17 15:55:12 2013 +0800
+# $Date: Thu Nov 21 17:32:24 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 if [ ! -z "$1" ]
 then
 	../../utils/asm2bin.sh $1 prog.bin /tmp/prog.s
 	cat /tmp/prog.s
-	if simu=$(grep -o 'simu: [0-9]\+ns' $1 | cut -d ' ' -f 2)
-	then
-		echo "simu time: $simu"
-		SIMU_TIME=$simu
-	fi
+	simu=$(grep -o 'simu: [0-9]\+ns' $1 | cut -d ' ' -f 2)
+	[ ! -z "$simu" ] && SIMU_TIME=$simu
 fi
 
 [ -d work ] || vlib work
