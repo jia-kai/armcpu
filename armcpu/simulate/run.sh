@@ -1,6 +1,6 @@
 #!/bin/bash -e
 # $File: run.sh
-# $Date: Thu Nov 21 17:32:24 2013 +0800
+# $Date: Thu Nov 21 20:56:58 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 if [ ! -z "$1" ]
@@ -15,7 +15,7 @@ fi
 
 [ -z "$SIMU_TIME" ] && SIMU_TIME=60ns
 
-vlog +incdir+src $i src/*.v top.v ram_sim.v
+vlog +incdir+src +define+SIMULATION=1  $i src/*.v top.v ram_sim.v
 
 vsim -c -do "run $SIMU_TIME; quit" top
 

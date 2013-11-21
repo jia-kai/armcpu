@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Thu Nov 21 19:28:12 2013 +0800
+ * $Date: Thu Nov 21 21:23:35 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -28,13 +28,14 @@ module top;
 		.addr(extram_addr), .data(extram_data),
 		.ce(extram_ce), .oe(extram_oe), .we(extram_we));
 
+	wire com_to_sys, com_from_sys;
 	system usystem(.clk_cpu(clk_half), .clk_mem(clk), .rst(rst),
 		.debug_out(debug_out),
 		.baseram_addr(baseram_addr), .baseram_data(baseram_data),
 		.baseram_ce(baseram_ce), .baseram_oe(baseram_oe), .baseram_we(baseram_we),
 		.extram_addr(extram_addr), .extram_data(extram_data),
 		.extram_ce(extram_ce), .extram_oe(extram_oe), .extram_we(extram_we),
-		.com_TxD(), .com_RxD(1'b1));
+		.com_TxD(com_from_sys), .com_RxD(com_to_sys));
 
 	always #1 clk <= ~clk;
 
@@ -50,6 +51,30 @@ module top;
 		$monitor("time=%g debug_out=%h", $time, debug_out);
 
 		#6 rst = 0;
+	end
+
+	reg write_com = 0;
+	reg [7:0] write_com_data = 0;
+	wire com_write_busy, com_read_ready;
+	wire [7:0] com_read_data;
+	uart_async_transmitter ucomtrans(.clk(clk), .TxD_start(write_com),
+		.TxD_data(write_com_data), .TxD(com_to_sys), .TxD_busy(com_write_busy));
+
+	uart_async_receiver ucomrecv(
+		.clk(clk), .rst(rst),
+		.RxD(com_from_sys), .RxD_data_ready(com_read_ready),
+		.RxD_waiting_data(), .RxD_data(com_read_data));
+
+	always @(com_read_ready)
+		$display("time=%g come_read_data=%h", $time, com_read_data);
+
+	always @(com_write_busy)
+		$display("time=%g com_write_busy=%b", $time, com_write_busy);
+
+	always begin
+		write_com_data = 8'hdf;
+		# 50 write_com = 1;
+		# 4 write_com = 0;
 	end
 
 	// $monitor seems to override privious ones
@@ -103,7 +128,7 @@ module top;
 		cp0_status = `CP0_VISIT_REG(usystem.ucpu.umem.cp0_reg, `CP0_STATUS),
 		cp0_cause = `CP0_VISIT_REG(usystem.ucpu.umem.cp0_reg, `CP0_CAUSE);
 	always @(cp0_status)
-		$display("time=%g cp0_status: IM=%b KSU=%b EXC=%b IE=%b",
+		$display("time=%g cp0_status: IM=%b KSU=%b EXL=%b IE=%b",
 			$time, cp0_status[15:8], cp0_status[4:3], cp0_status[1], cp0_status[0]);
 	always @(cp0_cause)
 		$display("time=%g cp0_cause: IP=%b ExcCode=%h",
