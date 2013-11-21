@@ -12,37 +12,21 @@
 # Loading work.stage_mem
 # Loading work.cp0
 # Loading work.mmu
-# Loading work.timer
 # Loading work.phy_mem_ctrl
+# Loading work.serial_port
+# Loading work.uart_async_transmitter
+# Loading work.BaudTickGen
+# Loading work.uart_async_receiver
 # run 200ns 
-# initial mem dump: 00000000: 3c048000
-# initial mem dump: 00000001: 34840100
-# initial mem dump: 00000002: 3c051993
-# initial mem dump: 00000003: 34a51102
-# initial mem dump: 00000004: ac850000
-# initial mem dump: 00000005: 8c860000
-# initial mem dump: 00000006: 00801821
-# initial mem dump: 00000007: 8c640000
-# initial mem dump: 00000008: 00603021
-# initial mem dump: 00000009: 0800000c
-# initial mem dump: 0000000a: 8cc60000
-# initial mem dump: 0000000b: 24060000
-# initial mem dump: 0000000c: 8c670000
-# initial mem dump: 0000000d: 8c630000
-# initial mem dump: 0000000e: 00673021
-# initial mem dump: 0000000f: 3c048000
-# initial mem dump: 00000010: 34840100
-# initial mem dump: 00000011: 3c058000
-# initial mem dump: 00000012: 34a50200
-# initial mem dump: 00000013: aca40000
-# initial mem dump: 00000014: 8ca50000
-# initial mem dump: 00000015: 8ca50000
-# initial mem dump: 00000016: 00a01021
-# initial mem dump: 00000017: 08000017
-# initial mem dump: 00000018: 00000000
+# time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
+# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
+#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
+# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
+#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=0 debug_out=xxxxxxxx
+# time=1 cp0_cause: IP=x0000000 ExcCode=xx
 # time=1 cpu entered kernel mode
-# time=1 cp0_cause: IP=00000000 ExcCode=00
+# time=1 cp0_cause: IP=x0000000 ExcCode=00
 # time=1 cp0_status: IM=00000000 KSU=00 EXC=0 IE=0
 # time=1 reg1($at)=00000000
 # time=1 reg2($v0)=00000000
@@ -56,8 +40,10 @@
 # time=1 reg26($k1)=00000000
 # time=1 reg29($sp)=00000000
 # time=1 reg31($ra)=00000000
+# time=1 cp0_cause: IP=00000000 ExcCode=00
 # time=1 debug_out=00000000
 # [32m < -- id -- > time=9 got instruction: pc=xxxxxxxx instr=00000000 [0m
+# time=9 cp0_cause: IP=10000000 ExcCode=00
 # [32m < -- id -- > time=13 got instruction: pc=80000000 instr=3c048000 [0m
 # [32m < -- id -- > time=17 got instruction: pc=80000004 instr=34840100 [0m
 # [32m < -- id -- > time=21 got instruction: pc=80000008 instr=3c051993 [0m
@@ -68,7 +54,7 @@
 # time=29 reg5($a1)=19930000
 # [32m < -- id -- > time=33 got instruction: pc=80000014 instr=8c860000 [0m
 # time=33 reg5($a1)=19931102
-# [31m <-- mem --> time=40 write: addr=00040 data=19931102[0m
+# [31m <-- mem base --> time=40 write: addr=00040 data=19931102[0m
 # [32m < -- id -- > time=49 got instruction: pc=80000018 instr=00801821 [0m
 # [32m < -- id -- > time=57 got instruction: pc=8000001c instr=8c640000 [0m
 # time=57 reg6($a2)=19931102
@@ -95,7 +81,7 @@
 # time=117 reg5($a1)=80000000
 # [32m < -- id -- > time=121 got instruction: pc=80000050 instr=8ca50000 [0m
 # time=121 reg5($a1)=80000200
-# [31m <-- mem --> time=128 write: addr=00080 data=80000100[0m
+# [31m <-- mem base --> time=128 write: addr=00080 data=80000100[0m
 # [32m < -- id -- > time=137 got instruction: pc=80000054 instr=8ca50000 [0m
 # [32m < -- id -- > time=145 got instruction: pc=80000058 instr=00a01021 [0m
 # time=145 reg5($a1)=80000100

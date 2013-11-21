@@ -1,6 +1,6 @@
 /*
  * $File: stage_mem.v
- * $Date: Thu Nov 21 17:19:38 2013 +0800
+ * $Date: Thu Nov 21 19:29:19 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -25,11 +25,10 @@ module stage_mem(
 	output exc_jmp_flag,
 	output [31:0] exc_jmp_dest,
 
-	output [`CP0_REG_TOT_WIDTH-1:0] cp0_reg,
+	output is_user_mode,
 
 	// handle interrupt; interface to misc divices
 	input [`INT_MASK_WIDTH-1:0] int_req,
-	output int_timer_ack,
 
 	// interface to MMU
 	output [`TLB_WRITE_STRUCT_WIDTH-1:0] mmu_tlb_write_struct,
@@ -56,6 +55,7 @@ module stage_mem(
 	assign set_stall = (state != READY);
 	assign set_clear = (cp0_exc_code != `EC_NONE);
 
+	wire [`CP0_REG_TOT_WIDTH-1:0] cp0_reg;
 	wire [31:0] cp0_reg_unwind [0:`CP0_NR_REG-1];
 	wire [31:0] cp0_status = cp0_reg_unwind[`CP0_STATUS];
 
@@ -66,8 +66,18 @@ module stage_mem(
 		end
 	endgenerate
 
+	assign is_user_mode = cp0_status[4:3] && !cp0_status[1];
 
-	assign has_int_pending = (int_req & cp0_status[15:8]) != 0 &&
+	wire int_timer_req;
+
+	reg [`INT_MASK_WIDTH-1:0] int_req_actual;
+	always @(*) begin
+		int_req_actual = int_req;
+		int_req_actual[`INT_TIMER] = int_timer_req;
+	end
+
+
+	assign has_int_pending = (int_req_actual & cp0_status[15:8]) != 0 &&
 		cp0_status[0] /* IE */ && !cp0_status[1] /* EXL */;
 
 	cp0 ucp0(.clk(clk), .rst(rst),
@@ -75,8 +85,8 @@ module stage_mem(
 		.reg_write_addr(cp0_write_addr), .reg_write_data(cp0_write_data),
 		.exc_code(cp0_exc_code),
 		.exc_epc(cp0_exc_epc), .exc_badvaddr(cp0_exc_badvaddr),
-		.cause_ip(int_req),
-		.int_timer_ack(int_timer_ack),
+		.cause_ip(int_req_actual),
+		.int_timer_req(int_timer_req),
 		.exc_jmp_flag(exc_jmp_flag), .exc_jmp_dest(exc_jmp_dest));
 
 	

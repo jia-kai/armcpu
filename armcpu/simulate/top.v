@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Thu Nov 21 17:22:15 2013 +0800
+ * $Date: Thu Nov 21 19:28:12 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -29,12 +29,12 @@ module top;
 		.ce(extram_ce), .oe(extram_oe), .we(extram_we));
 
 	system usystem(.clk_cpu(clk_half), .clk_mem(clk), .rst(rst),
-		.ram_read_wait(8'b0),
 		.debug_out(debug_out),
 		.baseram_addr(baseram_addr), .baseram_data(baseram_data),
 		.baseram_ce(baseram_ce), .baseram_oe(baseram_oe), .baseram_we(baseram_we),
 		.extram_addr(extram_addr), .extram_data(extram_data),
-		.extram_ce(extram_ce), .extram_oe(extram_oe), .extram_we(extram_we));
+		.extram_ce(extram_ce), .extram_oe(extram_oe), .extram_we(extram_we),
+		.com_TxD(), .com_RxD(1'b1));
 
 	always #1 clk <= ~clk;
 

@@ -1,6 +1,6 @@
 /*
  * $File: cp0.v
- * $Date: Thu Nov 21 17:25:50 2013 +0800
+ * $Date: Thu Nov 21 19:24:51 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -32,7 +32,7 @@ module cp0(
 	// ip field of Cause register
 	input [`INT_MASK_WIDTH-1:0] cause_ip,
 
-	output reg int_timer_ack,
+	output reg int_timer_req,
 
 	// updated at posedge
 	output reg exc_jmp_flag,
@@ -40,6 +40,8 @@ module cp0(
 
 	// ------------------------------------------------------------------
 
+	// note the dummy entry regmem[`CP0_NR_REG], so no need to check whether
+	// write_addr != `CP0_REG_NONE
 	reg [31:0] regmem[0:`CP0_NR_REG];
 
 	genvar i;
@@ -94,19 +96,22 @@ module cp0(
 	always @(posedge clk) begin
 		// only assert exc_jmp_flag and int_timer_ack for 1 cycle
 		exc_jmp_flag <= 0;
-		int_timer_ack <= 0;
 
 		if (rst) begin: RESET_CP0
 			integer i;
+			int_timer_req <= 0;
 			for (i = 0; i < `CP0_NR_REG; i = i + 1)
 				regmem[i] <= 0;
 		end else begin
 			regmem[`CP0_COUNT] <= regmem[`CP0_COUNT] + 1'b1;
+			if (regmem[`CP0_COUNT] == regmem[`CP0_COMPARE])
+				int_timer_req <= 1;
 
 			case (exc_code)
 				`EC_NONE: begin
+					// clear timer interrupt when writing to compare
 					if (reg_write_addr == `CP0_COMPARE)
-						int_timer_ack <= 1;
+						int_timer_req <= 0;
 					regmem[reg_write_addr] <= reg_write_data;
 				end
 				`EC_ERET:

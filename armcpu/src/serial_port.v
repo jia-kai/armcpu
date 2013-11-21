@@ -1,13 +1,14 @@
 /*
  * $File: serial_port.v
- * $Date: Thu Nov 21 16:47:55 2013 +0800
+ * $Date: Thu Nov 21 20:32:04 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 
 // interrupt for serial port
-module serial_port(
-	input clk,
+module serial_port
+	#(parameter CLK_FREQ = 0)
+	(input clk,
 	input rst,
 	output reg int_req,
 	input int_ack,
@@ -20,23 +21,22 @@ module serial_port(
 
 
 	// physical interface
-	output com_TxD,
-	input com_RxD);
+	output TxD,
+	input RxD);
 
 	// ------------------------------------------------------------------
 
-	localparam CLK_FREQ = 50000000,	// 50 MB
-			BAUD = 115200;
+	localparam BAUD = 115200;
 	
 	uart_async_transmitter #(.ClkFrequency(CLK_FREQ), .Baud(BAUD)) utrans
 		(.clk(clk), .TxD_start(write_enable && !write_busy), .TxD_data(data_in),
-		.TxD(com_TxD), .TxD_busy(write_busy));
+		.TxD(TxD), .TxD_busy(write_busy));
 
 
 	wire RxD_data_ready;
 	wire [7:0] RxD_data;
 	uart_async_receiver #(.ClkFrequency(CLK_FREQ), .Baud(BAUD)) urecv
-		(.clk(clk), .rst(rst), .RxD(com_RxD),
+		(.clk(clk), .rst(rst), .RxD(RxD),
 		.RxD_data_ready(RxD_data_ready), .RxD_waiting_data(),
 		.RxD_data(RxD_data));
 

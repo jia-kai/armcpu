@@ -1,6 +1,6 @@
 /*
  * $File: cpu.v
- * $Date: Thu Nov 21 17:18:53 2013 +0800
+ * $Date: Thu Nov 21 19:17:55 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -20,6 +20,8 @@
 module cpu(
 	input clk,
 	input rst,
+
+	input int_com_req,
 
 	// connected to physical memory controller
 	output [31:0] dev_mem_addr,
@@ -58,30 +60,17 @@ module cpu(
 	wire [31:0] branch_dest, exc_jmp_dest;
 	reg [31:0] jmp_dest;
 
-	wire [`CP0_REG_TOT_WIDTH-1:0] cp0_reg;
-	wire [31:0] cp0_reg_unwind [0:`CP0_NR_REG-1];
-
-	genvar i;
-	generate
-		for (i = 0; i < `CP0_NR_REG; i = i + 1) begin: CP0_REG_UNWIND
-			assign cp0_reg_unwind[i] = `CP0_VISIT_REG(cp0_reg, i);
-		end
-	endgenerate
 
 	wire stall, clear;
 
-	wire [7:0] int_req;
-    wire int_timer_ack;
+	reg [7:0] int_req;
 
-	assign is_user_mode = cp0_reg_unwind[`CP0_STATUS][4:3] &&
-						!cp0_reg_unwind[`CP0_STATUS][1];
+	wire is_user_mode;
 			
-	generate
-		for (i = 0; i < `INT_MASK_WIDTH; i = i + 1) begin: SET_INT_REQ
-			if (i != `INT_TIMER)
-				assign int_req[i] = 0;
-		end
-	endgenerate
+	always @(*) begin
+		int_req = 0;
+		int_req[`INT_COM] = int_com_req;
+	end
 
 	assign {ex2mem_mem_opt, ex2mem_wb_reg_addr} = 
 		interstage_ex2mem[`MEM_OPT_WIDTH+`REGADDR_WIDTH+31:32];
@@ -144,8 +133,8 @@ module cpu(
 		.wb_reg_addr(wb_addr), .wb_reg_data(wb_data),
 		.set_stall(stall), .set_clear(clear),
 		.exc_jmp_flag(exc_jmp_flag), .exc_jmp_dest(exc_jmp_dest),
-		.cp0_reg(cp0_reg),
-        .int_req(int_req), .int_timer_ack(int_timer_ack),
+		.is_user_mode(is_user_mode),
+        .int_req(int_req), 
 		.mmu_tlb_write_struct(mmu_tlb_write_struct),
 		.mmu_addr(mmu_data_addr),
 		.mmu_data_in(mmu_data_from_mmu),
@@ -166,12 +155,6 @@ module cpu(
 		.dev_mem_data_out(dev_mem_data_out),
 		.dev_mem_is_write(dev_mem_is_write),
 		.dev_mem_busy(dev_mem_busy));
-
-	timer utimer(.clk(clk), .rst(rst),
-		.cp0_count(cp0_reg_unwind[`CP0_COUNT]),
-		.cp0_compare(cp0_reg_unwind[`CP0_COMPARE]),
-		.int_req(int_req[`INT_TIMER]),
-        .int_ack(int_timer_ack));
 
 endmodule
 

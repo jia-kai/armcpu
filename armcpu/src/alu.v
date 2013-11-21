@@ -1,6 +1,6 @@
 /*
  * $File: alu.v
- * $Date: Wed Nov 20 08:47:45 2013 +0800
+ * $Date: Thu Nov 21 19:41:28 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -31,7 +31,7 @@ module alu(
             `ALU_OPT_LT:
                 result = $signed(opr1) < $signed(opr2) ? 32'b1 : 0;
             `ALU_OPT_SETU:
-                result = {opr2[31:16], opr1[15:0]};
+                result = {opr2[31:16], 16'b0};
             `ALU_OPT_PASS_OPR1:
                 result = opr1;
             default: begin
