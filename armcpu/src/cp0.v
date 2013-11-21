@@ -1,6 +1,6 @@
 /*
  * $File: cp0.v
- * $Date: Thu Nov 21 11:36:06 2013 +0800
+ * $Date: Thu Nov 21 17:25:50 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -25,10 +25,14 @@ module cp0(
 
 	// set exc_code to other than EC_NONE before posedge to prepare for
 	// exception; exc_jmp_flag would be set on next posedge
-	input [`INT_MASK_WIDTH-1:0] exc_ip,
 	input [`EXC_CODE_WIDTH-1:0] exc_code,
 	input [31:0] exc_epc,
 	input [31:0] exc_badvaddr,
+
+	// ip field of Cause register
+	input [`INT_MASK_WIDTH-1:0] cause_ip,
+
+	output reg int_timer_ack,
 
 	// updated at posedge
 	output reg exc_jmp_flag,
@@ -36,12 +40,15 @@ module cp0(
 
 	// ------------------------------------------------------------------
 
-	reg [31:0] regmem[0:`CP0_NR_REG-1];
+	reg [31:0] regmem[0:`CP0_NR_REG];
 
 	genvar i;
 	generate
 		for (i = 0; i < `CP0_NR_REG; i = i + 1) begin: CP0_REG_WIND
-			assign `CP0_VISIT_REG(cp0_reg, i) = regmem[i];
+			if (i != `CP0_CAUSE)
+				assign `CP0_VISIT_REG(cp0_reg, i) = regmem[i];
+			else
+				assign `CP0_VISIT_REG(cp0_reg, i) = {16'b0, cause_ip, regmem[i][7:0]};
 		end
 	endgenerate
 
@@ -52,7 +59,7 @@ module cp0(
 
 	task setup_exc; begin
 		$display("time=%g impending exception: ip=%b code=%h epc=%h",
-			$time, exc_ip, exc_code, exc_epc);
+			$time, cause_ip, exc_code, exc_epc);
 
 		// no other modification when EXL = 1,
 		// see MIPS32 Architecture For Programmers, ch5
@@ -61,7 +68,6 @@ module cp0(
 		else begin
 			regmem[`CP0_EPC] <= exc_epc;
 			regmem[`CP0_BADVADDR] <= exc_badvaddr;
-			regmem[`CP0_CAUSE][15:8] <= exc_ip;
 			regmem[`CP0_CAUSE][6:2] <= exc_code;
 			regmem[`CP0_STATUS][1] <= 1;	// EXL
 
@@ -86,7 +92,10 @@ module cp0(
 	end endtask
 
 	always @(posedge clk) begin
-		exc_jmp_flag <= 0; // only assert exc_jmp_flag for 1 cycle
+		// only assert exc_jmp_flag and int_timer_ack for 1 cycle
+		exc_jmp_flag <= 0;
+		int_timer_ack <= 0;
+
 		if (rst) begin: RESET_CP0
 			integer i;
 			for (i = 0; i < `CP0_NR_REG; i = i + 1)
@@ -95,14 +104,11 @@ module cp0(
 			regmem[`CP0_COUNT] <= regmem[`CP0_COUNT] + 1'b1;
 
 			case (exc_code)
-				`EC_NONE:
-					if (reg_write_addr != `CP0_REG_NONE) begin
-						regmem[reg_write_addr] <= reg_write_data;
-
-						// clear timer interrupt when writing to compare
-						if (reg_write_addr == `CP0_COMPARE)
-							regmem[`CP0_CAUSE][15] <= 0;
-					end
+				`EC_NONE: begin
+					if (reg_write_addr == `CP0_COMPARE)
+						int_timer_ack <= 1;
+					regmem[reg_write_addr] <= reg_write_data;
+				end
 				`EC_ERET:
 					perform_eret();
 				default:

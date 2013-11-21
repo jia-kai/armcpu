@@ -24,6 +24,7 @@ POSSIBLE BUG
 ================
 if access of $ra happens in the delay slot of jal, armcpu would use new value
 of $ra
+for interrupts not set in IM but happens, shoud IP be set?
 
 
 CP0 registers

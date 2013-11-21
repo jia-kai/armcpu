@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Thu Nov 21 11:49:34 2013 +0800
+ * $Date: Thu Nov 21 17:22:15 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -100,8 +100,8 @@ module top;
 			$display("time=%g cpu entered kernel mode", $time);
 
 	wire [31:0]
-		cp0_status = usystem.ucpu.umem.ucp0.regmem[`CP0_STATUS],
-		cp0_cause = usystem.ucpu.umem.ucp0.regmem[`CP0_CAUSE];
+		cp0_status = `CP0_VISIT_REG(usystem.ucpu.umem.cp0_reg, `CP0_STATUS),
+		cp0_cause = `CP0_VISIT_REG(usystem.ucpu.umem.cp0_reg, `CP0_CAUSE);
 	always @(cp0_status)
 		$display("time=%g cp0_status: IM=%b KSU=%b EXC=%b IE=%b",
 			$time, cp0_status[15:8], cp0_status[4:3], cp0_status[1], cp0_status[0]);

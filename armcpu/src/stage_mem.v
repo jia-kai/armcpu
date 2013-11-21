@@ -1,6 +1,6 @@
 /*
  * $File: stage_mem.v
- * $Date: Thu Nov 21 11:36:13 2013 +0800
+ * $Date: Thu Nov 21 17:19:38 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -29,7 +29,7 @@ module stage_mem(
 
 	// handle interrupt; interface to misc divices
 	input [`INT_MASK_WIDTH-1:0] int_req,
-	output reg [`INT_MASK_WIDTH-1:0] int_ack,
+	output int_timer_ack,
 
 	// interface to MMU
 	output [`TLB_WRITE_STRUCT_WIDTH-1:0] mmu_tlb_write_struct,
@@ -49,7 +49,6 @@ module stage_mem(
 
 	reg [`REGADDR_WIDTH-1:0] wb_reg_addr_latch;
 
-	reg [`INT_MASK_WIDTH-1:0] cp0_exc_ip;
 	reg [`EXC_CODE_WIDTH-1:0] cp0_exc_code;
 	reg [`CP0_REG_ADDR_WIDTH-1:0] cp0_write_addr;
 	reg [31:0] cp0_exc_epc, cp0_exc_badvaddr, cp0_write_data;
@@ -67,16 +66,17 @@ module stage_mem(
 		end
 	endgenerate
 
-	wire [`INT_MASK_WIDTH-1:0] int_pending_mask = int_req & cp0_status[15:8];
 
-	assign has_int_pending = (int_pending_mask &&
-		cp0_status[0] /* IE */ && !cp0_status[1] /* EXL */);
+	assign has_int_pending = (int_req & cp0_status[15:8]) != 0 &&
+		cp0_status[0] /* IE */ && !cp0_status[1] /* EXL */;
 
 	cp0 ucp0(.clk(clk), .rst(rst),
 		.cp0_reg(cp0_reg),
 		.reg_write_addr(cp0_write_addr), .reg_write_data(cp0_write_data),
-		.exc_ip(cp0_exc_ip), .exc_code(cp0_exc_code),
+		.exc_code(cp0_exc_code),
 		.exc_epc(cp0_exc_epc), .exc_badvaddr(cp0_exc_badvaddr),
+		.cause_ip(int_req),
+		.int_timer_ack(int_timer_ack),
 		.exc_jmp_flag(exc_jmp_flag), .exc_jmp_dest(exc_jmp_dest));
 
 	
@@ -91,11 +91,6 @@ module stage_mem(
 				state <= WAIT;
 				cp0_write_addr <= mem_addr_ex2mem[`CP0_REG_ADDR_WIDTH-1:0];
 				cp0_write_data <= mem_data_ex2mem;
-
-				// fire a timer ack when writing to compare to clear
-				// interrupt
-				if (mem_addr_ex2mem[`CP0_REG_ADDR_WIDTH-1:0] == `CP0_COMPARE)
-					int_ack[`INT_TIMER] <= 1;
 			end
 			`MEM_OPT_READ_CP0:
 				wb_reg_data <= cp0_reg_unwind[mem_addr_ex2mem];
@@ -121,7 +116,6 @@ module stage_mem(
 
 	always @(negedge clk) begin
 		// thoses signals should be asserted for at most 1 cycle
-		int_ack <= 0;
 		mmu_opt <= `MEM_OPT_NONE;
 		cp0_write_addr <= `CP0_REG_NONE;
 		tlb_write_enable <= 0;
@@ -132,16 +126,14 @@ module stage_mem(
 		end else case (state)
 			READY: begin
 				cp0_exc_epc <= exc_epc_ex2mem;
-				cp0_exc_ip <= 0;
+				cp0_exc_badvaddr <= 0;
 				wb_reg_addr_latch <= wb_reg_addr_ex2mem;
 				if (exc_code_ex2mem != `EC_NONE) begin
 					cp0_exc_code <= exc_code_ex2mem;
 					cp0_exc_badvaddr <= exc_badvaddr_ex2mem;
-				end else if (has_int_pending) begin
+				end else if (has_int_pending)
 					cp0_exc_code <= `EC_INT;
-					cp0_exc_ip <= int_pending_mask;
-					int_ack <= int_pending_mask;
-				end else begin
+				else begin
 					cp0_exc_code <= `EC_NONE;
 					wb_reg_addr <= wb_reg_addr_ex2mem;
 					wb_reg_data <= alu_result;

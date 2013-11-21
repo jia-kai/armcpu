@@ -1,6 +1,6 @@
 /*
  * $File: system.v
- * $Date: Sun Nov 17 12:29:47 2013 +0800
+ * $Date: Thu Nov 21 16:40:48 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -25,7 +25,11 @@ module system(
 	inout [31:0] extram_data,
 	output extram_ce,
 	output extram_oe,
-	output extram_we);
+	output extram_we,
+
+	// serial port interface
+	output com_TxD,
+	input com_RxD);
 
 	wire mem_is_write, mem_busy;
 	wire [31:0] mem_addr, data_to_mem, data_from_mem;

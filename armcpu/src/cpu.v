@@ -1,6 +1,6 @@
 /*
  * $File: cpu.v
- * $Date: Wed Nov 20 22:04:53 2013 +0800
+ * $Date: Thu Nov 21 17:18:53 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -70,7 +70,8 @@ module cpu(
 
 	wire stall, clear;
 
-	wire [7:0] int_req, int_ack;
+	wire [7:0] int_req;
+    wire int_timer_ack;
 
 	assign is_user_mode = cp0_reg_unwind[`CP0_STATUS][4:3] &&
 						!cp0_reg_unwind[`CP0_STATUS][1];
@@ -144,7 +145,7 @@ module cpu(
 		.set_stall(stall), .set_clear(clear),
 		.exc_jmp_flag(exc_jmp_flag), .exc_jmp_dest(exc_jmp_dest),
 		.cp0_reg(cp0_reg),
-		.int_req(int_req), .int_ack(int_ack),
+        .int_req(int_req), .int_timer_ack(int_timer_ack),
 		.mmu_tlb_write_struct(mmu_tlb_write_struct),
 		.mmu_addr(mmu_data_addr),
 		.mmu_data_in(mmu_data_from_mmu),
@@ -170,7 +171,7 @@ module cpu(
 		.cp0_count(cp0_reg_unwind[`CP0_COUNT]),
 		.cp0_compare(cp0_reg_unwind[`CP0_COMPARE]),
 		.int_req(int_req[`INT_TIMER]),
-		.int_ack(int_ack[`INT_TIMER]));
+        .int_ack(int_timer_ack));
 
 endmodule
 
