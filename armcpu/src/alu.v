@@ -20,6 +20,16 @@ module alu(
 		case (opt)
             `ALU_OPT_SLL_IMM:
                 result = opr2 << sa_imm;
+            `ALU_OPT_SRL_IMM:
+                result = opr2 >>> sa_imm;
+            `ALU_OPT_SRA_IMM:
+                result = opr2 >> sa_imm;
+            `ALU_OPT_SLL:
+                result = opr2 << opr1;
+            `ALU_OPT_SRL:
+                result = opr2 >>> opr1;
+            `ALU_OPT_SRA:
+                result = opr2 >> opr1;
 			`ALU_OPT_ADDU:
 				result = opr1 + opr2;
 			`ALU_OPT_SUBU:

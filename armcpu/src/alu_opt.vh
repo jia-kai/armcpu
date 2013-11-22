@@ -15,6 +15,11 @@
 `define ALU_OPT_DISABLE	7'h00
 
 `define ALU_OPT_SLL_IMM	7'h00 // shift opr2 left using imm value
+`define ALU_OPT_SRL_IMM	7'h02 
+`define ALU_OPT_SRA_IMM	7'h03 
+`define ALU_OPT_SLL 	7'h04
+`define ALU_OPT_SRL 	7'h06 
+`define ALU_OPT_SRA 	7'h07  
 `define ALU_OPT_ADDU	7'h21
 `define ALU_OPT_SUBU	7'h23
 `define ALU_OPT_AND		7'h24
