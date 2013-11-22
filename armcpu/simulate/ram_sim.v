@@ -1,6 +1,6 @@
 /*
  * $File: ram_sim.v
- * $Date: Thu Nov 21 20:30:24 2013 +0800
+ * $Date: Fri Nov 22 20:35:26 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -8,7 +8,7 @@
 
 // simulate ram device
 module ram_sim
-	#(parameter NAME, parameter IMAGE_FILE = "", parameter ADDR_WIDTH = 20)
+	#(parameter NAME, IMAGE_FILE = "", ADDR_WIDTH = 20, CHECK_BAD_READ = 1)
 
 	(input [ADDR_WIDTH-1:0] addr,
 	inout [31:0] data,
@@ -20,8 +20,8 @@ module ram_sim
 		is_valid_data = (|data) === 1'b1 || data === 32'b0;
 	endfunction
 
-	always @(negedge we)
-		if (!ce) begin
+	always @(posedge we)
+		if (!ce && $time > 0) begin
 			storage[addr] <= data;
 			if (!is_valid_data(data)) begin
 				$warning("time=%g mem %s: write bad data: addr=%h data=%h",
@@ -36,7 +36,7 @@ module ram_sim
 	assign data = (!ce && !oe ? data_from_mem : {32{1'bz}});
 
 	always @(*)
-		if (!oe && !ce && !is_valid_data(data_from_mem)) begin
+		if (CHECK_BAD_READ && !oe && !ce && !is_valid_data(data_from_mem)) begin
 			$warning("time=%g mem %s: read uninitialized memory: addr=%h, return rand",
 				$time, NAME, addr);
 			storage[addr] = $random;

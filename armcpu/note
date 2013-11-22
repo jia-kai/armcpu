@@ -126,6 +126,9 @@ virtual address mapping
 physical address mapping
 ===============================
 [0x00000000, 0x007FFFFF]	RAM		8MB
+[0x1E000000, 0x1EFFFFFF]	flash	16MB, but only lower half word is used
+0x1FD003F8, 0x1FD003FC		com data and stat
+0x1FD00400					segment display monitor
 
 
 

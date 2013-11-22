@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Wed Nov 20 22:54:09 2013 +0800
+ * $Date: Fri Nov 22 20:44:00 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -35,8 +35,9 @@ module stage_id(
 	output reg [`REGADDR_WIDTH-1:0] reg2_addr,
 	output reg [31:0] reg2_data,
 
-	output [`ID2EX_WIRE_WIDTH-1:0] interstage_id2ex,
-	output [31:0] debug_out);
+	output [`ID2EX_WIRE_WIDTH-1:0] interstage_id2ex);
+
+	// ------------------------------------------------------------------
 
 	`include "gencode/if2id_extract_load.v"
 	`include "gencode/id2ex_extract_store.v"
@@ -62,8 +63,7 @@ module stage_id(
 		.read1_addr(instr_rs), .read2_addr(instr_rt),
 		.write_addr(reg_write_addr), 
 		.data_in(reg_write_data),
-		.data_out1(rf_data1), .data_out2(rf_data2),
-		.debug_out(debug_out));
+		.data_out1(rf_data1), .data_out2(rf_data2));
 
 	reg [`CP0_REG_ADDR_WIDTH-1:0] instr_rd_cp0_regnum;
 	always @(*)

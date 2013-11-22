@@ -1,6 +1,8 @@
 # simu: 550ns
+# accumulator based on timer, syscall and memory access
 start:
 li $gp, 0x80010000
+li $sp, 0x9FD00400	# segdisp
 sw $zero, 0($gp)
 li $a0, 10	# number of cycles to sleep
 li $v0, 1
@@ -16,7 +18,7 @@ beq $v0, 1, setup_usermode
 lw $k1, 0($gp)
 addiu $k1, 1
 sw $k1, 0($gp)
-move $k0, $k1
+sw $k1, 0($sp)
 li $k1, 0
 jal setup_timer
 eret

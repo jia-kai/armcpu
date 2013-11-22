@@ -1,6 +1,6 @@
 /*
  * $File: phy_mem_ctrl.v
- * $Date: Thu Nov 21 19:48:23 2013 +0800
+ * $Date: Fri Nov 22 20:51:22 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -9,14 +9,22 @@
 `define COM_DATA_ADDR	32'h1FD003F8	// only lowest byte contributes
 `define COM_STAT_ADDR	32'h1FD003FC	// {30'b0, read_ready, write_ready}
 
-`define RAM_ADDR_MASK	32'h007FFFFF	// 8MiB
+`define SEGDISP_ADDR	32'h1FD00400	// 7-segment display monitor
 
-`define ADDR_IS_RAM(addr) ((addr & `RAM_ADDR_MASK) == addr)
+`define RAM_ADDR_MASK		// 8MiB
 
+`define ADDR_IS_RAM(addr) ((addr & 32'h007FFFFF) == addr)
+`define ADDR_IS_FLASH(addr) (addr[31:24] == 8'h1E)
+
+`define RAM_WRITE_WIDTH	1	// width of write signal
+`define RAM_WRITE_READ_RECOVERY 1	// recovery time before next read after write
+
+`define FLASH_WRITE_WIDTH 4
+`define FLASH_WRITE_READ_RECOVERY 2
 
 // physical memory controller
 module phy_mem_ctrl(
-	input clk,
+	input clk50M,
 	input rst,
 
 	input is_write,
@@ -26,6 +34,8 @@ module phy_mem_ctrl(
 	output busy,
 
 	output reg int_com_ack,
+
+	output reg [31:0] segdisp,
 
 	// ram interface
 	output [19:0] baseram_addr,
@@ -44,26 +54,15 @@ module phy_mem_ctrl(
 	output [7:0] com_data_out,
 	output reg enable_com_write,
 	input com_read_ready,
-	input com_write_ready);
+	input com_write_ready,
+
+	// flash interface
+	output [22:0] flash_addr,
+	inout [15:0] flash_data,
+	output [7:0] flash_ctl);
 
 
 	// ------------------------------------------------------------------
-
-	assign addr_is_ram = `ADDR_IS_RAM(addr),
-			addr_is_com_data = (addr == `COM_DATA_ADDR),
-			addr_is_com_stat = (addr == `COM_STAT_ADDR);
-
-	reg [31:0] write_addr_latch, write_data_latch;
-
-	assign com_data_out = write_data_latch[7:0];
-
-	reg [1:0] state;
-	localparam READ_RAM = 2'b00,
-		WRITE_RAM0 = 2'b01, WRITE_RAM1 = 2'b11, WRITE_RAM2 = 2'b10;
-
-	assign ram_we = (state != WRITE_RAM1);
-	assign ram_oe = ~(state == READ_RAM || state == WRITE_RAM2);
-	assign busy = (state != READ_RAM || is_write);
 
 	always @(*)
         if (addr[1:0]) begin
@@ -71,10 +70,47 @@ module phy_mem_ctrl(
             $fatal("exit due to previous error");
         end
 
-	wire [20:0]
-		addr_to_ram = (ram_oe ? write_addr_latch[22:2] : addr[22:2]);
+	reg [31:0] write_addr_latch, write_data_latch;
+	reg [1:0] state;
+	reg [3:0] write_cnt;
+	wire [3:0] write_cnt_next = write_cnt + 1'b1;
+	localparam READ = 2'b00,
+		WRITE_RAM = 2'b01, WRITE_FLASH = 2'b10, RECOVERY_READ = 2'b11;
 
-	assign ram_selector = addr_to_ram[20],
+	assign busy = (state != READ || is_write);
+
+	assign addr_is_ram = `ADDR_IS_RAM(addr),
+			addr_is_com_data = (addr == `COM_DATA_ADDR),
+			addr_is_com_stat = (addr == `COM_STAT_ADDR),
+			addr_is_flash = `ADDR_IS_FLASH(addr),
+			addr_is_segdisp = (addr == `SEGDISP_ADDR);
+
+	assign flash_byte = 1, flash_vpen = 1, flash_ce = 0, flash_rp = 1,
+		flash_oe = (state == WRITE_FLASH),
+		flash_we = ~(state == WRITE_FLASH && write_cnt < `FLASH_WRITE_WIDTH);
+	assign flash_addr = flash_oe ? write_addr_latch[23:1] : addr[23:1];
+	assign flash_data = flash_oe ? write_data_latch[15:0] : {16{1'bz}};
+	assign flash_ctl = {
+		flash_byte,
+		flash_ce,
+		2'b0,	// ce1 ce2
+		flash_oe,
+		flash_rp,
+		flash_vpen,
+		flash_we};
+
+
+
+	assign com_data_out = write_data_latch[7:0];
+
+	assign ram_oe = (state == WRITE_RAM),
+		ram_we = ~(state == WRITE_RAM && write_cnt < `RAM_WRITE_WIDTH);
+
+
+	wire [20:0]
+		ram_addr = (ram_oe ? write_addr_latch[22:2] : addr[22:2]);
+
+	assign ram_selector = ram_addr[20],
 		baseram_ce = ram_selector,
 		extram_ce = ~ram_selector,
 		baseram_oe = ~(~ram_selector & ~ram_oe),
@@ -85,43 +121,55 @@ module phy_mem_ctrl(
 	// set data after oe changes, so before we data is ready
 	assign baseram_data = baseram_oe ? write_data_latch : {32{1'bz}},
 		extram_data = extram_oe ? write_data_latch : {32{1'bz}},
-		baseram_addr = addr_to_ram[19:0],
-		extram_addr = addr_to_ram[19:0];
+		baseram_addr = ram_addr[19:0],
+		extram_addr = ram_addr[19:0];
 
 	always @(*) begin
 		data_out = 0;
-		// TODO: flash
-		case ({addr_is_ram, addr_is_com_data, addr_is_com_stat})
-			3'b100: data_out = ram_selector ? extram_data : baseram_data;
-			3'b010: data_out = {24'b0, com_data_in};
-			3'b001: data_out = {30'b0, com_read_ready, com_write_ready};
+		case ({addr_is_ram, addr_is_com_data, addr_is_com_stat, addr_is_flash})
+			4'b1000: data_out = ram_selector ? extram_data : baseram_data;
+			4'b0100: data_out = {24'b0, com_data_in};
+			4'b0010: data_out = {30'b0, com_read_ready, com_write_ready};
+			4'b0001: data_out = {16'b0, flash_data};
 		endcase
 	end
 
-	always @(negedge clk)
+	always @(negedge clk50M)
 		int_com_ack <= addr_is_com_data && !is_write;
 	
-	always @(negedge clk) begin
+	reg is_write_prev;
+	assign is_write_posedge = !is_write_prev && is_write;
+	always @(negedge clk50M) begin
 		enable_com_write <= 0;
+		is_write_prev <= is_write;
 		if (rst)
-			state <= READ_RAM;
+			state <= READ;
 		else case (state)
-			READ_RAM: if (is_write) begin
+			READ: if (is_write_posedge) begin
 				write_addr_latch <= addr;
 				write_data_latch <= data_in;
-				case ({addr_is_ram, addr_is_com_data})
-					2'b10: state <= WRITE_RAM0;
-					2'b01: enable_com_write <= 1;
+				write_cnt <= 0;
+				case ({addr_is_ram, addr_is_com_data, addr_is_flash, addr_is_segdisp})
+					4'b1000: state <= WRITE_RAM;
+					4'b0100: enable_com_write <= 1;
+					4'b0010: state <= WRITE_FLASH;
+					4'b0001: segdisp <= data_in;
 				endcase
 			end
-			WRITE_RAM0:
-				state <= WRITE_RAM1;
-			WRITE_RAM1:
-				state <= WRITE_RAM2;
-			WRITE_RAM2:
-				state <= READ_RAM;
+			WRITE_RAM: begin
+				write_cnt <= write_cnt_next;
+				if (write_cnt_next == `RAM_WRITE_READ_RECOVERY + `RAM_WRITE_WIDTH)
+					state <= RECOVERY_READ;
+			end
+			WRITE_FLASH: begin
+				write_cnt <= write_cnt_next;
+				if (write_cnt_next == `FLASH_WRITE_READ_RECOVERY + `FLASH_WRITE_WIDTH)
+					state <= RECOVERY_READ;
+			end
+			RECOVERY_READ:
+				state <= READ;
 			default:
-				state <= READ_RAM;
+				state <= READ;
 		endcase
 	end
 

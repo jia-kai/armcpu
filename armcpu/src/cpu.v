@@ -1,6 +1,6 @@
 /*
  * $File: cpu.v
- * $Date: Thu Nov 21 19:17:55 2013 +0800
+ * $Date: Fri Nov 22 20:42:03 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -28,9 +28,7 @@ module cpu(
 	input [31:0] dev_mem_data_in,
 	output [31:0] dev_mem_data_out,
 	output dev_mem_is_write,
-	input dev_mem_busy,
-
-	output [31:0] debug_out);
+	input dev_mem_busy);
 
 	// -------------------------------------------------------------------
 
@@ -118,8 +116,7 @@ module cpu(
 		.reg_write_addr(wb_addr), .reg_write_data(wb_data),
 		.reg1_addr(id2ex_reg1_addr), .reg1_data(id2ex_reg1_data),
 		.reg2_addr(id2ex_reg2_addr), .reg2_data(id2ex_reg2_data),
-		.interstage_id2ex(interstage_id2ex),
-		.debug_out(debug_out));
+		.interstage_id2ex(interstage_id2ex));
 
 	stage_ex uex(.clk(clk), .rst(rst), .stall(stall), .clear(clear),
 		.interstage_id2ex(interstage_id2ex),

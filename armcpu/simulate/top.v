@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Thu Nov 21 21:23:35 2013 +0800
+ * $Date: Fri Nov 22 20:43:15 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -17,7 +17,7 @@ module top;
 	wire baseram_ce, baseram_oe, baseram_we,
 		extram_ce, extram_oe, extram_we;
 
-	wire [31:0] debug_out;
+	wire [31:0] segdisp;
 
 	ram_sim #(.NAME("base"), .IMAGE_FILE("prog.bin"))
 		ubaseram(
@@ -28,14 +28,24 @@ module top;
 		.addr(extram_addr), .data(extram_data),
 		.ce(extram_ce), .oe(extram_oe), .we(extram_we));
 
+	wire [22:0] flash_addr;
+	wire [31:0] flash_data_ext;
+	wire [7:0] flash_ctl;
+	ram_sim #(.NAME("flash"), .ADDR_WIDTH(23), .CHECK_BAD_READ(0))
+		uflash(.addr(flash_addr), .data(flash_data_ext),
+		.ce(flash_ctl[5]), .oe(flash_ctl[3]), .we(flash_ctl[0]));
+
 	wire com_to_sys, com_from_sys;
-	system usystem(.clk_cpu(clk_half), .clk_mem(clk), .rst(rst),
-		.debug_out(debug_out),
+	system usystem(.clk_cpu(clk_half), .clk50MB(clk), .rst(rst),
+		.segdisp(segdisp),
 		.baseram_addr(baseram_addr), .baseram_data(baseram_data),
 		.baseram_ce(baseram_ce), .baseram_oe(baseram_oe), .baseram_we(baseram_we),
 		.extram_addr(extram_addr), .extram_data(extram_data),
 		.extram_ce(extram_ce), .extram_oe(extram_oe), .extram_we(extram_we),
-		.com_TxD(com_from_sys), .com_RxD(com_to_sys));
+		.com_TxD(com_from_sys), .com_RxD(com_to_sys),
+	
+		.flash_addr(flash_addr), .flash_data(flash_data_ext[15:0]),
+		.flash_ctl(flash_ctl));
 
 	always #1 clk <= ~clk;
 
@@ -48,7 +58,7 @@ module top;
 		$dumpvars(0, ubaseram);
 		$dumpvars(0, uextram);
 
-		$monitor("time=%g debug_out=%h", $time, debug_out);
+		$monitor("time=%g segdisp=%h", $time, segdisp);
 
 		#6 rst = 0;
 	end

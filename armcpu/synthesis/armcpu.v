@@ -1,6 +1,6 @@
 /*
  * $File: armcpu.v
- * $Date: Thu Nov 21 20:35:07 2013 +0800
+ * $Date: Fri Nov 22 20:53:30 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -27,7 +27,12 @@ module armcpu(
 
 	// serial port interface
 	output com_TxD,
-	input com_RxD);
+	input com_RxD,
+
+	// flash interface
+	output [22:0] flash_addr,
+	inout [15:0] flash_data,
+	output [7:0] flash_ctl);
 
 
 	reg clk_cpu;
@@ -42,27 +47,33 @@ module armcpu(
 	end
 
 	reg [7:0] monitor_data;
-	wire [31:0] debug_out;
+	wire [31:0] segdisp_data;
 	assign write_protect = baseram_addr <= 512;  // XXX: write-protect for code
 	wire baseram_we_set;
 	assign baseram_we = baseram_we_set | write_protect;
 
-	system usys(.clk_cpu(clk_cpu), .clk_mem(clk50M), .rst(~rst),
-		.debug_out(debug_out),
+	system usys(.clk_cpu(clk_cpu), .clk50M(clk50M), .rst(~rst),
+		.segdisp(segdisp_data),
+
 		.baseram_addr(baseram_addr), .baseram_data(baseram_data),
 		.baseram_ce(baseram_ce),
 		.baseram_oe(baseram_oe),	
 		.baseram_we(baseram_we_set),
 		.extram_addr(extram_addr), .extram_data(extram_data),
 		.extram_ce(extram_ce), .extram_oe(extram_oe), .extram_we(extram_we),
-		.com_TxD(com_TxD), .com_RxD(com_RxD));
+
+		.com_TxD(com_TxD), .com_RxD(com_RxD),
+	
+		.flash_addr(flash_addr),
+		.flash_data(flash_data),
+		.flash_ctl(flash_ctl));
 
 	always @(posedge clk_cpu)
 		led[7:0] <= {led[6:0], !led[6:0]};
 
 	always @(posedge clk50M) begin
-		led[15:8] <= debug_out[7:0];
-		monitor_data <= debug_out >> params[31:24];
+		led[15:8] <= segdisp_data[7:0];
+		monitor_data <= segdisp_data >> params[31:24];
 	end
 
 	digseg_driver useg0(.data(monitor_data[3:0]), .seg(segdisp0));
