@@ -181,8 +181,12 @@ module stage_id(
 				endcase
 			6'h09:	// ADDIU
 				wb_with_alu_imm(`ALU_OPT_ADDU, instr_imm_signext);
+			6'h0c:	// ANDI
+				wb_with_alu_imm(`ALU_OPT_AND, instr_imm_unsignext);
 			6'h0d:	// ORI
 				wb_with_alu_imm(`ALU_OPT_OR, instr_imm_unsignext);
+			6'h0e:	// XORI
+				wb_with_alu_imm(`ALU_OPT_XOR, instr_imm_unsignext);
 			6'h0f:	// LUI
 				wb_with_alu_imm(`ALU_OPT_SETU, {instr_imm, 16'b0});
 			6'h23:	// LW

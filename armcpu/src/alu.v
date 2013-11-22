@@ -24,10 +24,14 @@ module alu(
 				result = opr1 + opr2;
 			`ALU_OPT_SUBU:
 				result = opr1 - opr2;
+			`ALU_OPT_AND:
+				result = opr1 & opr2;	
 			`ALU_OPT_OR:
 				result = opr1 | opr2;
 			`ALU_OPT_XOR:
 				result = opr1 ^ opr2;
+			`ALU_OPT_NOR:
+				result = ~(opr1 | opr2);
             `ALU_OPT_LT:
                 result = $signed(opr1) < $signed(opr2) ? 32'b1 : 0;
             `ALU_OPT_SETU:
