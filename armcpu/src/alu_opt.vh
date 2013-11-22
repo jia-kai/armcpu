@@ -27,6 +27,7 @@
 `define ALU_OPT_XOR		7'h26
 `define ALU_OPT_NOR		7'h27
 `define ALU_OPT_LT		7'h2A // signed less than
+`define ALU_OPT_LTU		7'h2B // signed less than
 `define ALU_OPT_SETU	7'h40 // extended opt, set upper half of opr1
 `define ALU_OPT_PASS_OPR1	7'h41 // extended opt, result <= first operand
 

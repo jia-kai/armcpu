@@ -44,6 +44,8 @@ module alu(
 				result = ~(opr1 | opr2);
             `ALU_OPT_LT:
                 result = $signed(opr1) < $signed(opr2) ? 32'b1 : 0;
+            `ALU_OPT_LTU:
+                result = $unsigned(opr1) < $unsigned(opr2) ? 32'b1 : 0;
             `ALU_OPT_SETU:
                 result = {opr2[31:16], 16'b0};
             `ALU_OPT_PASS_OPR1:
