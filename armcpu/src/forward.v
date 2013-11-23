@@ -1,6 +1,6 @@
 /*
  * $File: forward.v
- * $Date: Sat Nov 16 23:29:30 2013 +0800
+ * $Date: Sat Nov 23 15:00:01 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -17,18 +17,18 @@ module forward(
 	input [31:0] regfile_write_data,
 	output reg [31:0] forward_data);
 
-	assign fw_from_alu_rst = 
-		(ex2mem_wb_reg_addr == opr_reg_addr && ex2mem_wb_from_alu);
-	assign fw_from_regfile = (regfile_write_addr == opr_reg_addr);
+	assign
+		fw_from_alu_rst = 
+			(ex2mem_wb_reg_addr == opr_reg_addr && ex2mem_wb_from_alu),
+		fw_from_regfile = (regfile_write_addr == opr_reg_addr),
+		addr_not_zero = (opr_reg_addr != 0);
 
-	always @(*) begin
-		forward_data = opr_reg_data;
-		if (opr_reg_addr) begin
-			if (fw_from_alu_rst)
-				forward_data = ex2mem_alu_result;
-			else if (fw_from_regfile) 
-				forward_data = regfile_write_data;
-		end
-	end
+	always @(*)
+		casex ({addr_not_zero, fw_from_alu_rst, fw_from_regfile})
+			3'b11x: forward_data = ex2mem_alu_result;
+			3'b101: forward_data = regfile_write_data;
+			default: forward_data = opr_reg_data;
+		endcase
+
 endmodule
 

@@ -1,4 +1,4 @@
-# simu: 200ns 
+# simu: 60ns 
 li $a0, 8
 li $a1, 1
 sll $a2, $a0, 2			#a2 = 32
