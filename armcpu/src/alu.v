@@ -20,16 +20,32 @@ module alu(
 		case (opt)
             `ALU_OPT_SLL_IMM:
                 result = opr2 << sa_imm;
+            `ALU_OPT_SRL_IMM:
+                result = $signed(opr2) >> sa_imm;
+            `ALU_OPT_SRA_IMM:
+                result = $signed(opr2) >>> sa_imm;
+            `ALU_OPT_SLL:
+                result = opr2 << opr1;
+            `ALU_OPT_SRL:
+                result = $signed(opr2) >> opr1;
+            `ALU_OPT_SRA:
+                result = $signed(opr2) >>> opr1;
 			`ALU_OPT_ADDU:
 				result = opr1 + opr2;
 			`ALU_OPT_SUBU:
 				result = opr1 - opr2;
+			`ALU_OPT_AND:
+				result = opr1 & opr2;	
 			`ALU_OPT_OR:
 				result = opr1 | opr2;
 			`ALU_OPT_XOR:
 				result = opr1 ^ opr2;
+			`ALU_OPT_NOR:
+				result = ~(opr1 | opr2);
             `ALU_OPT_LT:
                 result = $signed(opr1) < $signed(opr2) ? 32'b1 : 0;
+            `ALU_OPT_LTU:
+                result = $unsigned(opr1) < $unsigned(opr2) ? 32'b1 : 0;
             `ALU_OPT_SETU:
                 result = {opr2[31:16], 16'b0};
             `ALU_OPT_PASS_OPR1:

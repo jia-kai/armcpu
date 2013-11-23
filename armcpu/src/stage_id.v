@@ -162,6 +162,10 @@ module stage_id(
                         assign_reg1();
                         proc_cond_branch(1'b0, `ALU_OPT_LT, `BRANCH_ON_ALU_EQZ);
                     end
+                    5'b00000: begin  // BLTZ 
+                        assign_reg1();
+                        proc_cond_branch(1'b0, `ALU_OPT_LT, `BRANCH_ON_ALU_NEZ);
+                    end
                     default:
                         invalid_instruction();
                 endcase
@@ -169,6 +173,16 @@ module stage_id(
                 proc_cond_branch(1'b1, `ALU_OPT_XOR, `BRANCH_ON_ALU_EQZ);
 			6'h05:  // BNE
                 proc_cond_branch(1'b1, `ALU_OPT_XOR, `BRANCH_ON_ALU_NEZ);
+			6'h06:  
+				case (instr_rt)
+                    5'b00000: begin  // BLEZ
+                        reg2_addr <= instr_rs;
+						reg2_data <= rf_data1;
+						proc_cond_branch(1'b0, `ALU_OPT_LT, `BRANCH_ON_ALU_EQZ);
+                    end
+                    default:
+                        invalid_instruction();
+                endcase
 			6'h07:
 				case (instr_rt)
 					5'b00000: begin  // BGTZ
@@ -181,8 +195,16 @@ module stage_id(
 				endcase
 			6'h09:	// ADDIU
 				wb_with_alu_imm(`ALU_OPT_ADDU, instr_imm_signext);
+			6'h0a:	// SLTI
+				wb_with_alu_imm(`ALU_OPT_LT, instr_imm_signext);
+			6'h0b:	// SLTIU
+				wb_with_alu_imm(`ALU_OPT_LTU, instr_imm_unsignext);
+			6'h0c:	// ANDI
+				wb_with_alu_imm(`ALU_OPT_AND, instr_imm_unsignext);
 			6'h0d:	// ORI
 				wb_with_alu_imm(`ALU_OPT_OR, instr_imm_unsignext);
+			6'h0e:	// XORI
+				wb_with_alu_imm(`ALU_OPT_XOR, instr_imm_unsignext);
 			6'h0f:	// LUI
 				wb_with_alu_imm(`ALU_OPT_SETU, {instr_imm, 16'b0});
 			6'h23:	// LW
