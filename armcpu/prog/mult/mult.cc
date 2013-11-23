@@ -1,6 +1,6 @@
 /*
  * $File: mult.cc
- * $Date: Sat Nov 23 21:08:33 2013 +0800
+ * $Date: Sat Nov 23 23:13:53 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -9,10 +9,10 @@
 const char COM_STAT_READ = 2, COM_STAT_WRITE = 1;
 typedef uint32_t * volatile hw_ptr_t;
 
-// use class to git rid of global variables
+// use class to get rid of global variables
 
 class Main {
-	static const uint8_t 
+	static const uint8_t
 		CMD_FLASH_WRITE	= 0b01110000,
 		CMD_FLASH_READ	= 0b00001111,
 		CMD_FLASH_ERASE	= 0b00111000,
