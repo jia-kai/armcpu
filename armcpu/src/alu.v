@@ -1,6 +1,6 @@
 /*
  * $File: alu.v
- * $Date: Sat Nov 23 09:59:53 2013 +0800
+ * $Date: Sat Nov 23 19:23:53 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -50,6 +50,7 @@ module alu(
                 result = {opr2[31:16], 16'b0};
             `ALU_OPT_PASS_OPR1:
                 result = opr1;
+			`ALU_OPT_MULT: ;	// ignore; processed by stage_ex
             default: begin
                 $warning("illegal alu opt: %h", opt);
 				illegal_opt = 1;

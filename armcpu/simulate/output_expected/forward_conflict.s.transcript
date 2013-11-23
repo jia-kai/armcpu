@@ -4,6 +4,8 @@
 # Loading work.system
 # Loading work.cpu
 # Loading work.forward
+# Loading work.multiplier_wrapper
+# Loading work.multiplier
 # Loading work.stage_if
 # Loading work.stage_id
 # Loading work.register_file
@@ -29,6 +31,8 @@
 # time=1 cpu entered kernel mode
 # time=1 cp0_cause: IP=x0000000 ExcCode=00
 # time=1 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
+# ** Warning: time=1 TLB read missing, vaddr=xxxxxxxX
+#    Time: 1 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=1 reg1($at)=00000000
 # time=1 reg2($v0)=00000000
 # time=1 reg3($v1)=00000000
@@ -56,7 +60,6 @@
 #    Time: 35 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
 # [31m <-- mem base --> time=40 write: addr=00400 data=19931102[0m
 # [32m < -- id -- > time=49 got instruction: pc=80000018 instr=24040123 [0m
-# time=51 com_write_busy=1
 # [32m < -- id -- > time=57 got instruction: pc=8000001c instr=24850001 [0m
 # time=57 reg4($a0)=19931102
 # [32m < -- id -- > time=61 got instruction: pc=80000020 instr=1000ffff [0m

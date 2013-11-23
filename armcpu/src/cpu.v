@@ -1,11 +1,12 @@
 /*
  * $File: cpu.v
- * $Date: Sat Nov 23 16:46:38 2013 +0800
+ * $Date: Sat Nov 23 19:43:10 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 `timescale 1ns/1ps
 
+`include "lohi_def.vh"
 `include "common.vh"
 `include "branch_opt.vh"
 `include "alu_opt.vh"
@@ -19,6 +20,7 @@
 
 module cpu(
 	input clk,
+	input clk_fast,	// for multiplier
 	input rst,
 
 	input int_com_req,
@@ -57,6 +59,11 @@ module cpu(
 	reg jmp_flag;
 	wire [31:0] branch_dest, exc_jmp_dest;
 	reg [31:0] jmp_dest;
+
+	wire [31:0] mult_opr1, mult_opr2, lohi_write_data;
+	wire [63:0] mult_result;
+	wire lohi_ready;
+	wire [`LOHI_WRITE_OPT_WIDTH-1:0] lohi_write_opt;
 
 
 	wire stall, clear;
@@ -104,6 +111,13 @@ module cpu(
 		.regfile_write_data(wb_data),
 		.forward_data(id2ex_reg2_forward_data));
 
+	multiplier_wrapper umult(.clk(clk_fast),
+		.opr1(mult_opr1), .opr2(mult_opr2),
+		.result(mult_result),
+		.write_data(lohi_write_data),
+		.write_opt(lohi_write_opt),
+		.ready(lohi_ready));
+
 	stage_if uif(.clk(clk), .rst(rst), .stall(stall), .clear(clear),
 		.jmp_flag(jmp_flag), .jmp_dest(jmp_dest),
 		.interstage_if2id(interstage_if2id), 
@@ -123,6 +137,7 @@ module cpu(
 		.reg1_data(id2ex_reg1_forward_data),
 		.reg2_data(id2ex_reg2_forward_data),
 		.branch_flag(branch_flag), .branch_dest(branch_dest),
+		.mult_opr1(mult_opr1), .mult_opr2(mult_opr2),
 		.interstage_ex2mem(interstage_ex2mem));
 
 	stage_mem umem(.clk(clk), .rst(rst),
@@ -130,8 +145,16 @@ module cpu(
 		.wb_reg_addr(wb_addr), .wb_reg_data(wb_data),
 		.set_stall(stall), .set_clear(clear),
 		.exc_jmp_flag(exc_jmp_flag), .exc_jmp_dest(exc_jmp_dest),
+
 		.is_user_mode(is_user_mode),
+
+		.lohi_value(mult_result),
+		.lohi_ready(lohi_ready),
+		.lohi_write_opt(lohi_write_opt),
+		.lohi_write_data(lohi_write_data),
+
         .int_req(int_req), 
+
 		.mmu_tlb_write_struct(mmu_tlb_write_struct),
 		.mmu_addr(mmu_data_addr),
 		.mmu_data_in(mmu_data_from_mmu),

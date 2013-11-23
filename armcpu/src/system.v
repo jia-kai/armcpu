@@ -1,6 +1,6 @@
 /*
  * $File: system.v
- * $Date: Fri Nov 22 20:51:14 2013 +0800
+ * $Date: Sat Nov 23 19:40:30 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -42,7 +42,7 @@ module system
 	wire int_com_req, int_com_ack, com_write_enable, com_write_busy;
 	wire [7:0] data_to_com, data_from_com;
 
-	cpu ucpu(.clk(clk_cpu), .rst(rst),
+	cpu ucpu(.clk(clk_cpu), .clk_fast(clk50M), .rst(rst),
 		.int_com_req(int_com_req),
 		.dev_mem_addr(mem_addr),
 		.dev_mem_data_in(data_from_mem),

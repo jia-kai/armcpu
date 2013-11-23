@@ -1,6 +1,6 @@
 /*
  * $File: stage_mem.v
- * $Date: Thu Nov 21 19:29:19 2013 +0800
+ * $Date: Sat Nov 23 20:35:41 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -8,6 +8,8 @@
 `include "mem_opt.vh"
 `include "gencode/ex2mem_param.v"
 `include "int_def.vh"
+
+`include "lohi_def.vh"
 
 // memory read/write
 module stage_mem(
@@ -27,6 +29,12 @@ module stage_mem(
 
 	output is_user_mode,
 
+	// interface to LO and HI registers
+	input [63:0] lohi_value,
+	input lohi_ready,
+	output reg [`LOHI_WRITE_OPT_WIDTH-1:0] lohi_write_opt,
+	output reg [31:0] lohi_write_data,
+
 	// handle interrupt; interface to misc divices
 	input [`INT_MASK_WIDTH-1:0] int_req,
 
@@ -43,10 +51,8 @@ module stage_mem(
 
 	`include "gencode/ex2mem_extract_load.v"
 
-	reg state;
-	localparam READY = 1'b0, WAIT = 1'b1;
-
-	reg [`REGADDR_WIDTH-1:0] wb_reg_addr_latch;
+	reg [1:0] state;
+	localparam READY = 2'b00, WAIT_MMU = 2'b01, WAIT_LOHI = 2'b10;
 
 	reg [`EXC_CODE_WIDTH-1:0] cp0_exc_code;
 	reg [`CP0_REG_ADDR_WIDTH-1:0] cp0_write_addr;
@@ -98,14 +104,14 @@ module stage_mem(
 	task proc_mem_opt; 
 		case (mem_opt_ex2mem) 
 			`MEM_OPT_WRITE_CP0: begin
-				state <= WAIT;
+				state <= WAIT_MMU;
 				cp0_write_addr <= mem_addr_ex2mem[`CP0_REG_ADDR_WIDTH-1:0];
 				cp0_write_data <= mem_data_ex2mem;
 			end
 			`MEM_OPT_READ_CP0:
 				wb_reg_data <= cp0_reg_unwind[mem_addr_ex2mem];
 			`MEM_OPT_WRITE_TLB_IDX: begin
-				state <= WAIT;
+				state <= WAIT_MMU;
 				tlb_write_enable <= 1;
 				tlb_index <= cp0_reg_unwind[`CP0_INDEX][`TLB_INDEX_WIDTH-1:0];
 				tlb_entry <= {cp0_reg_unwind[`CP0_ENTRY_HI][31:13],
@@ -114,8 +120,31 @@ module stage_mem(
 					cp0_reg_unwind[`CP0_ENTRY_LO0][25:6],
 					cp0_reg_unwind[`CP0_ENTRY_LO0][2:1]};
 			end
+			`MEM_OPT_MFLO, `MEM_OPT_MFHI:
+				if (!lohi_ready) begin
+					state <= WAIT_LOHI;
+					wb_reg_addr <= 0;
+				end
+				else begin
+					state <= READY;
+					wb_reg_addr <= wb_reg_addr_ex2mem;
+					if (mem_opt_ex2mem == `MEM_OPT_MFLO)
+						wb_reg_data <= lohi_value[31:0];
+					else
+						wb_reg_data <= lohi_value[63:32];
+				end
+			`MEM_OPT_MTLO: begin
+				lohi_write_opt <= `LOHI_WRITE_LO;
+				lohi_write_data <= alu_result;
+			end
+			`MEM_OPT_MTHI: begin
+				lohi_write_opt <= `LOHI_WRITE_HI;
+				lohi_write_data <= alu_result;
+			end
+
+			// mmu operations
 			default: if (mem_opt_ex2mem != `MEM_OPT_NONE) begin
-				state <= WAIT;
+				state <= WAIT_MMU;
 				mmu_opt <= mem_opt_ex2mem;
 				mmu_addr <= mem_addr_ex2mem;
 				mmu_data_out <= mem_data_ex2mem;
@@ -129,6 +158,7 @@ module stage_mem(
 		mmu_opt <= `MEM_OPT_NONE;
 		cp0_write_addr <= `CP0_REG_NONE;
 		tlb_write_enable <= 0;
+		lohi_write_opt <= `LOHI_WRITE_NONE;
 
 		if (rst) begin
 			state <= READY;
@@ -137,7 +167,6 @@ module stage_mem(
 			READY: begin
 				cp0_exc_epc <= exc_epc_ex2mem;
 				cp0_exc_badvaddr <= 0;
-				wb_reg_addr_latch <= wb_reg_addr_ex2mem;
 				if (exc_code_ex2mem != `EC_NONE) begin
 					cp0_exc_code <= exc_code_ex2mem;
 					cp0_exc_badvaddr <= exc_badvaddr_ex2mem;
@@ -150,7 +179,7 @@ module stage_mem(
 					proc_mem_opt();
 				end
 			end
-			WAIT:
+			WAIT_MMU:
 				if (mmu_exc_code != `EC_NONE) begin
 					state <= READY;
 					cp0_exc_code <= mmu_exc_code;
@@ -158,8 +187,13 @@ module stage_mem(
 				end else if (!mmu_busy) begin
 					state <= READY;
 					wb_reg_data <= mmu_data_in;
-					wb_reg_addr <= wb_reg_addr_latch;
+					wb_reg_addr <= wb_reg_addr_ex2mem;
 				end
+			WAIT_LOHI:
+				proc_mem_opt();	// stalled, so mem_opt should not change
+
+			default:
+				state <= READY;
 		endcase
 	end
 

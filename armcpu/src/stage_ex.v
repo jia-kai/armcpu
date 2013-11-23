@@ -1,6 +1,6 @@
 /*
  * $File: stage_ex.v
- * $Date: Wed Nov 20 19:32:48 2013 +0800
+ * $Date: Sat Nov 23 19:32:56 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -29,8 +29,13 @@ module stage_ex(
 	// updated on negedge, regardness of stall
 	output reg branch_flag,
 	output reg [31:0] branch_dest,
+
+	output reg [31:0] mult_opr1,
+	output reg [31:0] mult_opr2,
 	
 	output [`EX2MEM_WIRE_WIDTH-1:0] interstage_ex2mem);
+
+	// ------------------------------------------------------------------
 
 	`include "gencode/id2ex_extract_load.v"
 	`include "gencode/ex2mem_extract_store.v"
@@ -72,6 +77,10 @@ module stage_ex(
 			else if (alu_illegal_opt)
 				exc_code_ex2mem <= `EC_RI;
 			else begin
+				if (alu_opt == `ALU_OPT_MULT) begin
+					mult_opr1 <= reg1_data;
+					mult_opr2 <= reg2_data;
+				end
 				alu_result <= result_from_alu;
 				wb_reg_addr_ex2mem <= wb_reg_addr_id2ex;
 				mem_opt_ex2mem <= mem_opt_id2ex;

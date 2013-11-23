@@ -4,6 +4,8 @@
 # Loading work.system
 # Loading work.cpu
 # Loading work.forward
+# Loading work.multiplier_wrapper
+# Loading work.multiplier
 # Loading work.stage_if
 # Loading work.stage_id
 # Loading work.register_file
@@ -29,6 +31,8 @@
 # time=1 cpu entered kernel mode
 # time=1 cp0_cause: IP=x0000000 ExcCode=00
 # time=1 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
+# ** Warning: time=1 TLB read missing, vaddr=xxxxxxxX
+#    Time: 1 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=1 reg1($at)=00000000
 # time=1 reg2($v0)=00000000
 # time=1 reg3($v1)=00000000
@@ -57,15 +61,12 @@
 # [32m < -- id -- > time=45 got instruction: pc=80000024 instr=10000002 [0m
 # [32m < -- id -- > time=49 got instruction: pc=80000028 instr=275a0001 [0m
 # time=49 reg26($k0)=00000001
-# time=51 com_write_busy=1
 # [32m < -- id -- > time=53 got instruction: pc=80000030 instr=04810002 [0m
 # [32m < -- id -- > time=57 got instruction: pc=80000034 instr=00000000 [0m
 # time=57 reg26($k0)=00000002
 # [32m < -- id -- > time=61 got instruction: pc=8000003c instr=04a10002 [0m
 # [32m < -- id -- > time=65 got instruction: pc=80000040 instr=275a0001 [0m
 # [32m < -- id -- > time=69 got instruction: pc=80000048 instr=04c10003 [0m
-# time=71 cp0_cause: IP=10010000 ExcCode=00
-# time=73 com_write_busy=0
 # [32m < -- id -- > time=73 got instruction: pc=8000004c instr=275a0001 [0m
 # time=73 reg26($k0)=00000003
 # [32m < -- id -- > time=77 got instruction: pc=80000050 instr=10000002 [0m
@@ -77,7 +78,6 @@
 # [32m < -- id -- > time=93 got instruction: pc=80000064 instr=10000002 [0m
 # [32m < -- id -- > time=97 got instruction: pc=80000068 instr=275a0001 [0m
 # [32m < -- id -- > time=101 got instruction: pc=80000070 instr=18800002 [0m
-# time=105 com_write_busy=1
 # [32m < -- id -- > time=105 got instruction: pc=80000074 instr=00000000 [0m
 # time=105 reg26($k0)=00000006
 # [32m < -- id -- > time=109 got instruction: pc=8000007c instr=18a00002 [0m
@@ -87,7 +87,6 @@
 # time=121 reg26($k0)=00000007
 # [32m < -- id -- > time=125 got instruction: pc=8000008c instr=00000000 [0m
 # time=125 reg26($k0)=00000008
-# time=127 com_write_busy=0
 # [32m < -- id -- > time=129 got instruction: pc=80000094 instr=04c00002 [0m
 # [32m < -- id -- > time=133 got instruction: pc=80000098 instr=275a0001 [0m
 # [32m < -- id -- > time=137 got instruction: pc=800000a0 instr=14800002 [0m
@@ -99,14 +98,12 @@
 # [32m < -- id -- > time=153 got instruction: pc=800000b0 instr=00000000 [0m
 # time=153 reg26($k0)=0000000b
 # [32m < -- id -- > time=157 got instruction: pc=800000b8 instr=275a0001 [0m
-# time=159 com_write_busy=1
 # [32m < -- id -- > time=161 got instruction: pc=800000bc instr=1000ffff [0m
 # [32m < -- id -- > time=165 got instruction: pc=800000c0 instr=00000000 [0m
 # time=165 reg26($k0)=0000000c
 # [32m < -- id -- > time=169 got instruction: pc=800000bc instr=1000ffff [0m
 # [32m < -- id -- > time=173 got instruction: pc=800000c0 instr=00000000 [0m
 # [32m < -- id -- > time=177 got instruction: pc=800000bc instr=1000ffff [0m
-# time=181 com_write_busy=0
 # [32m < -- id -- > time=181 got instruction: pc=800000c0 instr=00000000 [0m
 # [32m < -- id -- > time=185 got instruction: pc=800000bc instr=1000ffff [0m
 # [32m < -- id -- > time=189 got instruction: pc=800000c0 instr=00000000 [0m

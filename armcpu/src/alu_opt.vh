@@ -1,6 +1,6 @@
 /*
  * $File: alu_opt.vh
- * $Date: Sat Nov 23 15:15:21 2013 +0800
+ * $Date: Sat Nov 23 19:27:41 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -12,7 +12,7 @@
 
 // ALU opt is same as R-type instructions
 `define ALU_OPT_WIDTH	7
-`define ALU_OPT_DISABLE	7'h00
+`define ALU_OPT_NONE	7'h00
 
 `define ALU_OPT_SLL_IMM	7'h00 // shift opr2 left using imm value
 `define ALU_OPT_SRL_IMM	7'h02 
@@ -20,6 +20,7 @@
 `define ALU_OPT_SLL 	7'h04
 `define ALU_OPT_SRL 	7'h06 
 `define ALU_OPT_SRA 	7'h07  
+`define ALU_OPT_MULT	7'h18
 `define ALU_OPT_ADDU	7'h21
 `define ALU_OPT_SUBU	7'h23
 `define ALU_OPT_AND		7'h24

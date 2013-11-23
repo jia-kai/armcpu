@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/bash -e
 # $File: runall.sh
-# $Date: Sat Nov 23 15:04:17 2013 +0800
+# $Date: Sat Nov 23 19:43:23 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
-mkdir output
+[ -d output ] || mkdir output
 for i in prog/*.s
 do
 	./run.sh $i

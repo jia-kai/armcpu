@@ -4,6 +4,8 @@
 # Loading work.system
 # Loading work.cpu
 # Loading work.forward
+# Loading work.multiplier_wrapper
+# Loading work.multiplier
 # Loading work.stage_if
 # Loading work.stage_id
 # Loading work.register_file
@@ -29,6 +31,8 @@
 # time=1 cpu entered kernel mode
 # time=1 cp0_cause: IP=x0000000 ExcCode=00
 # time=1 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
+# ** Warning: time=1 TLB read missing, vaddr=xxxxxxxX
+#    Time: 1 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=1 reg1($at)=00000000
 # time=1 reg2($v0)=00000000
 # time=1 reg3($v1)=00000000
@@ -55,12 +59,9 @@
 # [32m < -- id -- > time=45 got instruction: pc=80000010 instr=1000fffd [0m
 # [32m < -- id -- > time=49 got instruction: pc=80000014 instr=ac9a0000 [0m
 # time=49 reg26($k0)=00000001
-# time=51 com_write_busy=1
 # [32m < -- id -- > time=53 got instruction: pc=80000008 instr=8c9a0000 [0m
 # [31m <-- mem ext --> time=60 write: addr=40000 data=00000001[0m
 # [32m < -- id -- > time=69 got instruction: pc=8000000c instr=275a0001 [0m
-# time=71 cp0_cause: IP=10010000 ExcCode=00
-# time=73 com_write_busy=0
 # [32m < -- id -- > time=77 got instruction: pc=80000010 instr=1000fffd [0m
 # [32m < -- id -- > time=81 got instruction: pc=80000014 instr=ac9a0000 [0m
 # time=81 reg26($k0)=00000002

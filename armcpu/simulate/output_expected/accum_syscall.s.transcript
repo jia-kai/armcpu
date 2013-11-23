@@ -4,6 +4,8 @@
 # Loading work.system
 # Loading work.cpu
 # Loading work.forward
+# Loading work.multiplier_wrapper
+# Loading work.multiplier
 # Loading work.stage_if
 # Loading work.stage_id
 # Loading work.register_file
@@ -29,6 +31,8 @@
 # time=1 cpu entered kernel mode
 # time=1 cp0_cause: IP=x0000000 ExcCode=00
 # time=1 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
+# ** Warning: time=1 TLB read missing, vaddr=xxxxxxxX
+#    Time: 1 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=1 reg1($at)=00000000
 # time=1 reg2($v0)=00000000
 # time=1 reg3($v1)=00000000
@@ -60,14 +64,11 @@
 # time=45 reg26($k1)=80000004
 # [32m < -- id -- > time=49 got instruction: pc=80000190 instr=42000018 [0m
 # time=49 reg26($k1)=8000000c
-# time=51 com_write_busy=1
 # [32m < -- id -- > time=57 got instruction: pc=80000194 instr=00000000 [0m
 # time=61 eret: 8000000c
 # time=61 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
 # [32m < -- id -- > time=65 got instruction: pc=8000019c instr=00000000 [0m
 # [32m < -- id -- > time=69 got instruction: pc=8000000c instr=24030000 [0m
-# time=71 cp0_cause: IP=10010000 ExcCode=08
-# time=73 com_write_busy=0
 # [32m < -- id -- > time=73 got instruction: pc=80000010 instr=1000fffb [0m
 # [32m < -- id -- > time=77 got instruction: pc=80000014 instr=0040d021 [0m
 # time=77 reg3($v1)=00000000
@@ -76,11 +77,10 @@
 # time=85 reg26($k0)=00000001
 # [32m < -- id -- > time=89 got instruction: pc=80000008 instr=0000000c [0m
 # time=89 reg3($v1)=00000001
-# time=93 impending exception: ip=10010000 code=08 epc=80000004
+# time=93 impending exception: ip=10000000 code=08 epc=80000004
 # time=93 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
 # [32m < -- id -- > time=97 got instruction: pc=80000010 instr=00000000 [0m
 # [32m < -- id -- > time=101 got instruction: pc=80000180 instr=00431021 [0m
-# time=105 com_write_busy=1
 # [32m < -- id -- > time=105 got instruction: pc=80000184 instr=401b7000 [0m
 # [32m < -- id -- > time=109 got instruction: pc=80000188 instr=277b0008 [0m
 # time=109 reg2($v0)=00000002
@@ -89,7 +89,6 @@
 # [32m < -- id -- > time=117 got instruction: pc=80000190 instr=42000018 [0m
 # time=117 reg26($k1)=8000000c
 # [32m < -- id -- > time=125 got instruction: pc=80000194 instr=00000000 [0m
-# time=127 com_write_busy=0
 # time=129 eret: 8000000c
 # time=129 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
 # [32m < -- id -- > time=133 got instruction: pc=8000019c instr=00000000 [0m
@@ -102,15 +101,13 @@
 # time=153 reg26($k0)=00000002
 # [32m < -- id -- > time=157 got instruction: pc=80000008 instr=0000000c [0m
 # time=157 reg3($v1)=00000001
-# time=159 com_write_busy=1
-# time=161 impending exception: ip=10010000 code=08 epc=80000004
+# time=161 impending exception: ip=10000000 code=08 epc=80000004
 # time=161 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
 # [32m < -- id -- > time=165 got instruction: pc=80000010 instr=00000000 [0m
 # [32m < -- id -- > time=169 got instruction: pc=80000180 instr=00431021 [0m
 # [32m < -- id -- > time=173 got instruction: pc=80000184 instr=401b7000 [0m
 # [32m < -- id -- > time=177 got instruction: pc=80000188 instr=277b0008 [0m
 # time=177 reg2($v0)=00000003
-# time=181 com_write_busy=0
 # [32m < -- id -- > time=181 got instruction: pc=8000018c instr=409b7000 [0m
 # time=181 reg26($k1)=80000004
 # [32m < -- id -- > time=185 got instruction: pc=80000190 instr=42000018 [0m
@@ -121,7 +118,6 @@
 # [32m < -- id -- > time=201 got instruction: pc=8000019c instr=00000000 [0m
 # [32m < -- id -- > time=205 got instruction: pc=8000000c instr=24030000 [0m
 # [32m < -- id -- > time=209 got instruction: pc=80000010 instr=1000fffb [0m
-# time=213 com_write_busy=1
 # [32m < -- id -- > time=213 got instruction: pc=80000014 instr=0040d021 [0m
 # time=213 reg3($v1)=00000000
 # [32m < -- id -- > time=217 got instruction: pc=80000000 instr=24030001 [0m
@@ -129,10 +125,9 @@
 # time=221 reg26($k0)=00000003
 # [32m < -- id -- > time=225 got instruction: pc=80000008 instr=0000000c [0m
 # time=225 reg3($v1)=00000001
-# time=229 impending exception: ip=10010000 code=08 epc=80000004
+# time=229 impending exception: ip=10000000 code=08 epc=80000004
 # time=229 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
 # [32m < -- id -- > time=233 got instruction: pc=80000010 instr=00000000 [0m
-# time=235 com_write_busy=0
 # [32m < -- id -- > time=237 got instruction: pc=80000180 instr=00431021 [0m
 # [32m < -- id -- > time=241 got instruction: pc=80000184 instr=401b7000 [0m
 # [32m < -- id -- > time=245 got instruction: pc=80000188 instr=277b0008 [0m
@@ -144,19 +139,17 @@
 # [32m < -- id -- > time=261 got instruction: pc=80000194 instr=00000000 [0m
 # time=265 eret: 8000000c
 # time=265 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
-# time=267 com_write_busy=1
 # [32m < -- id -- > time=269 got instruction: pc=8000019c instr=00000000 [0m
 # [32m < -- id -- > time=273 got instruction: pc=8000000c instr=24030000 [0m
 # [32m < -- id -- > time=277 got instruction: pc=80000010 instr=1000fffb [0m
 # [32m < -- id -- > time=281 got instruction: pc=80000014 instr=0040d021 [0m
 # time=281 reg3($v1)=00000000
 # [32m < -- id -- > time=285 got instruction: pc=80000000 instr=24030001 [0m
-# time=289 com_write_busy=0
 # [32m < -- id -- > time=289 got instruction: pc=80000004 instr=0000000c [0m
 # time=289 reg26($k0)=00000004
 # [32m < -- id -- > time=293 got instruction: pc=80000008 instr=0000000c [0m
 # time=293 reg3($v1)=00000001
-# time=297 impending exception: ip=10010000 code=08 epc=80000004
+# time=297 impending exception: ip=10000000 code=08 epc=80000004
 # time=297 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
 # [32m < -- id -- > time=301 got instruction: pc=80000010 instr=00000000 [0m
 # [32m < -- id -- > time=305 got instruction: pc=80000180 instr=00431021 [0m
@@ -165,7 +158,6 @@
 # time=313 reg2($v0)=00000005
 # [32m < -- id -- > time=317 got instruction: pc=8000018c instr=409b7000 [0m
 # time=317 reg26($k1)=80000004
-# time=321 com_write_busy=1
 # [32m < -- id -- > time=321 got instruction: pc=80000190 instr=42000018 [0m
 # time=321 reg26($k1)=8000000c
 # [32m < -- id -- > time=329 got instruction: pc=80000194 instr=00000000 [0m
@@ -173,7 +165,6 @@
 # time=333 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
 # [32m < -- id -- > time=337 got instruction: pc=8000019c instr=00000000 [0m
 # [32m < -- id -- > time=341 got instruction: pc=8000000c instr=24030000 [0m
-# time=343 com_write_busy=0
 # [32m < -- id -- > time=345 got instruction: pc=80000010 instr=1000fffb [0m
 # [32m < -- id -- > time=349 got instruction: pc=80000014 instr=0040d021 [0m
 # time=349 reg3($v1)=00000000
@@ -182,11 +173,10 @@
 # time=357 reg26($k0)=00000005
 # [32m < -- id -- > time=361 got instruction: pc=80000008 instr=0000000c [0m
 # time=361 reg3($v1)=00000001
-# time=365 impending exception: ip=10010000 code=08 epc=80000004
+# time=365 impending exception: ip=10000000 code=08 epc=80000004
 # time=365 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
 # [32m < -- id -- > time=369 got instruction: pc=80000010 instr=00000000 [0m
 # [32m < -- id -- > time=373 got instruction: pc=80000180 instr=00431021 [0m
-# time=375 com_write_busy=1
 # [32m < -- id -- > time=377 got instruction: pc=80000184 instr=401b7000 [0m
 # [32m < -- id -- > time=381 got instruction: pc=80000188 instr=277b0008 [0m
 # time=381 reg2($v0)=00000006
@@ -194,7 +184,6 @@
 # time=385 reg26($k1)=80000004
 # [32m < -- id -- > time=389 got instruction: pc=80000190 instr=42000018 [0m
 # time=389 reg26($k1)=8000000c
-# time=397 com_write_busy=0
 # [32m < -- id -- > time=397 got instruction: pc=80000194 instr=00000000 [0m
 # time=401 eret: 8000000c
 # time=401 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
@@ -206,17 +195,15 @@
 # [32m < -- id -- > time=421 got instruction: pc=80000000 instr=24030001 [0m
 # [32m < -- id -- > time=425 got instruction: pc=80000004 instr=0000000c [0m
 # time=425 reg26($k0)=00000006
-# time=429 com_write_busy=1
 # [32m < -- id -- > time=429 got instruction: pc=80000008 instr=0000000c [0m
 # time=429 reg3($v1)=00000001
-# time=433 impending exception: ip=10010000 code=08 epc=80000004
+# time=433 impending exception: ip=10000000 code=08 epc=80000004
 # time=433 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
 # [32m < -- id -- > time=437 got instruction: pc=80000010 instr=00000000 [0m
 # [32m < -- id -- > time=441 got instruction: pc=80000180 instr=00431021 [0m
 # [32m < -- id -- > time=445 got instruction: pc=80000184 instr=401b7000 [0m
 # [32m < -- id -- > time=449 got instruction: pc=80000188 instr=277b0008 [0m
 # time=449 reg2($v0)=00000007
-# time=451 com_write_busy=0
 # [32m < -- id -- > time=453 got instruction: pc=8000018c instr=409b7000 [0m
 # time=453 reg26($k1)=80000004
 # [32m < -- id -- > time=457 got instruction: pc=80000190 instr=42000018 [0m
@@ -227,7 +214,6 @@
 # [32m < -- id -- > time=473 got instruction: pc=8000019c instr=00000000 [0m
 # [32m < -- id -- > time=477 got instruction: pc=8000000c instr=24030000 [0m
 # [32m < -- id -- > time=481 got instruction: pc=80000010 instr=1000fffb [0m
-# time=483 com_write_busy=1
 # [32m < -- id -- > time=485 got instruction: pc=80000014 instr=0040d021 [0m
 # time=485 reg3($v1)=00000000
 # [32m < -- id -- > time=489 got instruction: pc=80000000 instr=24030001 [0m

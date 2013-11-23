@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Sat Nov 23 16:46:31 2013 +0800
+ * $Date: Sat Nov 23 20:36:26 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -247,7 +247,7 @@ module stage_id(
 	task reset; begin
 		branch_opt_id2ex <= `BRANCH_NONE;
 		wb_reg_addr_id2ex <= 0;
-		alu_opt <= `ALU_OPT_DISABLE;
+		alu_opt <= `ALU_OPT_NONE;
         alu_sa_imm <= 0;
 		reg1_addr <= 0;
 		reg2_addr <= 0;
@@ -274,12 +274,38 @@ module stage_id(
 			invalid_instruction();
 	endtask
 
+	task proc_instr_mfhi; begin
+		mem_opt_id2ex <= `MEM_OPT_MFHI;
+		wb_reg_addr_id2ex <= instr_rd;
+	end endtask
+
+	task proc_instr_mflo; begin
+		mem_opt_id2ex <= `MEM_OPT_MFLO;
+		wb_reg_addr_id2ex <= instr_rd;
+	end endtask
+
+	task proc_instr_mthi; begin
+		assign_reg1();
+		mem_opt_id2ex <= `MEM_OPT_MTHI;
+		alu_opt <= `ALU_OPT_PASS_OPR1;
+	end endtask
+
+	task proc_instr_mtlo; begin
+		assign_reg1();
+		mem_opt_id2ex <= `MEM_OPT_MTLO;
+		alu_opt <= `ALU_OPT_PASS_OPR1;
+	end endtask
+
     task do_decode; begin
         case (instr_opcode)
             6'b000000: case(instr_func)
                 6'h08: proc_instr_jr();
                 6'h09: proc_instr_jalr();
 				6'h0c: proc_instr_syscall();
+				6'h10: proc_instr_mfhi();
+				6'h11: proc_instr_mthi();
+				6'h12: proc_instr_mflo();
+				6'h13: proc_instr_mtlo();
                 default: proc_rtype();
             endcase
             6'b000010:

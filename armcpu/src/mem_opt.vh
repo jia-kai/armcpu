@@ -1,6 +1,6 @@
 /*
  * $File: mem_opt.vh
- * $Date: Wed Nov 20 21:42:38 2013 +0800
+ * $Date: Sat Nov 23 19:07:45 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -15,6 +15,7 @@
 `define MEM_OPT_SB		4'b0101
 
 
+
 // used for stage_mem only
 
 // operation on CP0 registers
@@ -23,6 +24,11 @@
 
 `define MEM_OPT_WRITE_TLB_IDX	4'b1000
 
+// operation on multiplier
+`define MEM_OPT_MFLO		4'b1001
+`define MEM_OPT_MFHI		4'b1010
+`define MEM_OPT_MTLO		4'b1011
+`define MEM_OPT_MTHI		4'b1100
 
 
 // check whether operation is read/write mem, not special reg or none
