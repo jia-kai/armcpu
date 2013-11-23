@@ -1,11 +1,11 @@
 #!/bin/bash
 # $File: cc2bin.sh
-# $Date: Sat Nov 23 16:49:32 2013 +0800
+# $Date: Sat Nov 23 20:52:12 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 SECTION=.text.startup._ZN4Main4mainEv
 CC=mips-sde-elf-g++
-CC_FLAGS="-EL -mips32 -c -O2"
+CC_FLAGS="-EL -mips32 -c -O2 -Wall"
 OBJCOPY=mips-sde-elf-objcopy
 OBJDUMP=mips-sde-elf-objdump
 

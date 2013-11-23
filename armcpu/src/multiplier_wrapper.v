@@ -1,6 +1,6 @@
 /*
  * $File: multiplier_wrapper.v
- * $Date: Sat Nov 23 20:22:18 2013 +0800
+ * $Date: Sat Nov 23 20:49:20 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -32,7 +32,7 @@ module multiplier_wrapper(
 			cur_opr2 <= opr2;
 			wait_cnt <= 0;
 		end else begin
-			wait_cnt <= wait_cnt + 1;
+			wait_cnt <= wait_cnt + 1'b1;
 			if (wait_cnt == `WAIT_CYCLE) begin
 				prev_opr1 <= cur_opr1;
 				prev_opr2 <= cur_opr2;
