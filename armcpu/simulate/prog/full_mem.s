@@ -1,15 +1,24 @@
-# totally noncense program just to verify all memory instructions 
-# simu: 100ns
-li $a0, 5 * 1024 * 1024 + 0x80000000
-sw $zero, 0($a0)
-halt:
-lw $k0, 0($a0)
-addiu $k0, $k0, 1
-sw $k0, 0($a0)
-nop
-lbu $k0, 0($a0)
-addiu $k0, $k0, 0x2345
-sb $k0, 0($a0)
-nop
-lb $k0, 0($a0)
-b halt
+# simu: 200ns
+li $gp, 5 * 1024 * 1024 + 0x80000000
+li $v0, 0x19931102
+sw $v0, 0($gp)
+
+lb $a0, 0($gp)	# 0x02
+lb $a0, 1($gp)	# 0x11
+lb $a0, 2($gp)	# 0xffffff93
+lb $a0, 3($gp)	# 0x19
+
+lbu $a0, 0($gp)
+lbu $a0, 1($gp)
+lbu $a0, 2($gp)
+lbu $a0, 3($gp)
+
+li $v1, 0xffffff01
+sb $v1, 2($gp)
+sb $v1, 0($gp)
+sb $v1, 1($gp)
+sb $v1, 3($gp)
+
+halt: b halt
+
+# vim: ft=mips

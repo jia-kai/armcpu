@@ -107,11 +107,12 @@ jalr
 
 lw
 sw
+lb
+lbu
+sb
 
 syscall
 eret
-
-TODO: test: sb, lb: could reside on non-boundary
 
 
 virtual address mapping

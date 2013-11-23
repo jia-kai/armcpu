@@ -1,6 +1,6 @@
 /*
  * $File: mmu.v
- * $Date: Thu Nov 21 11:44:24 2013 +0800
+ * $Date: Sat Nov 23 16:06:43 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -98,14 +98,14 @@ module mmu(
 		// TODO: check user/kernel permission
         exc_code = `EC_NONE;
         if (mem_unaligned_addr[1:0]) begin
-			if (data_opt == `MEM_OPT_LW || data_opt == `MEM_OPT_NONE) begin
+			if (state == READ && (data_opt == `MEM_OPT_LW || data_opt == `MEM_OPT_NONE)) begin
                 exc_code = `EC_ADEL;
-				$warning("time=%g unaligned mem_addr read: %h", $time,
-					mem_unaligned_addr);
+				$warning("time=%g unaligned mem_addr read, data_opt=%h: %h", $time,
+					data_opt, mem_unaligned_addr);
 			end
 			if (data_opt == `MEM_OPT_SW) begin
                 exc_code = `EC_ADES;
-				$warning("time=%g unaligned mem_addr write: %h", $time,
+				$warning("time=%g unaligned mem_addr write word: %h", $time,
 					mem_unaligned_addr);
 			end
 		end else if (tlb_missing) begin

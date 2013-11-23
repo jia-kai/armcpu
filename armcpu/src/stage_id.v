@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Sat Nov 23 10:17:13 2013 +0800
+ * $Date: Sat Nov 23 15:57:06 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -23,8 +23,7 @@ module stage_id(
 
 	input [`IF2ID_WIRE_WIDTH-1:0] interstage_if2id,
 
-    // to determine whether current instruction is in branch delay slot
-    input cur_if_branch,
+    input in_branch_delay_slot,
 
 	// since reg[0] is always 0, no need for write enable signal;
 	input [`REGADDR_WIDTH-1:0] reg_write_addr,
@@ -201,8 +200,14 @@ module stage_id(
 				wb_with_alu_imm(`ALU_OPT_XOR, instr_imm_unsignext);
 			6'h0f:	// LUI
 				wb_with_alu_imm(`ALU_OPT_SETU, {instr_imm, 16'b0});
+			6'h20:	// LB
+				mem_opt(`MEM_OPT_LBS);
 			6'h23:	// LW
 				mem_opt(`MEM_OPT_LW);
+			6'h24:	// LBU
+				mem_opt(`MEM_OPT_LBU);
+			6'h28:	// SB
+				mem_opt(`MEM_OPT_SB);
 			6'h2b:	// SW
 				mem_opt(`MEM_OPT_SW);
 			default:
@@ -283,6 +288,7 @@ module stage_id(
                 proc_instr_jal();
 			6'b010000:
 				proc_cp0();
+			6'b101111: ;	// CACHE ignored
             default:
                 proc_itype();
         endcase
@@ -301,7 +307,7 @@ module stage_id(
                     exc_epc_id2ex <= exc_addr_if2id;
                     exc_badvaddr_id2ex <= exc_addr_if2id;
                 end else begin
-                    exc_epc_id2ex <= cur_if_branch ? next_pc - 8 : next_pc - 4;
+                    exc_epc_id2ex <= in_branch_delay_slot ? next_pc - 8 : next_pc - 4;
                     do_decode();
                 end
             end
