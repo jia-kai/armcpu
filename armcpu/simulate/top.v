@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Fri Nov 22 20:43:15 2013 +0800
+ * $Date: Sat Nov 23 09:55:10 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -36,7 +36,7 @@ module top;
 		.ce(flash_ctl[5]), .oe(flash_ctl[3]), .we(flash_ctl[0]));
 
 	wire com_to_sys, com_from_sys;
-	system usystem(.clk_cpu(clk_half), .clk50MB(clk), .rst(rst),
+	system usystem(.clk_cpu(clk_half), .clk50M(clk), .rst(rst),
 		.segdisp(segdisp),
 		.baseram_addr(baseram_addr), .baseram_data(baseram_data),
 		.baseram_ce(baseram_ce), .baseram_oe(baseram_oe), .baseram_we(baseram_we),

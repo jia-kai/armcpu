@@ -1,6 +1,6 @@
 /*
  * $File: alu.v
- * $Date: Thu Nov 21 19:41:28 2013 +0800
+ * $Date: Sat Nov 23 09:59:53 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -21,13 +21,13 @@ module alu(
             `ALU_OPT_SLL_IMM:
                 result = opr2 << sa_imm;
             `ALU_OPT_SRL_IMM:
-                result = $signed(opr2) >> sa_imm;
+                result = $unsigned(opr2) >> sa_imm;
             `ALU_OPT_SRA_IMM:
                 result = $signed(opr2) >>> sa_imm;
             `ALU_OPT_SLL:
                 result = opr2 << opr1;
             `ALU_OPT_SRL:
-                result = $signed(opr2) >> opr1;
+                result = $unsigned(opr2) >> opr1;
             `ALU_OPT_SRA:
                 result = $signed(opr2) >>> opr1;
 			`ALU_OPT_ADDU:

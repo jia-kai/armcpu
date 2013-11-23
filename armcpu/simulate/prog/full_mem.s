@@ -8,7 +8,7 @@ addiu $k0, $k0, 1
 sw $k0, 0($a0)
 nop
 lbu $k0, 0($a0)
-addiu $k0, $k0, 0x12345
+addiu $k0, $k0, 0x2345
 sb $k0, 0($a0)
 nop
 lb $k0, 0($a0)
