@@ -1,6 +1,6 @@
 /*
  * $File: common.vh
- * $Date: Thu Nov 21 17:53:24 2013 +0800
+ * $Date: Sat Nov 23 23:37:10 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -15,7 +15,11 @@
 
 `include "cp0_def.vh"
 
+`ifdef START_FROM_RAM
 `define SYSTEM_STARTUP_ADDR	32'h80000000
+`else
+`define SYSTEM_STARTUP_ADDR	32'hBFC00000
+`endif
 
 // vim: ft=verilog
 

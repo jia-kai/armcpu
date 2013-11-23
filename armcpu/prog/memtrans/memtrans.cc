@@ -1,6 +1,6 @@
 /*
  * $File: memtrans.cc
- * $Date: Sat Nov 23 17:30:11 2013 +0800
+ * $Date: Sat Nov 23 22:04:34 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -53,6 +53,7 @@ class Main {
 		return read_com_word(3);
 	}
 
+
 	void init() {
 		m_com_data = (hw_ptr_t)0x9FD003F8;
 		m_com_stat = (hw_ptr_t)0x9FD003FC;
@@ -65,10 +66,15 @@ class Main {
 		*m_segdisp = data;
 	}
 
+	int flash_check_finished() {
+		m_flash_start[0] = 0x0070;
+		return (m_flash_start[0] >> 7) & 1;
+	}
+
 	public:
 		void main() {
-			asm volatile ("li $sp, 0x80001000");
-			asm volatile ("li $a0, 0x80004000");	// this
+			asm volatile ("li $sp, 0x80010000");
+			asm volatile ("li $a0, 0x80020000");	// this
 
 			init();
 
@@ -97,6 +103,29 @@ class Main {
 							write_com_byte(data >> 16);
 							write_com_byte(data >> 24);
 						}
+						break;
+					case CMD_FLASH_READ:
+						m_flash_start[0] = 0x00FF;
+						for (uint32_t i = start; i < end; i ++) {
+							uint32_t data = m_flash_start[i];
+							write_com_byte(data);
+							write_com_byte(data >> 8);
+						}
+						break;
+					case CMD_FLASH_WRITE:
+						for (uint32_t i = start; i < end; i ++) {
+							uint32_t data = read_com_word(2);
+							m_flash_start[0] = 0x0020;
+							m_flash_start[i] = data;
+							while (!flash_check_finished());
+						}
+						break;
+					case CMD_FLASH_ERASE:
+						m_flash_start[0] = 0x0020;
+						m_flash_start[start] = 0x00D0;
+						while (!flash_check_finished())
+							write_com_byte(CMD_ERASE_IN_PROGRESS);
+						write_com_byte(CMD_ERASE_FINISHED);
 						break;
 				}
 				write_com_byte(m_checksum);

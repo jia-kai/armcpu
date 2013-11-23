@@ -1,6 +1,6 @@
 /*
  * $File: phy_mem_ctrl.v
- * $Date: Fri Nov 22 20:51:22 2013 +0800
+ * $Date: Sat Nov 23 23:32:09 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -15,6 +15,9 @@
 
 `define ADDR_IS_RAM(addr) ((addr & 32'h007FFFFF) == addr)
 `define ADDR_IS_FLASH(addr) (addr[31:24] == 8'h1E)
+`define ADDR_IS_ROM(addr) (addr[31:12] == 20'h1FC00)
+
+`define ROM_ADDR_WIDTH	12
 
 `define RAM_WRITE_WIDTH	1	// width of write signal
 `define RAM_WRITE_READ_RECOVERY 1	// recovery time before next read after write
@@ -83,7 +86,8 @@ module phy_mem_ctrl(
 			addr_is_com_data = (addr == `COM_DATA_ADDR),
 			addr_is_com_stat = (addr == `COM_STAT_ADDR),
 			addr_is_flash = `ADDR_IS_FLASH(addr),
-			addr_is_segdisp = (addr == `SEGDISP_ADDR);
+			addr_is_segdisp = (addr == `SEGDISP_ADDR),
+			addr_is_rom = `ADDR_IS_ROM(addr);
 
 	assign flash_byte = 1, flash_vpen = 1, flash_ce = 0, flash_rp = 1,
 		flash_oe = (state == WRITE_FLASH),
@@ -99,6 +103,11 @@ module phy_mem_ctrl(
 		flash_vpen,
 		flash_we};
 
+	
+	wire [`ROM_ADDR_WIDTH-1:0] rom_addr = addr[`ROM_ADDR_WIDTH-1:0];
+	reg [31:0] rom_data;
+	always @(rom_addr)
+		`include "rom/rom.v"
 
 
 	assign com_data_out = write_data_latch[7:0];
@@ -126,11 +135,13 @@ module phy_mem_ctrl(
 
 	always @(*) begin
 		data_out = 0;
-		case ({addr_is_ram, addr_is_com_data, addr_is_com_stat, addr_is_flash})
-			4'b1000: data_out = ram_selector ? extram_data : baseram_data;
-			4'b0100: data_out = {24'b0, com_data_in};
-			4'b0010: data_out = {30'b0, com_read_ready, com_write_ready};
-			4'b0001: data_out = {16'b0, flash_data};
+		case ({addr_is_ram, addr_is_com_data, addr_is_com_stat,
+				addr_is_flash, addr_is_rom})
+			5'b10000: data_out = ram_selector ? extram_data : baseram_data;
+			5'b01000: data_out = {25'b0, com_data_in};
+			5'b00100: data_out = {30'b0, com_read_ready, com_write_ready};
+			5'b00010: data_out = {16'b0, flash_data};
+			5'b00001: data_out = rom_data;
 		endcase
 	end
 

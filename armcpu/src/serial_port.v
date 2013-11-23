@@ -1,6 +1,6 @@
 /*
  * $File: serial_port.v
- * $Date: Thu Nov 21 20:32:04 2013 +0800
+ * $Date: Sat Nov 23 22:45:23 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -47,6 +47,12 @@ module serial_port
 			int_req <= 1;
 			data_out <= RxD_data;
 		end
+
+	always @(posedge write_enable)
+		if (write_busy)
+			$warning("time=%g write to com while it is busy", $time);
+		else
+			$warning("time=%g write to com: %h", $time, data_in);
 
 endmodule
 

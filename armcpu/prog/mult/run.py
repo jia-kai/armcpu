@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: run.py
-# $Date: Sat Nov 23 21:15:11 2013 +0800
+# $Date: Sat Nov 23 21:31:18 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 DEVICE = '/dev/ttyUSB0'
@@ -16,7 +16,7 @@ def write_int32(n):
 
 def read_int64():
     s = ser.read(8)
-    print 'raw value: {!r}'.format(s)
+    #print 'raw value: {!r}'.format(s)
     val = sum(ord(s[i]) << (i * 8) for i in range(8))
     if val > 2 ** 63:
         val -= 2 ** 64
