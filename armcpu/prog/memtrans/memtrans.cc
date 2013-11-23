@@ -1,12 +1,12 @@
 /*
  * $File: memtrans.cc
- * $Date: Fri Nov 22 22:26:16 2013 +0800
+ * $Date: Sat Nov 23 17:30:11 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 #include <stdint.h>
 
-const char COM_STAT_READ = 1, COM_STAT_WRITE = 2;
+const char COM_STAT_READ = 2, COM_STAT_WRITE = 1;
 typedef uint32_t * volatile hw_ptr_t;
 
 // use class to git rid of global variables
@@ -61,15 +61,22 @@ class Main {
 		m_ram_start = (hw_ptr_t)0x80000000;
 	}
 
+	void write_segdisp(uint32_t data) {
+		*m_segdisp = data;
+	}
+
 	public:
 		void main() {
 			asm volatile ("li $sp, 0x80001000");
+			asm volatile ("li $a0, 0x80004000");	// this
 
 			init();
 
 			uint8_t cmd;
 			for (; ; ) {
+				write_segdisp(0);
 				cmd = read_com_byte();
+				write_segdisp(cmd);
 				reset_checksum();
 				uint32_t start = read_addr(),
 						 end = read_addr();
@@ -81,6 +88,7 @@ class Main {
 							uint32_t data = read_com_word(4);
 							m_ram_start[i] = data;
 						}
+						break;
 					case CMD_RAM_READ:
 						for (uint32_t i = start; i < end; i ++) {
 							uint32_t data = m_ram_start[i];
@@ -89,6 +97,7 @@ class Main {
 							write_com_byte(data >> 16);
 							write_com_byte(data >> 24);
 						}
+						break;
 				}
 				write_com_byte(m_checksum);
 			}

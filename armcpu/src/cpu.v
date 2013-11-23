@@ -1,6 +1,6 @@
 /*
  * $File: cpu.v
- * $Date: Sat Nov 23 15:47:17 2013 +0800
+ * $Date: Sat Nov 23 16:46:38 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -112,7 +112,7 @@ module cpu(
 
 	stage_id uid(.clk(clk), .rst(rst), .stall(stall), .clear(clear),
 		.interstage_if2id(interstage_if2id),
-		.in_branch_delay_slot(branch_flag),
+		.in_delay_slot(branch_flag),
 		.reg_write_addr(wb_addr), .reg_write_data(wb_data),
 		.reg1_addr(id2ex_reg1_addr), .reg1_data(id2ex_reg1_data),
 		.reg2_addr(id2ex_reg2_addr), .reg2_data(id2ex_reg2_data),

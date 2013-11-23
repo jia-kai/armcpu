@@ -32,6 +32,7 @@ isim
 *.lfp
 *.log
 *.lso
+*.lst
 *.map
 *.mfd
 *.mod
@@ -49,6 +50,7 @@ pepExtractor.prj
 *.pnx
 *.prj
 *.ptwx
+*.pyc
 *.rpt
 *.scr
 *.stx
@@ -64,6 +66,7 @@ transcript
 *.txt
 *.unroutes
 *.ut
+*.vcd
 *.vhi
 *.vm6
 vsim.wlf
@@ -80,5 +83,3 @@ xlnx_*
 xst
 *.xst
 *.xwbt
-*.lst
-*.vcd

@@ -1,0 +1,75 @@
+# vsim -do {run 100ns; quit} -c top 
+# Loading work.top
+# Loading work.ram_sim
+# Loading work.system
+# Loading work.cpu
+# Loading work.forward
+# Loading work.stage_if
+# Loading work.stage_id
+# Loading work.register_file
+# Loading work.stage_ex
+# Loading work.alu
+# Loading work.stage_mem
+# Loading work.cp0
+# Loading work.mmu
+# Loading work.phy_mem_ctrl
+# Loading work.serial_port
+# Loading work.uart_async_transmitter
+# Loading work.uart_async_receiver
+# run 100ns 
+# time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
+# time=0 com_write_busy=0
+# time=0 come_read_data=00
+# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
+#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
+# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
+#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
+# time=0 segdisp=xxxxxxxx
+# time=1 cp0_cause: IP=x0000000 ExcCode=xx
+# time=1 cpu entered kernel mode
+# time=1 cp0_cause: IP=x0000000 ExcCode=00
+# time=1 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
+# time=1 reg1($at)=00000000
+# time=1 reg2($v0)=00000000
+# time=1 reg3($v1)=00000000
+# time=1 reg4($a0)=00000000
+# time=1 reg5($a1)=00000000
+# time=1 reg6($a2)=00000000
+# time=1 reg7($a3)=00000000
+# time=1 reg16($s0)=00000000
+# time=1 reg26($k0)=00000000
+# time=1 reg26($k1)=00000000
+# time=1 reg29($sp)=00000000
+# time=1 reg31($ra)=00000000
+# time=1 cp0_cause: IP=00000000 ExcCode=00
+# [32m < -- id -- > time=9 got instruction: pc=xxxxxxxx instr=00000000 [0m
+# time=9 cp0_cause: IP=10000000 ExcCode=00
+# [32m < -- id -- > time=13 got instruction: pc=80000000 instr=24040001 [0m
+# [32m < -- id -- > time=17 got instruction: pc=80000004 instr=24050001 [0m
+# [32m < -- id -- > time=21 got instruction: pc=80000008 instr=00853021 [0m
+# time=21 reg4($a0)=00000001
+# [32m < -- id -- > time=25 got instruction: pc=8000000c instr=08000003 [0m
+# time=25 reg5($a1)=00000001
+# [32m < -- id -- > time=29 got instruction: pc=80000010 instr=00000000 [0m
+# time=29 reg6($a2)=00000002
+# [32m < -- id -- > time=33 got instruction: pc=8000000c instr=08000003 [0m
+# [32m < -- id -- > time=37 got instruction: pc=80000010 instr=00000000 [0m
+# [32m < -- id -- > time=41 got instruction: pc=8000000c instr=08000003 [0m
+# [32m < -- id -- > time=45 got instruction: pc=80000010 instr=00000000 [0m
+# [32m < -- id -- > time=49 got instruction: pc=8000000c instr=08000003 [0m
+# time=51 com_write_busy=1
+# [32m < -- id -- > time=53 got instruction: pc=80000010 instr=00000000 [0m
+# [32m < -- id -- > time=57 got instruction: pc=8000000c instr=08000003 [0m
+# [32m < -- id -- > time=61 got instruction: pc=80000010 instr=00000000 [0m
+# [32m < -- id -- > time=65 got instruction: pc=8000000c instr=08000003 [0m
+# [32m < -- id -- > time=69 got instruction: pc=80000010 instr=00000000 [0m
+# time=71 cp0_cause: IP=10010000 ExcCode=00
+# time=73 com_write_busy=0
+# [32m < -- id -- > time=73 got instruction: pc=8000000c instr=08000003 [0m
+# [32m < -- id -- > time=77 got instruction: pc=80000010 instr=00000000 [0m
+# [32m < -- id -- > time=81 got instruction: pc=8000000c instr=08000003 [0m
+# [32m < -- id -- > time=85 got instruction: pc=80000010 instr=00000000 [0m
+# [32m < -- id -- > time=89 got instruction: pc=8000000c instr=08000003 [0m
+# [32m < -- id -- > time=93 got instruction: pc=80000010 instr=00000000 [0m
+# [32m < -- id -- > time=97 got instruction: pc=8000000c instr=08000003 [0m
+#  quit 

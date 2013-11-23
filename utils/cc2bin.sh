@@ -1,6 +1,6 @@
 #!/bin/bash
 # $File: cc2bin.sh
-# $Date: Fri Nov 22 22:32:03 2013 +0800
+# $Date: Sat Nov 23 16:49:32 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 SECTION=.text.startup._ZN4Main4mainEv
@@ -24,7 +24,6 @@ tmpobj=$(mktemp)
 rst=0
 (
 set -e
-echo $CC $CC_FLAGS $ccfile -o $tmpobj
 $CC $CC_FLAGS $ccfile -o $tmpobj
 [ -z "$deasm_dump" ] || $OBJDUMP -j $SECTION $tmpobj -D > $deasm_dump
 $OBJCOPY -j $SECTION -O binary $tmpobj $outfile

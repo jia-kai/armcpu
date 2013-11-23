@@ -1,0 +1,91 @@
+# vsim -do {run 100ns; quit} -c top 
+# Loading work.top
+# Loading work.ram_sim
+# Loading work.system
+# Loading work.cpu
+# Loading work.forward
+# Loading work.stage_if
+# Loading work.stage_id
+# Loading work.register_file
+# Loading work.stage_ex
+# Loading work.alu
+# Loading work.stage_mem
+# Loading work.cp0
+# Loading work.mmu
+# Loading work.phy_mem_ctrl
+# Loading work.serial_port
+# Loading work.uart_async_transmitter
+# Loading work.uart_async_receiver
+# run 100ns 
+# time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
+# time=0 com_write_busy=0
+# time=0 come_read_data=00
+# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
+#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
+# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
+#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
+# time=0 segdisp=xxxxxxxx
+# time=1 cp0_cause: IP=x0000000 ExcCode=xx
+# time=1 cpu entered kernel mode
+# time=1 cp0_cause: IP=x0000000 ExcCode=00
+# time=1 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
+# time=1 reg1($at)=00000000
+# time=1 reg2($v0)=00000000
+# time=1 reg3($v1)=00000000
+# time=1 reg4($a0)=00000000
+# time=1 reg5($a1)=00000000
+# time=1 reg6($a2)=00000000
+# time=1 reg7($a3)=00000000
+# time=1 reg16($s0)=00000000
+# time=1 reg26($k0)=00000000
+# time=1 reg26($k1)=00000000
+# time=1 reg29($sp)=00000000
+# time=1 reg31($ra)=00000000
+# time=1 cp0_cause: IP=00000000 ExcCode=00
+# [32m < -- id -- > time=9 got instruction: pc=xxxxxxxx instr=00000000 [0m
+# time=9 cp0_cause: IP=10000000 ExcCode=00
+# [32m < -- id -- > time=13 got instruction: pc=80000000 instr=3c048050 [0m
+# [32m < -- id -- > time=17 got instruction: pc=80000004 instr=ac800000 [0m
+# [32m < -- id -- > time=21 got instruction: pc=80000008 instr=8c9a0000 [0m
+# time=21 reg4($a0)=80500000
+# ** Warning: time=23 mem ext: read uninitialized memory: addr=40000, return rand
+#    Time: 23 ns  Scope: top.uextram File: ram_sim.v Line: 41
+# [31m <-- mem ext --> time=28 write: addr=40000 data=00000000[0m
+# [32m < -- id -- > time=37 got instruction: pc=8000000c instr=275a0001 [0m
+# [32m < -- id -- > time=45 got instruction: pc=80000010 instr=ac9a0000 [0m
+# [32m < -- id -- > time=49 got instruction: pc=80000014 instr=00000000 [0m
+# time=49 reg26($k0)=00000001
+# time=51 com_write_busy=1
+# [31m <-- mem ext --> time=56 write: addr=40000 data=00000001[0m
+# ** Warning: invalid instruction: 909a0000
+#    Time: 65 ns  Scope: top.usystem.ucpu.uid.invalid_instruction File: src/stage_id.v Line: 152
+# [32m < -- id -- > time=65 got instruction: pc=80000018 instr=909a0000 [0m
+# [32m < -- id -- > time=69 got instruction: pc=8000001c instr=275a2345 [0m
+# time=71 cp0_cause: IP=10010000 ExcCode=00
+# time=73 com_write_busy=0
+# time=73 impending exception: ip=10010000 code=0a epc=80000018
+# time=73 cp0_cause: IP=10010000 ExcCode=0a
+# time=73 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
+# ** Warning: time=73 mem base: read uninitialized memory: addr=00060, return rand
+#    Time: 73 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
+# [32m < -- id -- > time=77 got instruction: pc=80000024 instr=00000000 [0m
+# ** Warning: time=77 mem base: read uninitialized memory: addr=00061, return rand
+#    Time: 77 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
+# ** Warning: invalid instruction: c0895e81
+#    Time: 81 ns  Scope: top.usystem.ucpu.uid.invalid_instruction File: src/stage_id.v Line: 152
+# [32m < -- id -- > time=81 got instruction: pc=80000180 instr=c0895e81 [0m
+# ** Warning: time=81 mem base: read uninitialized memory: addr=00062, return rand
+#    Time: 81 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
+# ** Warning: invalid instruction: 8484d609
+#    Time: 85 ns  Scope: top.usystem.ucpu.uid.invalid_instruction File: src/stage_id.v Line: 152
+# [32m < -- id -- > time=85 got instruction: pc=80000184 instr=8484d609 [0m
+# ** Warning: time=85 mem base: read uninitialized memory: addr=00063, return rand
+#    Time: 85 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
+# time=89 impending exception: ip=10010000 code=0a epc=80000180
+# ** Warning: time=89 mem base: read uninitialized memory: addr=00064, return rand
+#    Time: 89 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
+# [32m < -- id -- > time=93 got instruction: pc=8000018c instr=00000000 [0m
+# ** Warning: invalid instruction: c0895e81
+#    Time: 97 ns  Scope: top.usystem.ucpu.uid.invalid_instruction File: src/stage_id.v Line: 152
+# [32m < -- id -- > time=97 got instruction: pc=80000180 instr=c0895e81 [0m
+#  quit 

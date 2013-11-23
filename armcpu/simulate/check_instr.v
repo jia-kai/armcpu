@@ -1,6 +1,6 @@
 /*
  * $File: check_instr.v
- * $Date: Fri Nov 22 23:16:32 2013 +0800
+ * $Date: Sat Nov 23 16:46:45 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -20,7 +20,7 @@ module check_instr #(parameter IMAGE_FILE = "prog.bin");
 	
 	stage_id uid(.clk(clk), .rst(rst), .stall(1'b0), .clear(1'b0),
 		.interstage_if2id(interstage_if2id),
-		.cur_if_branch(1'b0),
+		.in_delay_slot(1'b0),
 		.reg_write_addr(5'b0), .reg_write_data(0));
 
 	always @(posedge clk) begin

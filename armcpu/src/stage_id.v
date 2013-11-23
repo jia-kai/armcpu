@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Sat Nov 23 15:57:06 2013 +0800
+ * $Date: Sat Nov 23 16:46:31 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -23,7 +23,7 @@ module stage_id(
 
 	input [`IF2ID_WIRE_WIDTH-1:0] interstage_if2id,
 
-    input in_branch_delay_slot,
+    input in_delay_slot,
 
 	// since reg[0] is always 0, no need for write enable signal;
 	input [`REGADDR_WIDTH-1:0] reg_write_addr,
@@ -307,7 +307,7 @@ module stage_id(
                     exc_epc_id2ex <= exc_addr_if2id;
                     exc_badvaddr_id2ex <= exc_addr_if2id;
                 end else begin
-                    exc_epc_id2ex <= in_branch_delay_slot ? next_pc - 8 : next_pc - 4;
+                    exc_epc_id2ex <= in_delay_slot ? next_pc - 8 : next_pc - 4;
                     do_decode();
                 end
             end

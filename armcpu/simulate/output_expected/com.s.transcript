@@ -1,0 +1,154 @@
+# vsim -do {run 300ns; quit} -c top 
+# Loading work.top
+# Loading work.ram_sim
+# Loading work.system
+# Loading work.cpu
+# Loading work.forward
+# Loading work.stage_if
+# Loading work.stage_id
+# Loading work.register_file
+# Loading work.stage_ex
+# Loading work.alu
+# Loading work.stage_mem
+# Loading work.cp0
+# Loading work.mmu
+# Loading work.phy_mem_ctrl
+# Loading work.serial_port
+# Loading work.uart_async_transmitter
+# Loading work.uart_async_receiver
+# run 300ns 
+# time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
+# time=0 com_write_busy=0
+# time=0 come_read_data=00
+# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
+#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
+# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
+#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
+# time=0 segdisp=xxxxxxxx
+# time=1 cp0_cause: IP=x0000000 ExcCode=xx
+# time=1 cpu entered kernel mode
+# time=1 cp0_cause: IP=x0000000 ExcCode=00
+# time=1 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
+# time=1 reg1($at)=00000000
+# time=1 reg2($v0)=00000000
+# time=1 reg3($v1)=00000000
+# time=1 reg4($a0)=00000000
+# time=1 reg5($a1)=00000000
+# time=1 reg6($a2)=00000000
+# time=1 reg7($a3)=00000000
+# time=1 reg16($s0)=00000000
+# time=1 reg26($k0)=00000000
+# time=1 reg26($k1)=00000000
+# time=1 reg29($sp)=00000000
+# time=1 reg31($ra)=00000000
+# time=1 cp0_cause: IP=00000000 ExcCode=00
+# [32m < -- id -- > time=9 got instruction: pc=xxxxxxxx instr=00000000 [0m
+# time=9 cp0_cause: IP=10000000 ExcCode=00
+# [32m < -- id -- > time=13 got instruction: pc=80000000 instr=241b1001 [0m
+# [32m < -- id -- > time=17 got instruction: pc=80000004 instr=409b6000 [0m
+# [32m < -- id -- > time=21 got instruction: pc=80000008 instr=08000002 [0m
+# time=21 reg26($k1)=00001001
+# time=25 cp0_status: IM=00010000 KSU=00 EXL=0 IE=1
+# [32m < -- id -- > time=29 got instruction: pc=8000000c instr=00000000 [0m
+# [32m < -- id -- > time=33 got instruction: pc=80000008 instr=08000002 [0m
+# [32m < -- id -- > time=37 got instruction: pc=8000000c instr=00000000 [0m
+# [32m < -- id -- > time=41 got instruction: pc=80000008 instr=08000002 [0m
+# [32m < -- id -- > time=45 got instruction: pc=8000000c instr=00000000 [0m
+# [32m < -- id -- > time=49 got instruction: pc=80000008 instr=08000002 [0m
+# time=51 com_write_busy=1
+# [32m < -- id -- > time=53 got instruction: pc=8000000c instr=00000000 [0m
+# [32m < -- id -- > time=57 got instruction: pc=80000008 instr=08000002 [0m
+# [32m < -- id -- > time=61 got instruction: pc=8000000c instr=00000000 [0m
+# [32m < -- id -- > time=65 got instruction: pc=80000008 instr=08000002 [0m
+# [32m < -- id -- > time=69 got instruction: pc=8000000c instr=00000000 [0m
+# time=71 cp0_cause: IP=10010000 ExcCode=00
+# time=73 com_write_busy=0
+# [32m < -- id -- > time=73 got instruction: pc=80000008 instr=08000002 [0m
+# time=77 impending exception: ip=10010000 code=00 epc=80000008
+# time=77 cp0_status: IM=00010000 KSU=00 EXL=1 IE=1
+# [32m < -- id -- > time=81 got instruction: pc=80000008 instr=00000000 [0m
+# [32m < -- id -- > time=85 got instruction: pc=80000180 instr=3c1cbfd0 [0m
+# [32m < -- id -- > time=89 got instruction: pc=80000184 instr=379c03f8 [0m
+# [32m < -- id -- > time=93 got instruction: pc=80000188 instr=8f9a0000 [0m
+# [32m < -- id -- > time=97 got instruction: pc=8000018c instr=275a0001 [0m
+# ** Warning: time=99 mem ext: read uninitialized memory: addr=400fe, return rand
+#    Time: 99 ns  Scope: top.uextram File: ram_sim.v Line: 41
+# time=101 cp0_cause: IP=10000000 ExcCode=00
+# time=105 com_write_busy=1
+# [32m < -- id -- > time=105 got instruction: pc=80000190 instr=af9a0000 [0m
+# time=105 reg26($k0)=000000df
+# [32m < -- id -- > time=109 got instruction: pc=80000194 instr=42000018 [0m
+# time=109 reg26($k0)=000000e0
+# [32m < -- id -- > time=121 got instruction: pc=80000198 instr=00000000 [0m
+# time=125 eret: 80000008
+# time=125 cp0_cause: IP=10010000 ExcCode=00
+# time=125 cp0_status: IM=00010000 KSU=00 EXL=0 IE=1
+# time=127 com_write_busy=0
+# time=129 impending exception: ip=10010000 code=00 epc=80000194
+# time=129 cp0_status: IM=00010000 KSU=00 EXL=1 IE=1
+# [32m < -- id -- > time=133 got instruction: pc=80000008 instr=00000000 [0m
+# time=133 come_read_data=e0
+# time=135 come_read_data=e0
+# [32m < -- id -- > time=137 got instruction: pc=80000180 instr=3c1cbfd0 [0m
+# [32m < -- id -- > time=141 got instruction: pc=80000184 instr=379c03f8 [0m
+# [32m < -- id -- > time=145 got instruction: pc=80000188 instr=8f9a0000 [0m
+# [32m < -- id -- > time=149 got instruction: pc=8000018c instr=275a0001 [0m
+# time=153 cp0_cause: IP=10000000 ExcCode=00
+# [32m < -- id -- > time=157 got instruction: pc=80000190 instr=af9a0000 [0m
+# time=157 reg26($k0)=000000df
+# time=159 com_write_busy=1
+# [32m < -- id -- > time=161 got instruction: pc=80000194 instr=42000018 [0m
+# time=161 reg26($k0)=000000e0
+# [32m < -- id -- > time=173 got instruction: pc=80000198 instr=00000000 [0m
+# time=177 eret: 80000194
+# time=177 cp0_status: IM=00010000 KSU=00 EXL=0 IE=1
+# time=179 cp0_cause: IP=10010000 ExcCode=00
+# time=181 com_write_busy=0
+# [32m < -- id -- > time=181 got instruction: pc=800001a0 instr=00000000 [0m
+# time=185 impending exception: ip=10010000 code=00 epc=80000198
+# time=185 come_read_data=e0
+# time=185 cp0_status: IM=00010000 KSU=00 EXL=1 IE=1
+# time=187 come_read_data=e0
+# [32m < -- id -- > time=189 got instruction: pc=80000198 instr=00000000 [0m
+# [32m < -- id -- > time=193 got instruction: pc=80000180 instr=3c1cbfd0 [0m
+# [32m < -- id -- > time=197 got instruction: pc=80000184 instr=379c03f8 [0m
+# [32m < -- id -- > time=201 got instruction: pc=80000188 instr=8f9a0000 [0m
+# [32m < -- id -- > time=205 got instruction: pc=8000018c instr=275a0001 [0m
+# time=209 cp0_cause: IP=10000000 ExcCode=00
+# time=213 com_write_busy=1
+# [32m < -- id -- > time=213 got instruction: pc=80000190 instr=af9a0000 [0m
+# time=213 reg26($k0)=000000df
+# [32m < -- id -- > time=217 got instruction: pc=80000194 instr=42000018 [0m
+# time=217 reg26($k0)=000000e0
+# [32m < -- id -- > time=229 got instruction: pc=80000198 instr=00000000 [0m
+# time=233 eret: 80000198
+# time=233 cp0_cause: IP=10010000 ExcCode=00
+# time=233 cp0_status: IM=00010000 KSU=00 EXL=0 IE=1
+# time=235 com_write_busy=0
+# time=237 impending exception: ip=10010000 code=00 epc=80000194
+# time=237 cp0_status: IM=00010000 KSU=00 EXL=1 IE=1
+# [32m < -- id -- > time=241 got instruction: pc=80000198 instr=00000000 [0m
+# time=241 come_read_data=e0
+# time=243 come_read_data=e0
+# [32m < -- id -- > time=245 got instruction: pc=80000180 instr=3c1cbfd0 [0m
+# [32m < -- id -- > time=249 got instruction: pc=80000184 instr=379c03f8 [0m
+# [32m < -- id -- > time=253 got instruction: pc=80000188 instr=8f9a0000 [0m
+# [32m < -- id -- > time=257 got instruction: pc=8000018c instr=275a0001 [0m
+# time=261 cp0_cause: IP=10000000 ExcCode=00
+# [32m < -- id -- > time=265 got instruction: pc=80000190 instr=af9a0000 [0m
+# time=265 reg26($k0)=000000df
+# time=267 com_write_busy=1
+# [32m < -- id -- > time=269 got instruction: pc=80000194 instr=42000018 [0m
+# time=269 reg26($k0)=000000e0
+# [32m < -- id -- > time=281 got instruction: pc=80000198 instr=00000000 [0m
+# time=285 eret: 80000194
+# time=285 cp0_status: IM=00010000 KSU=00 EXL=0 IE=1
+# time=287 cp0_cause: IP=10010000 ExcCode=00
+# time=289 com_write_busy=0
+# [32m < -- id -- > time=289 got instruction: pc=800001a0 instr=00000000 [0m
+# time=293 impending exception: ip=10010000 code=00 epc=80000198
+# time=293 come_read_data=e0
+# time=293 cp0_status: IM=00010000 KSU=00 EXL=1 IE=1
+# time=295 come_read_data=e0
+# [32m < -- id -- > time=297 got instruction: pc=80000198 instr=00000000 [0m
+#  quit 

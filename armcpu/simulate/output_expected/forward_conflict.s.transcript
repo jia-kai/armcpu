@@ -1,0 +1,67 @@
+# vsim -do {run 70ns; quit} -c top 
+# Loading work.top
+# Loading work.ram_sim
+# Loading work.system
+# Loading work.cpu
+# Loading work.forward
+# Loading work.stage_if
+# Loading work.stage_id
+# Loading work.register_file
+# Loading work.stage_ex
+# Loading work.alu
+# Loading work.stage_mem
+# Loading work.cp0
+# Loading work.mmu
+# Loading work.phy_mem_ctrl
+# Loading work.serial_port
+# Loading work.uart_async_transmitter
+# Loading work.uart_async_receiver
+# run 70ns 
+# time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
+# time=0 com_write_busy=0
+# time=0 come_read_data=00
+# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
+#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
+# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
+#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
+# time=0 segdisp=xxxxxxxx
+# time=1 cp0_cause: IP=x0000000 ExcCode=xx
+# time=1 cpu entered kernel mode
+# time=1 cp0_cause: IP=x0000000 ExcCode=00
+# time=1 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
+# time=1 reg1($at)=00000000
+# time=1 reg2($v0)=00000000
+# time=1 reg3($v1)=00000000
+# time=1 reg4($a0)=00000000
+# time=1 reg5($a1)=00000000
+# time=1 reg6($a2)=00000000
+# time=1 reg7($a3)=00000000
+# time=1 reg16($s0)=00000000
+# time=1 reg26($k0)=00000000
+# time=1 reg26($k1)=00000000
+# time=1 reg29($sp)=00000000
+# time=1 reg31($ra)=00000000
+# time=1 cp0_cause: IP=00000000 ExcCode=00
+# [32m < -- id -- > time=9 got instruction: pc=xxxxxxxx instr=00000000 [0m
+# time=9 cp0_cause: IP=10000000 ExcCode=00
+# [32m < -- id -- > time=13 got instruction: pc=80000000 instr=3c1c8000 [0m
+# [32m < -- id -- > time=17 got instruction: pc=80000004 instr=379c1000 [0m
+# [32m < -- id -- > time=21 got instruction: pc=80000008 instr=3c021993 [0m
+# [32m < -- id -- > time=25 got instruction: pc=8000000c instr=34421102 [0m
+# [32m < -- id -- > time=29 got instruction: pc=80000010 instr=af820000 [0m
+# time=29 reg2($v0)=19930000
+# [32m < -- id -- > time=33 got instruction: pc=80000014 instr=8f840000 [0m
+# time=33 reg2($v0)=19931102
+# ** Warning: time=35 mem base: read uninitialized memory: addr=00400, return rand
+#    Time: 35 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
+# [31m <-- mem base --> time=40 write: addr=00400 data=19931102[0m
+# [32m < -- id -- > time=49 got instruction: pc=80000018 instr=24040123 [0m
+# time=51 com_write_busy=1
+# [32m < -- id -- > time=57 got instruction: pc=8000001c instr=24850001 [0m
+# time=57 reg4($a0)=19931102
+# [32m < -- id -- > time=61 got instruction: pc=80000020 instr=1000ffff [0m
+# time=61 reg4($a0)=00000123
+# [32m < -- id -- > time=65 got instruction: pc=80000024 instr=00000000 [0m
+# time=65 reg5($a1)=00000124
+# [32m < -- id -- > time=69 got instruction: pc=80000020 instr=1000ffff [0m
+#  quit 
