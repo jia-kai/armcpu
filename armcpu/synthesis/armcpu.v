@@ -1,6 +1,6 @@
 /*
  * $File: armcpu.v
- * $Date: Fri Nov 22 20:53:30 2013 +0800
+ * $Date: Sun Nov 24 10:26:09 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -48,7 +48,7 @@ module armcpu(
 
 	reg [7:0] monitor_data;
 	wire [31:0] segdisp_data;
-	assign write_protect = baseram_addr <= 512;  // XXX: write-protect for code
+	assign write_protect = 0;	//baseram_addr <= 512;  // XXX: write-protect for code
 	wire baseram_we_set;
 	assign baseram_we = baseram_we_set | write_protect;
 
