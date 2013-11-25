@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: controller.py
-# $Date: Mon Nov 25 16:36:23 2013 +0800
+# $Date: Mon Nov 25 17:10:46 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 from ctllib import MemtransController
@@ -66,7 +66,7 @@ if __name__ == '__main__':
             stopbits=2, parity=serial.PARITY_NONE, timeout=1)
 
     if sys.argv[1] == 'jmp_mem_start':
-        ser.write(chr(CMD_JMP_TO_MEM_START))
+        ser.write(chr(CMD_JMP_TO_MEM_START) + '\x00' * 6)   # cmd + fake addr
         sys.exit()
 
     module = sys.argv[1]

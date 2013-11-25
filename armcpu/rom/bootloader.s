@@ -6,7 +6,7 @@
   edited by jiakai
  */
 
-#define DISPVAL_DONE 0x00FF
+#define DISPVAL_DONE 0x0023
 #define DISPVAL_BAD 0x00EE
 #define DISPVAL_KRNRET 0x00EF
 
@@ -83,6 +83,7 @@ copy_sec:
 
 done:
 	li $v0, DISPVAL_DONE
+	sw $v0, 0($SEGDISP)
 #jump to kernel
 	jr $s3
 

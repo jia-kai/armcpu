@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Mon Nov 25 15:06:58 2013 +0800
+ * $Date: Mon Nov 25 17:05:53 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -83,7 +83,7 @@ module top;
 		$display("time=%g com_write_busy=%b", $time, com_write_busy);
 
 	always begin
-		write_com_data = 8'hf3;
+		write_com_data = 8'hff;
 		# 500 write_com = 1;
 		# 4 write_com = 0;
 	end
