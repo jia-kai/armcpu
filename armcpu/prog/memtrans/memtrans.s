@@ -1,6 +1,6 @@
 //
 // $File: memtrans.s
-// $Date: Mon Nov 25 09:23:43 2013 +0800
+// $Date: Mon Nov 25 09:27:18 2013 +0800
 // $Author: Xinyu Zhou <zxytim@gmail.com>
 //
 
@@ -59,11 +59,6 @@ main:
 
 		RESET_CHECKSUM()
 
-		sll $a2, 2
-		sll $a3, 2
-		addu $a2, $RAM_START
-		addu $a3, $RAM_START
-
 		// v0 is cases switches
 		li $v0, CMD_RAM_WRITE
 		beq $a1, $v0, ram_write
@@ -76,14 +71,26 @@ main:
 		// a3: m_ram_start + end
 
 		ram_write:
+			sll $a2, 2
+			sll $a3, 2
+			addu $a2, $RAM_START
+			addu $a3, $RAM_START
+
+		ram_write_loop:
 			beq $a2, $a3, cmd_end
 			li $a0, 4
 			jal read_com_word
 			sw $v0, 0($a2)
 			addiu $a2, $a2, 4
-			b ram_write
+			b ram_write_loop
 
 		ram_read:
+			sll $a2, 2
+			sll $a3, 2
+			addu $a2, $RAM_START
+			addu $a3, $RAM_START
+
+		ram_read_loop:
 			beq $a2, $a3, cmd_end
 			lw $a1, 0($a2) // a0 grabs the data
 			move $a0, $a1
@@ -96,7 +103,7 @@ main:
 			jal write_com_byte
 			addiu $a2, $a2, 4
 
-			b ram_read
+			b ram_read_loop
 
 		cmd_end:
 			// write checksum
