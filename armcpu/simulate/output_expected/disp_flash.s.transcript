@@ -1,4 +1,4 @@
-# vsim -do {run 90ns; quit} -c top 
+# vsim -do {run 100ns; quit} -c top 
 # Loading work.top
 # Loading work.ram_sim
 # Loading work.system
@@ -18,7 +18,7 @@
 # Loading work.serial_port
 # Loading work.uart_async_transmitter
 # Loading work.uart_async_receiver
-# run 90ns 
+# run 100ns 
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
 # time=0 come_read_data=00
@@ -48,25 +48,25 @@
 # time=1 cp0_cause: IP=00000000 ExcCode=00
 # [32m < -- id -- > time=9 got instruction: pc=xxxxxxxx instr=00000000 [0m
 # time=9 cp0_cause: IP=10000000 ExcCode=00
-# [32m < -- id -- > time=13 got instruction: pc=80000000 instr=3c041993 [0m
-# [32m < -- id -- > time=17 got instruction: pc=80000004 instr=34840501 [0m
-# [32m < -- id -- > time=21 got instruction: pc=80000008 instr=3c051993 [0m
-# time=21 reg4($a0)=19930000
-# [32m < -- id -- > time=25 got instruction: pc=8000000c instr=34a51102 [0m
-# time=25 reg4($a0)=19930501
-# [32m < -- id -- > time=29 got instruction: pc=80000010 instr=00850018 [0m
-# time=29 reg5($a1)=19930000
-# [32m < -- id -- > time=33 got instruction: pc=80000014 instr=00001010 [0m
-# time=33 reg5($a1)=19931102
-# [32m < -- id -- > time=37 got instruction: pc=80000018 instr=00001812 [0m
-# [32m < -- id -- > time=69 got instruction: pc=8000001c instr=00800011 [0m
-# time=69 reg2($v0)=028e0c9b
-# [32m < -- id -- > time=73 got instruction: pc=80000020 instr=00a00013 [0m
-# time=73 reg3($v1)=ef0e1b02
-# [32m < -- id -- > time=77 got instruction: pc=80000024 instr=00001010 [0m
-# [32m < -- id -- > time=81 got instruction: pc=80000028 instr=00001812 [0m
-# [32m < -- id -- > time=85 got instruction: pc=8000002c instr=1000ffff [0m
-# time=85 reg2($v0)=19930501
-# [32m < -- id -- > time=89 got instruction: pc=80000030 instr=00000000 [0m
-# time=89 reg3($v1)=19931102
+# [32m < -- id -- > time=13 got instruction: pc=80000000 instr=3c1cbe00 [0m
+# [32m < -- id -- > time=17 got instruction: pc=80000004 instr=3c1abfd0 [0m
+# [32m < -- id -- > time=21 got instruction: pc=80000008 instr=375a0400 [0m
+# [32m < -- id -- > time=25 got instruction: pc=8000000c instr=240200ff [0m
+# time=25 reg26($k0)=bfd00000
+# [32m < -- id -- > time=29 got instruction: pc=80000010 instr=af820000 [0m
+# time=29 reg26($k0)=bfd00400
+# [32m < -- id -- > time=33 got instruction: pc=80000014 instr=93820000 [0m
+# time=33 reg2($v0)=000000ff
+# [31m <-- mem flash --> time=46 write: addr=000000 data=zzzz00ff[0m
+# [32m < -- id -- > time=57 got instruction: pc=80000018 instr=af420000 [0m
+# [32m < -- id -- > time=65 got instruction: pc=8000001c instr=1000fffd [0m
+# ** Warning: time=67 mem ext: read uninitialized memory: addr=40100, return rand
+#    Time: 67 ns  Scope: top.uextram File: ram_sim.v Line: 41
+# time=70 segdisp=000000ff
+# [32m < -- id -- > time=77 got instruction: pc=80000020 instr=279c0001 [0m
+# [32m < -- id -- > time=81 got instruction: pc=80000014 instr=93820000 [0m
+# [32m < -- id -- > time=85 got instruction: pc=80000018 instr=af420000 [0m
+# [32m < -- id -- > time=93 got instruction: pc=8000001c instr=1000fffd [0m
+# time=93 reg2($v0)=00000000
+# time=98 segdisp=00000000
 #  quit 

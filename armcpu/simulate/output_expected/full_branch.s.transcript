@@ -1,4 +1,4 @@
-# vsim -do {run 200ns; quit} -c top 
+# vsim -do {run 250ns; quit} -c top 
 # Loading work.top
 # Loading work.ram_sim
 # Loading work.system
@@ -18,7 +18,7 @@
 # Loading work.serial_port
 # Loading work.uart_async_transmitter
 # Loading work.uart_async_receiver
-# run 200ns 
+# run 250ns 
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
 # time=0 come_read_data=00
@@ -77,36 +77,51 @@
 # time=89 reg26($k0)=00000005
 # [32m < -- id -- > time=93 got instruction: pc=80000064 instr=10000002 [0m
 # [32m < -- id -- > time=97 got instruction: pc=80000068 instr=275a0001 [0m
-# [32m < -- id -- > time=101 got instruction: pc=80000070 instr=18800002 [0m
+# [32m < -- id -- > time=101 got instruction: pc=80000070 instr=1ca00002 [0m
 # [32m < -- id -- > time=105 got instruction: pc=80000074 instr=00000000 [0m
 # time=105 reg26($k0)=00000006
-# [32m < -- id -- > time=109 got instruction: pc=8000007c instr=18a00002 [0m
+# [32m < -- id -- > time=109 got instruction: pc=8000007c instr=18800002 [0m
 # [32m < -- id -- > time=113 got instruction: pc=80000080 instr=275a0001 [0m
-# [32m < -- id -- > time=117 got instruction: pc=80000084 instr=275a0001 [0m
-# [32m < -- id -- > time=121 got instruction: pc=80000088 instr=04800002 [0m
+# [32m < -- id -- > time=117 got instruction: pc=80000088 instr=18a00002 [0m
+# [32m < -- id -- > time=121 got instruction: pc=8000008c instr=275a0001 [0m
 # time=121 reg26($k0)=00000007
-# [32m < -- id -- > time=125 got instruction: pc=8000008c instr=00000000 [0m
-# time=125 reg26($k0)=00000008
-# [32m < -- id -- > time=129 got instruction: pc=80000094 instr=04c00002 [0m
-# [32m < -- id -- > time=133 got instruction: pc=80000098 instr=275a0001 [0m
-# [32m < -- id -- > time=137 got instruction: pc=800000a0 instr=14800002 [0m
+# [32m < -- id -- > time=125 got instruction: pc=80000090 instr=275a0001 [0m
+# [32m < -- id -- > time=129 got instruction: pc=80000094 instr=18c00002 [0m
+# time=129 reg26($k0)=00000008
+# [32m < -- id -- > time=133 got instruction: pc=80000098 instr=00000000 [0m
+# time=133 reg26($k0)=00000009
+# [32m < -- id -- > time=137 got instruction: pc=800000a0 instr=04800002 [0m
 # [32m < -- id -- > time=141 got instruction: pc=800000a4 instr=275a0001 [0m
-# time=141 reg26($k0)=00000009
 # [32m < -- id -- > time=145 got instruction: pc=800000a8 instr=275a0001 [0m
-# [32m < -- id -- > time=149 got instruction: pc=800000ac instr=14a60002 [0m
+# [32m < -- id -- > time=149 got instruction: pc=800000ac instr=04c00002 [0m
 # time=149 reg26($k0)=0000000a
 # [32m < -- id -- > time=153 got instruction: pc=800000b0 instr=00000000 [0m
 # time=153 reg26($k0)=0000000b
-# [32m < -- id -- > time=157 got instruction: pc=800000b8 instr=275a0001 [0m
-# [32m < -- id -- > time=161 got instruction: pc=800000bc instr=1000ffff [0m
-# [32m < -- id -- > time=165 got instruction: pc=800000c0 instr=00000000 [0m
-# time=165 reg26($k0)=0000000c
-# [32m < -- id -- > time=169 got instruction: pc=800000bc instr=1000ffff [0m
-# [32m < -- id -- > time=173 got instruction: pc=800000c0 instr=00000000 [0m
-# [32m < -- id -- > time=177 got instruction: pc=800000bc instr=1000ffff [0m
-# [32m < -- id -- > time=181 got instruction: pc=800000c0 instr=00000000 [0m
-# [32m < -- id -- > time=185 got instruction: pc=800000bc instr=1000ffff [0m
-# [32m < -- id -- > time=189 got instruction: pc=800000c0 instr=00000000 [0m
-# [32m < -- id -- > time=193 got instruction: pc=800000bc instr=1000ffff [0m
-# [32m < -- id -- > time=197 got instruction: pc=800000c0 instr=00000000 [0m
+# [32m < -- id -- > time=157 got instruction: pc=800000b8 instr=14800002 [0m
+# [32m < -- id -- > time=161 got instruction: pc=800000bc instr=275a0001 [0m
+# [32m < -- id -- > time=165 got instruction: pc=800000c0 instr=275a0001 [0m
+# [32m < -- id -- > time=169 got instruction: pc=800000c4 instr=14a60002 [0m
+# time=169 reg26($k0)=0000000c
+# [32m < -- id -- > time=173 got instruction: pc=800000c8 instr=00000000 [0m
+# time=173 reg26($k0)=0000000d
+# [32m < -- id -- > time=177 got instruction: pc=800000d0 instr=275a0001 [0m
+# [32m < -- id -- > time=181 got instruction: pc=800000d4 instr=1000ffff [0m
+# [32m < -- id -- > time=185 got instruction: pc=800000d8 instr=00000000 [0m
+# time=185 reg26($k0)=0000000e
+# [32m < -- id -- > time=189 got instruction: pc=800000d4 instr=1000ffff [0m
+# [32m < -- id -- > time=193 got instruction: pc=800000d8 instr=00000000 [0m
+# [32m < -- id -- > time=197 got instruction: pc=800000d4 instr=1000ffff [0m
+# [32m < -- id -- > time=201 got instruction: pc=800000d8 instr=00000000 [0m
+# [32m < -- id -- > time=205 got instruction: pc=800000d4 instr=1000ffff [0m
+# [32m < -- id -- > time=209 got instruction: pc=800000d8 instr=00000000 [0m
+# [32m < -- id -- > time=213 got instruction: pc=800000d4 instr=1000ffff [0m
+# [32m < -- id -- > time=217 got instruction: pc=800000d8 instr=00000000 [0m
+# [32m < -- id -- > time=221 got instruction: pc=800000d4 instr=1000ffff [0m
+# [32m < -- id -- > time=225 got instruction: pc=800000d8 instr=00000000 [0m
+# [32m < -- id -- > time=229 got instruction: pc=800000d4 instr=1000ffff [0m
+# [32m < -- id -- > time=233 got instruction: pc=800000d8 instr=00000000 [0m
+# [32m < -- id -- > time=237 got instruction: pc=800000d4 instr=1000ffff [0m
+# [32m < -- id -- > time=241 got instruction: pc=800000d8 instr=00000000 [0m
+# [32m < -- id -- > time=245 got instruction: pc=800000d4 instr=1000ffff [0m
+# [32m < -- id -- > time=249 got instruction: pc=800000d8 instr=00000000 [0m
 #  quit 

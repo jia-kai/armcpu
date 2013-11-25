@@ -1,4 +1,4 @@
-# simu: 200ns
+# simu: 250ns
 li $a0, 0
 li $a1, 1
 li $a2, -1
@@ -40,6 +40,11 @@ l8:
 addiu $k0, -1
 l9:
 
+bgtz $a1, lx0
+addiu $k0, -1
+lx0:
+addiu $k0, 1
+
 blez $a0, l10
 addiu $k0,  -1
 l10:
@@ -49,10 +54,14 @@ blez $a1, l11
 addiu $k0, 1
 l11:
 
-bltz $a0, l12
+blez $a2, l11x
 addiu $k0, -1
-l12:
+l11x:
 addiu $k0, 1
+
+bltz $a0, l12
+addiu $k0, 1
+l12:
 
 bltz $a2, l13
 addiu $k0, -1
@@ -68,6 +77,7 @@ addiu $k0,  -1
 l15:
 addiu $k0, 1
 
-halt: b halt
+b .
+nop
 
 # vim: ft=mips

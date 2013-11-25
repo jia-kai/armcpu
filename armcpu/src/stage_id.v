@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Sat Nov 23 20:36:26 2013 +0800
+ * $Date: Mon Nov 25 21:58:19 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -250,7 +250,9 @@ module stage_id(
 		alu_opt <= `ALU_OPT_NONE;
         alu_sa_imm <= 0;
 		reg1_addr <= 0;
+		reg1_data <= 0;
 		reg2_addr <= 0;
+		reg2_data <= 0;
 		mem_opt_id2ex <= `MEM_OPT_NONE;
         exc_code_id2ex <= `EC_NONE;
 	end endtask

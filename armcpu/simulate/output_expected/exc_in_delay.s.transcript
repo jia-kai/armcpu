@@ -1,4 +1,4 @@
-# vsim -do {run 90ns; quit} -c top 
+# vsim -do {run 30ns; quit} -c top 
 # Loading work.top
 # Loading work.ram_sim
 # Loading work.system
@@ -18,7 +18,7 @@
 # Loading work.serial_port
 # Loading work.uart_async_transmitter
 # Loading work.uart_async_receiver
-# run 90ns 
+# run 30ns 
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
 # time=0 come_read_data=00
@@ -48,25 +48,13 @@
 # time=1 cp0_cause: IP=00000000 ExcCode=00
 # [32m < -- id -- > time=9 got instruction: pc=xxxxxxxx instr=00000000 [0m
 # time=9 cp0_cause: IP=10000000 ExcCode=00
-# [32m < -- id -- > time=13 got instruction: pc=80000000 instr=3c041993 [0m
-# [32m < -- id -- > time=17 got instruction: pc=80000004 instr=34840501 [0m
-# [32m < -- id -- > time=21 got instruction: pc=80000008 instr=3c051993 [0m
-# time=21 reg4($a0)=19930000
-# [32m < -- id -- > time=25 got instruction: pc=8000000c instr=34a51102 [0m
-# time=25 reg4($a0)=19930501
-# [32m < -- id -- > time=29 got instruction: pc=80000010 instr=00850018 [0m
-# time=29 reg5($a1)=19930000
-# [32m < -- id -- > time=33 got instruction: pc=80000014 instr=00001010 [0m
-# time=33 reg5($a1)=19931102
-# [32m < -- id -- > time=37 got instruction: pc=80000018 instr=00001812 [0m
-# [32m < -- id -- > time=69 got instruction: pc=8000001c instr=00800011 [0m
-# time=69 reg2($v0)=028e0c9b
-# [32m < -- id -- > time=73 got instruction: pc=80000020 instr=00a00013 [0m
-# time=73 reg3($v1)=ef0e1b02
-# [32m < -- id -- > time=77 got instruction: pc=80000024 instr=00001010 [0m
-# [32m < -- id -- > time=81 got instruction: pc=80000028 instr=00001812 [0m
-# [32m < -- id -- > time=85 got instruction: pc=8000002c instr=1000ffff [0m
-# time=85 reg2($v0)=19930501
-# [32m < -- id -- > time=89 got instruction: pc=80000030 instr=00000000 [0m
-# time=89 reg3($v1)=19931102
+# [32m < -- id -- > time=13 got instruction: pc=80000000 instr=00000000 [0m
+# [32m < -- id -- > time=17 got instruction: pc=80000004 instr=1000ffff [0m
+# [32m < -- id -- > time=21 got instruction: pc=80000008 instr=0000000c [0m
+# [32m < -- id -- > time=25 got instruction: pc=80000004 instr=1000ffff [0m
+# time=29 impending exception: ip=10000000 code=08 epc=80000004
+# time=29 cp0_cause: IP=10000000 ExcCode=08
+# time=29 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
+# ** Warning: time=29 mem base: read uninitialized memory: addr=00060, return rand
+#    Time: 29 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
 #  quit 
