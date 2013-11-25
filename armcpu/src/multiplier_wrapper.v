@@ -1,10 +1,10 @@
 /*
  * $File: multiplier_wrapper.v
- * $Date: Sat Nov 23 20:49:20 2013 +0800
+ * $Date: Sun Nov 24 14:02:59 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
-`define WAIT_CYCLE	8
+`define WAIT_CYCLE	15
 `include "lohi_def.vh"
 
 // wrap around xilinx multiplier core, and provide hi/lo register

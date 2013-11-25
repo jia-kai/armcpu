@@ -1,10 +1,11 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: ctllib.py
-# $Date: Fri Nov 01 22:39:52 2013 +0800
+# $Date: Mon Nov 25 09:05:05 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import sys
+import os
 
 CMD_FLASH_WRITE	= chr(0b01110000)
 CMD_FLASH_READ	= chr(0b00001111)
@@ -28,8 +29,14 @@ class MemtransController(object):
     def __init__(self, ser):
         self.ser = ser
 
-    def _do_write_data(self, data):
-        self.ser.write(data)
+    if os.getenv('SINGLESTEP'):
+        def _do_write_data(self, data):
+            for i in data:
+                raw_input('write {}'.format(hex(ord(i))))
+                self.ser.write(i)
+    else:
+        def _do_write_data(self, data):
+            self.ser.write(data)
 
     def _raw_write(self, data):
         assert type(data) is str

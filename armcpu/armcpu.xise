@@ -448,6 +448,7 @@
     <!-- include files.                                                       -->
     <file xil_pn:name="src/alu_opt.vh" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/cp0_def.vh" xil_pn:type="FILE_VERILOG"/>
+    <file xil_pn:name="src/lohi_def.vh" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/common.vh" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/branch_opt.vh" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/mem_opt.vh" xil_pn:type="FILE_VERILOG"/>
@@ -455,14 +456,13 @@
     <file xil_pn:name="src/gencode/id2ex_param.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/ex2mem_param.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/int_def.vh" xil_pn:type="FILE_VERILOG"/>
+    <file xil_pn:name="src/rom/rom.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/id2ex_extract_load.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/ex2mem_extract_store.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/if2id_extract_load.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/id2ex_extract_store.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/if2id_extract_store.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/ex2mem_extract_load.v" xil_pn:type="FILE_VERILOG"/>
-    <file xil_pn:name="src/lohi_def.vh" xil_pn:type="FILE_VERILOG"/>
-    <file xil_pn:name="src/rom/rom.v" xil_pn:type="FILE_VERILOG"/>
   </autoManagedFiles>
 
 </project>
