@@ -1,6 +1,6 @@
 /*
  * $File: system.v
- * $Date: Sat Nov 23 19:40:30 2013 +0800
+ * $Date: Mon Nov 25 15:04:09 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -12,6 +12,9 @@ module system
 	input rst,
 
 	output [31:0] segdisp,
+
+	// control interface
+	input rom_selector,
 
 	// ram interface
 	output [19:0] baseram_addr,
@@ -58,6 +61,8 @@ module system
 		.int_com_ack(int_com_ack),
 
 		.segdisp(segdisp),
+
+		.rom_selector(rom_selector),
 
 		.baseram_addr(baseram_addr), .baseram_data(baseram_data),
 		.baseram_ce(baseram_ce), .baseram_oe(baseram_oe), .baseram_we(baseram_we),

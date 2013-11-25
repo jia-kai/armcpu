@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Sat Nov 23 17:06:18 2013 +0800
+ * $Date: Mon Nov 25 15:06:58 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -38,6 +38,7 @@ module top;
 	wire com_to_sys, com_from_sys;
 	system usystem(.clk_cpu(clk_half), .clk50M(clk), .rst(rst),
 		.segdisp(segdisp),
+		.rom_selector(1'b0),
 		.baseram_addr(baseram_addr), .baseram_data(baseram_data),
 		.baseram_ce(baseram_ce), .baseram_oe(baseram_oe), .baseram_we(baseram_we),
 		.extram_addr(extram_addr), .extram_data(extram_data),

@@ -1,6 +1,6 @@
 /*
  * $File: phy_mem_ctrl.v
- * $Date: Sat Nov 23 23:32:09 2013 +0800
+ * $Date: Mon Nov 25 15:07:37 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -11,11 +11,9 @@
 
 `define SEGDISP_ADDR	32'h1FD00400	// 7-segment display monitor
 
-`define RAM_ADDR_MASK		// 8MiB
-
 `define ADDR_IS_RAM(addr) ((addr & 32'h007FFFFF) == addr)
 `define ADDR_IS_FLASH(addr) (addr[31:24] == 8'h1E)
-`define ADDR_IS_ROM(addr) (addr[31:12] == 20'h1FC00)
+`define ADDR_IS_ROM(addr) (addr[31:12] == 20'h10000)
 
 `define ROM_ADDR_WIDTH	12
 
@@ -39,6 +37,9 @@ module phy_mem_ctrl(
 	output reg int_com_ack,
 
 	output reg [31:0] segdisp,
+
+	// control interface
+	input rom_selector,
 
 	// ram interface
 	output [19:0] baseram_addr,
@@ -106,9 +107,20 @@ module phy_mem_ctrl(
 	
 	wire [`ROM_ADDR_WIDTH-1:0] rom_addr = addr[`ROM_ADDR_WIDTH-1:0];
 	reg [31:0] rom_data;
-	always @(rom_addr)
-		`include "rom/rom.v"
 
+	task rom_bootloader;
+		`include "rom/bootloader.v"
+	endtask
+
+	task rom_memtrans;
+		`include "rom/memtrans.v"
+	endtask
+
+	always @(rom_addr, rom_selector)
+		case (rom_selector)
+			1'b0: rom_memtrans();
+			1'b1: rom_bootloader();
+		endcase
 
 	assign com_data_out = write_data_latch[7:0];
 

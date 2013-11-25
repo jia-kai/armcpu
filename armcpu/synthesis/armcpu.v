@@ -1,6 +1,6 @@
 /*
  * $File: armcpu.v
- * $Date: Sun Nov 24 10:26:09 2013 +0800
+ * $Date: Mon Nov 25 15:13:44 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -37,6 +37,8 @@ module armcpu(
 
 	reg clk_cpu;
 	wire [23:0] cpu_speed = params[23:0];
+	wire [4:0] monitor_data_shift = params[28:24];
+	wire rom_selector = params[31];
 	reg [23:0] clk50M_cnt;
 	always @(posedge clk50M) begin
 		if (clk50M_cnt >= cpu_speed) begin
@@ -54,6 +56,8 @@ module armcpu(
 
 	system usys(.clk_cpu(clk_cpu), .clk50M(clk50M), .rst(~rst),
 		.segdisp(segdisp_data),
+
+		.rom_selector(rom_selector),
 
 		.baseram_addr(baseram_addr), .baseram_data(baseram_data),
 		.baseram_ce(baseram_ce),
@@ -73,7 +77,7 @@ module armcpu(
 
 	always @(posedge clk50M) begin
 		led[15:8] <= segdisp_data[7:0];
-		monitor_data <= segdisp_data >> params[31:24];
+		monitor_data <= segdisp_data >> monitor_data_shift;
 	end
 
 	digseg_driver useg0(.data(monitor_data[3:0]), .seg(segdisp0));
