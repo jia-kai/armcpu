@@ -1,6 +1,6 @@
 /*
  * $File: memtrans.cc
- * $Date: Sat Nov 23 22:04:34 2013 +0800
+ * $Date: Mon Nov 25 10:06:48 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -115,7 +115,7 @@ class Main {
 					case CMD_FLASH_WRITE:
 						for (uint32_t i = start; i < end; i ++) {
 							uint32_t data = read_com_word(2);
-							m_flash_start[0] = 0x0020;
+							m_flash_start[0] = 0x0040;
 							m_flash_start[i] = data;
 							while (!flash_check_finished());
 						}

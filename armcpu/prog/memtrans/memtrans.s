@@ -1,6 +1,6 @@
 //
 // $File: memtrans.s
-// $Date: Mon Nov 25 09:27:18 2013 +0800
+// $Date: Mon Nov 25 10:31:16 2013 +0800
 // $Author: Xinyu Zhou <zxytim@gmail.com>
 //
 
@@ -23,6 +23,7 @@
 #define COM_STAT	t1
 #define CHECKSUM	t9
 #define SEGDISP		t2
+#define FLASH_START	t3
 #define RAM_START	t4
 
 #define CMD_FLASH_WRITE	0b01110000
@@ -34,6 +35,7 @@
 #define CMD_ERASE_FINISHED		0b00110011
 #define RESET_CHECKSUM()	li $CHECKSUM, 0x23
 
+#define FLASH_SR_FINISH_MASK	0b10000000
 
 
 main:
@@ -59,53 +61,123 @@ main:
 
 		RESET_CHECKSUM()
 
+		sll $a2, 2
+		sll $a3, 2
+
 		// v0 is cases switches
 		li $v0, CMD_RAM_WRITE
 		beq $a1, $v0, ram_write
 		li $v0, CMD_RAM_READ
 		beq $a1, $v0, ram_read
-		b cmd_end
+		li $v0, CMD_FLASH_READ
+		beq $a1, $v0, flash_read
+		li $v0, CMD_FLASH_WRITE
+		beq $a1, $v0, flash_write
+		li $v0, CMD_FLASH_ERASE
+		beq $a1, $v0, flash_erase
+		b main_loop
+
+		init_ram_rw:
+			addu $a2, $RAM_START
+			addu $a3, $RAM_START
+			jr $ra
+
+		init_flash_rw:
+			addu $a2, $FLASH_START
+			addu $a3, $FLASH_START
+			jr $ra
 
 		// a0, a1 are reusable from now on
 		// a2: m_ram_start + start
 		// a3: m_ram_start + end
 
 		ram_write:
-			sll $a2, 2
-			sll $a3, 2
-			addu $a2, $RAM_START
-			addu $a3, $RAM_START
+			jal init_ram_rw
 
-		ram_write_loop:
-			beq $a2, $a3, cmd_end
-			li $a0, 4
-			jal read_com_word
-			sw $v0, 0($a2)
-			addiu $a2, $a2, 4
-			b ram_write_loop
+			ram_write_loop:
+				beq $a2, $a3, cmd_end_write_checksum
+				li $a0, 4
+				jal read_com_word
+				sw $v0, 0($a2)
+				addiu $a2, $a2, 4
+				b ram_write_loop
 
 		ram_read:
-			sll $a2, 2
-			sll $a3, 2
-			addu $a2, $RAM_START
-			addu $a3, $RAM_START
+			jal init_ram_rw
 
-		ram_read_loop:
-			beq $a2, $a3, cmd_end
-			lw $a1, 0($a2) // a0 grabs the data
-			move $a0, $a1
-			jal write_com_byte
-			srl $a0, $a1, 8
-			jal write_com_byte
-			srl $a0, $a1, 16
-			jal write_com_byte
-			srl $a0, $a1, 24
-			jal write_com_byte
-			addiu $a2, $a2, 4
+			ram_read_loop:
+				beq $a2, $a3, cmd_end_write_checksum
+				lw $a1, 0($a2)
+				move $a0, $a1
+				jal write_com_byte
+				srl $a0, $a1, 8
+				jal write_com_byte
+				srl $a0, $a1, 16
+				jal write_com_byte
+				srl $a0, $a1, 24
+				jal write_com_byte
+				addiu $a2, $a2, 4
 
-			b ram_read_loop
+				b ram_read_loop
 
-		cmd_end:
+		flash_read:
+			jal init_flash_rw
+			li $v0, 0x00FF
+			sw $v0, 0($FLASH_START)
+
+			flash_read_loop:
+				beq $a2, $a3, cmd_end_write_checksum
+				lw $a1, 0($a2)
+				move $a0, $a1
+				jal write_com_byte
+				srl $a0, $a1, 8
+				jal write_com_byte
+				addiu $a2, 4
+
+				b flash_read_loop
+
+		flash_write:
+			jal init_flash_rw
+
+			flash_write_loop:
+				beq $a2, $a3, cmd_end_write_checksum
+				li $a0, 2
+				jal read_com_word
+				li $v1, 0x0040
+				sw $v1, 0($FLASH_START)
+				sw $v0, 0($a2)
+
+				flash_write_wait_finish:
+					li $v0, 0x0070
+					sw $v0, 0($FLASH_START)
+					lw $v0, 0($FLASH_START)
+					andi $v0, FLASH_SR_FINISH_MASK
+					beqz $v0, flash_write_wait_finish
+
+				addiu $a2, 4
+				b flash_write_loop
+
+		flash_erase:
+			jal init_flash_rw
+			li $v0, 0x0020
+			sw $v0, 0($FLASH_START)
+			li $v0, 0x00D0
+			sw $v0, 0($a2)
+
+			erase_wait_finish:
+				li $a0, CMD_ERASE_IN_PROGRESS	
+				jal write_com_byte
+				li $v0, 0x0070
+				sw $v0, 0($FLASH_START)
+				lw $v0, 0($FLASH_START)
+				andi $v0, FLASH_SR_FINISH_MASK
+				beqz $v0, erase_wait_finish
+
+			li $a0, CMD_ERASE_FINISHED
+			jal write_com_byte
+			b main_loop
+
+		cmd_end_write_checksum:
 			// write checksum
 			move $a0, $CHECKSUM
 			jal write_com_byte
@@ -117,7 +189,7 @@ init:
 	li $COM_DATA, 0x9FD003F8
 	li $COM_STAT, 0x9FD003FC 
 	li $SEGDISP, 0x9FD00400
-	li $t3, 0x9E000000
+	li $FLASH_START, 0x9E000000
 	li $RAM_START, 0x80000000 // m_ram_start
 
 	jr $ra
