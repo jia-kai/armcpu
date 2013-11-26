@@ -21,9 +21,9 @@
 # run 550ns 
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
-# time=0 come_read_data=00
 # ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
 #    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
+# time=0 com_read_data=00
 # ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
 #    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=0 segdisp=xxxxxxxx
@@ -207,7 +207,6 @@
 # time=497 eret: 80000020
 # time=497 cpu entered user mode
 # time=497 cp0_status: IM=10000000 KSU=10 EXL=0 IE=1
-# time=501 com_write_busy=1
 # [32m < -- id -- > time=501 got instruction: pc=800001b0 instr=00000000 [0m
 # [32m < -- id -- > time=505 got instruction: pc=80000020 instr=08000008 [0m
 # [32m < -- id -- > time=509 got instruction: pc=80000024 instr=00000000 [0m
@@ -215,10 +214,8 @@
 # [32m < -- id -- > time=517 got instruction: pc=80000024 instr=00000000 [0m
 # time=517 cp0_cause: IP=10000000 ExcCode=00
 # time=521 impending exception: ip=10000000 code=00 epc=80000020
-# time=521 cp0_cause: IP=10010000 ExcCode=00
 # time=521 cpu entered kernel mode
 # time=521 cp0_status: IM=10000000 KSU=10 EXL=1 IE=1
-# time=523 com_write_busy=0
 # [32m < -- id -- > time=525 got instruction: pc=80000024 instr=00000000 [0m
 # [32m < -- id -- > time=529 got instruction: pc=80000180 instr=24010001 [0m
 # [32m < -- id -- > time=533 got instruction: pc=80000184 instr=10410008 [0m

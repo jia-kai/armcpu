@@ -1,6 +1,6 @@
 /*
  * $File: cp0.v
- * $Date: Thu Nov 21 19:24:51 2013 +0800
+ * $Date: Tue Nov 26 19:42:05 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -13,6 +13,8 @@
 // 2. if write to predifined fieds (e.g. EBase[31:30]), the standard requires
 //	original valus is returned on next read; but the value newly written would
 //	be returned in this simplified cp0 design
+// 3. select field is ignored (e.g. mfc0 $t0, $15, 0 and mfc0 $t0, $15, 1 both
+// setup EBase)
 module cp0(
 	input clk,
 	input rst,
@@ -54,6 +56,9 @@ module cp0(
 		end
 	endgenerate
 
+	assign exc_is_tlb_refill = (exc_code == `EC_TLBL || exc_code == `EC_TLBS),
+			exc_is_tlb = (exc_is_tlb_refill || exc_code == `EC_TLB_MOD);
+
 	task set_vector_offset(input [29:0] offset);
 		exc_jmp_dest <= {2'b10, offset + {regmem[`CP0_EBASE][29:12], 12'b0}};
 	endtask
@@ -73,13 +78,13 @@ module cp0(
 			regmem[`CP0_CAUSE][6:2] <= exc_code;
 			regmem[`CP0_STATUS][1] <= 1;	// EXL
 
-			/*
-			if (`EC_IS_TLB_REFILL(exc_code))
+			if (exc_is_tlb_refill)
 				set_vector_offset(30'h0);
 			else 
 				set_vector_offset(30'h180);
-			*/
-			set_vector_offset(30'h180);	// required by ucore ?
+
+			if (exc_is_tlb)
+				regmem[`CP0_ENTRY_HI][31:13] <= exc_badvaddr[31:13];
 		end
 
 		exc_jmp_flag <= 1;

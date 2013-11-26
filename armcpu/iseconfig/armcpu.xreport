@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2013-11-26T09:54:49</DateModified>
+  <DateModified>2013-11-26T20:55:52</DateModified>
   <ModuleName>armcpu</ModuleName>
-  <SummaryTimeStamp>2013-11-24T22:04:47</SummaryTimeStamp>
+  <SummaryTimeStamp>2013-11-26T20:47:51</SummaryTimeStamp>
   <SavedFilePath>/home/jiakai/document/original/thu/2013-fall/assignment/computer-organization/armcpu/armcpu/iseconfig/armcpu.xreport</SavedFilePath>
   <ImplementationReportsDirectory>/home/jiakai/document/original/thu/2013-fall/assignment/computer-organization/armcpu/armcpu/xilinx_working_dir/</ImplementationReportsDirectory>
   <DateInitialized>2013-11-20T14:26:43</DateInitialized>

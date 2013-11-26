@@ -1,6 +1,6 @@
 /*
  * $File: mmu.v
- * $Date: Sat Nov 23 16:06:43 2013 +0800
+ * $Date: Tue Nov 26 20:22:03 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -119,7 +119,7 @@ module mmu(
 					$time, mem_vrt_addr);
 			end
 		end else if (!tlb_writable && mem_opt_is_write) begin
-			exc_code = `EC_TLBL;
+			exc_code = `EC_TLB_MOD;
 			$warning("time=%g write to read-only page, vaddr=%h",
 				$time, mem_vrt_addr);
 		end
@@ -145,11 +145,11 @@ module mmu(
 					if (mem_vrt_addr[12] && tlb_mem[i][22]) begin
 						tlb_missing = 0;
 						tlb_writable = tlb_mem[i][23];
-						dev_mem_addr = {tlb_mem[i][43:24], dev_mem_addr[11:0]};
+						dev_mem_addr = {tlb_mem[i][43:24], mem_vrt_addr[11:0]};
 					end else if (!mem_vrt_addr[12] && tlb_mem[i][0]) begin
 						tlb_missing = 0;
 						tlb_writable = tlb_mem[i][1];
-						dev_mem_addr = {tlb_mem[i][21:2], dev_mem_addr[11:0]};
+						dev_mem_addr = {tlb_mem[i][21:2], mem_vrt_addr[11:0]};
 					end
 
 				end

@@ -1,14 +1,14 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: terminal.py
-# $Date: Tue Nov 26 11:40:59 2013 +0800
+# $Date: Tue Nov 26 18:27:04 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 DEVICE = '/dev/ttyUSB0'
 
 import serial
 import sys
-import gevent
+import threading
 
 ser = serial.Serial(DEVICE, 115201,
         stopbits=2, parity=serial.PARITY_NONE)
@@ -24,7 +24,10 @@ def com_writer():
         data = raw_input() + '\r\n'
         ser.write(data)
 
-jobs = map(gevent.spawn, [com_reader, com_writer])
+threads = [threading.Thread(target = i) for i in [com_reader, com_writer]]
+for i in threads:
+    i.start()
 print 'terminal started'
-gevent.joinall(jobs)
+for i in threads:
+    i.join()
 

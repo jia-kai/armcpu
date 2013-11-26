@@ -21,9 +21,9 @@
 # run 100ns 
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
-# time=0 come_read_data=00
 # ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
 #    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
+# time=0 com_read_data=00
 # ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
 #    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=0 segdisp=xxxxxxxx

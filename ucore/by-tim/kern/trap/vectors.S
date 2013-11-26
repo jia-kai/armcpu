@@ -17,6 +17,12 @@
 .extern ramExcHandle_tlbmiss
 .extern ramExcHandle_general
 
+
+# how can original code work, without .set noreorder
+# maybe behavior of gnu/as changed ...?
+.set noreorder
+
+
 .global __exception_vector
 __exception_vector:
   RVECENT(ramExcHandle_tlbmiss,0) 
@@ -156,3 +162,4 @@ __exception_vector_end:
 	 * so this is address R_VEC+0x400 == 0xbfc00400
 	 */
 
+# vim: ft=mips

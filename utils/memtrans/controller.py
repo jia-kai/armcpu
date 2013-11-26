@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: controller.py
-# $Date: Mon Nov 25 23:22:41 2013 +0800
+# $Date: Tue Nov 26 18:31:28 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 from ctllib import MemtransController
@@ -49,7 +49,11 @@ def parse_addr(addr):
         addr = addr[:-1]
     if addr.startswith('0x'):
         return int(addr[2:], 16) * mul
-    return int(addr) * mul
+    if addr.startswith('0x'):
+        addr = int(addr[2:], 16)
+    else:
+        addr = int(addr)
+    return addr * mul
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:

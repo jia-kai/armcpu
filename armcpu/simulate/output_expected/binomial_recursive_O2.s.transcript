@@ -21,9 +21,9 @@
 # run 50000ns 
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
-# time=0 come_read_data=00
 # ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
 #    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
+# time=0 com_read_data=00
 # ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
 #    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=0 segdisp=xxxxxxxx
@@ -187,12 +187,9 @@
 # [32m < -- id -- > time=493 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=497 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=497 reg2($v0)=00000001
-# time=501 com_write_busy=1
 # [32m < -- id -- > time=505 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=513 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=521 got instruction: pc=80000088 instr=03e00008 [0m
-# time=521 cp0_cause: IP=10010000 ExcCode=00
-# time=523 com_write_busy=0
 # [32m < -- id -- > time=529 got instruction: pc=8000008c instr=27bd0028 [0m
 # [32m < -- id -- > time=533 got instruction: pc=80000064 instr=0212182a [0m
 # [32m < -- id -- > time=537 got instruction: pc=80000068 instr=1060fff8 [0m
@@ -296,11 +293,9 @@
 # time=997 reg29($sp)=803fff98
 # [32m < -- id -- > time=1001 got instruction: pc=80000018 instr=afb30020 [0m
 # time=1001 reg2($v0)=00000000
-# time=1005 com_write_busy=1
 # [31m <-- mem base --> time=1008 write: addr=fffef data=80000064[0m
 # [32m < -- id -- > time=1017 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=1024 write: addr=fffee data=00000000[0m
-# time=1027 com_write_busy=0
 # [32m < -- id -- > time=1033 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=1040 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=1049 got instruction: pc=80000024 instr=14400024 [0m
@@ -401,13 +396,11 @@
 # [32m < -- id -- > time=1497 got instruction: pc=80000038 instr=00808021 [0m
 # [32m < -- id -- > time=1501 got instruction: pc=800000b0 instr=1000ffef [0m
 # [32m < -- id -- > time=1505 got instruction: pc=800000b4 instr=24110001 [0m
-# time=1509 com_write_busy=1
 # [32m < -- id -- > time=1509 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=1513 got instruction: pc=80000074 instr=02201021 [0m
 # [32m < -- id -- > time=1521 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=1525 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=1525 reg2($v0)=00000001
-# time=1531 com_write_busy=0
 # [32m < -- id -- > time=1533 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=1541 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=1549 got instruction: pc=80000088 instr=03e00008 [0m
@@ -505,13 +498,11 @@
 # [32m < -- id -- > time=1997 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=1997 reg2($v0)=00000003
 # [32m < -- id -- > time=2005 got instruction: pc=80000080 instr=8fb10018 [0m
-# time=2013 com_write_busy=1
 # [32m < -- id -- > time=2013 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=2021 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=2029 got instruction: pc=8000008c instr=27bd0028 [0m
 # time=2029 reg16($s0)=00000003
 # [32m < -- id -- > time=2033 got instruction: pc=80000064 instr=0212182a [0m
-# time=2035 com_write_busy=0
 # [32m < -- id -- > time=2037 got instruction: pc=80000068 instr=1060fff8 [0m
 # time=2037 reg29($sp)=803fffe8
 # [32m < -- id -- > time=2041 got instruction: pc=8000006c instr=02228821 [0m
@@ -614,13 +605,11 @@
 # [32m < -- id -- > time=2497 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=2501 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=2508 write: addr=fffeb data=00000000[0m
-# time=2517 com_write_busy=1
 # [32m < -- id -- > time=2517 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=2521 got instruction: pc=800000b0 instr=1000ffef [0m
 # [32m < -- id -- > time=2525 got instruction: pc=800000b4 instr=24110001 [0m
 # [32m < -- id -- > time=2529 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=2533 got instruction: pc=80000074 instr=02201021 [0m
-# time=2539 com_write_busy=0
 # [32m < -- id -- > time=2541 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=2545 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=2545 reg2($v0)=00000001
@@ -725,11 +714,9 @@
 # [32m < -- id -- > time=3001 got instruction: pc=80000074 instr=02201021 [0m
 # [32m < -- id -- > time=3009 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=3013 got instruction: pc=8000007c instr=8fb2001c [0m
-# time=3021 com_write_busy=1
 # [32m < -- id -- > time=3021 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=3029 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=3037 got instruction: pc=80000088 instr=03e00008 [0m
-# time=3043 com_write_busy=0
 # [32m < -- id -- > time=3045 got instruction: pc=8000008c instr=27bd0028 [0m
 # time=3045 reg16($s0)=00000001
 # [32m < -- id -- > time=3049 got instruction: pc=80000064 instr=0212182a [0m
@@ -839,12 +826,10 @@
 # [31m <-- mem base --> time=3500 write: addr=fffee data=00000000[0m
 # [32m < -- id -- > time=3509 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=3516 write: addr=fffed data=00000001[0m
-# time=3525 com_write_busy=1
 # [32m < -- id -- > time=3525 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=3532 write: addr=fffec data=00000000[0m
 # [32m < -- id -- > time=3541 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=3545 got instruction: pc=8000002c instr=10800020 [0m
-# time=3547 com_write_busy=0
 # [31m <-- mem base --> time=3552 write: addr=fffeb data=00000003[0m
 # [32m < -- id -- > time=3561 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=3565 got instruction: pc=80000034 instr=10a0001e [0m
@@ -942,12 +927,10 @@
 # [32m < -- id -- > time=4013 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=4013 reg2($v0)=00000001
 # [32m < -- id -- > time=4021 got instruction: pc=80000080 instr=8fb10018 [0m
-# time=4029 com_write_busy=1
 # [32m < -- id -- > time=4029 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=4037 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=4045 got instruction: pc=8000008c instr=27bd0028 [0m
 # [32m < -- id -- > time=4049 got instruction: pc=80000064 instr=0212182a [0m
-# time=4051 com_write_busy=0
 # [32m < -- id -- > time=4053 got instruction: pc=80000068 instr=1060fff8 [0m
 # time=4053 reg29($sp)=803fffc0
 # [32m < -- id -- > time=4057 got instruction: pc=8000006c instr=02228821 [0m
@@ -1056,11 +1039,9 @@
 # [31m <-- mem base --> time=4512 write: addr=fffef data=80000064[0m
 # [32m < -- id -- > time=4521 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=4528 write: addr=fffee data=00000000[0m
-# time=4533 com_write_busy=1
 # [32m < -- id -- > time=4537 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=4544 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=4553 got instruction: pc=80000024 instr=14400024 [0m
-# time=4555 com_write_busy=0
 # [31m <-- mem base --> time=4560 write: addr=fffec data=00000000[0m
 # [32m < -- id -- > time=4569 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=4573 got instruction: pc=8000002c instr=10800020 [0m
@@ -1157,11 +1138,9 @@
 # [32m < -- id -- > time=5029 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=5033 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=5033 reg2($v0)=00000001
-# time=5037 com_write_busy=1
 # [32m < -- id -- > time=5041 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=5049 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=5057 got instruction: pc=80000088 instr=03e00008 [0m
-# time=5059 com_write_busy=0
 # [32m < -- id -- > time=5065 got instruction: pc=8000008c instr=27bd0028 [0m
 # [32m < -- id -- > time=5069 got instruction: pc=80000064 instr=0212182a [0m
 # [32m < -- id -- > time=5073 got instruction: pc=80000068 instr=1060fff8 [0m
@@ -1272,10 +1251,8 @@
 # [32m < -- id -- > time=5533 got instruction: pc=80000018 instr=afb30020 [0m
 # time=5533 reg2($v0)=00000000
 # [31m <-- mem base --> time=5540 write: addr=fffef data=80000064[0m
-# time=5541 com_write_busy=1
 # [32m < -- id -- > time=5549 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=5556 write: addr=fffee data=00000000[0m
-# time=5563 com_write_busy=0
 # [32m < -- id -- > time=5565 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=5572 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=5581 got instruction: pc=80000024 instr=14400024 [0m
@@ -1376,13 +1353,11 @@
 # [32m < -- id -- > time=6029 got instruction: pc=800000b4 instr=24110001 [0m
 # [32m < -- id -- > time=6033 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=6037 got instruction: pc=80000074 instr=02201021 [0m
-# time=6045 com_write_busy=1
 # [32m < -- id -- > time=6045 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=6049 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=6049 reg2($v0)=00000001
 # [32m < -- id -- > time=6057 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=6065 got instruction: pc=80000084 instr=8fb00014 [0m
-# time=6067 com_write_busy=0
 # [32m < -- id -- > time=6073 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=6081 got instruction: pc=8000008c instr=27bd0028 [0m
 # [32m < -- id -- > time=6085 got instruction: pc=80000064 instr=0212182a [0m
@@ -1489,7 +1464,6 @@
 # [32m < -- id -- > time=6537 got instruction: pc=80000040 instr=24b3ffff [0m
 # [32m < -- id -- > time=6541 got instruction: pc=80000044 instr=10000003 [0m
 # [32m < -- id -- > time=6545 got instruction: pc=80000048 instr=00008821 [0m
-# time=6549 com_write_busy=1
 # [32m < -- id -- > time=6549 got instruction: pc=80000054 instr=2610ffff [0m
 # [32m < -- id -- > time=6553 got instruction: pc=80000058 instr=02002021 [0m
 # [32m < -- id -- > time=6557 got instruction: pc=8000005c instr=0c000003 [0m
@@ -1499,7 +1473,6 @@
 # [32m < -- id -- > time=6565 got instruction: pc=8000000c instr=27bdffd8 [0m
 # [32m < -- id -- > time=6569 got instruction: pc=80000010 instr=0085102a [0m
 # time=6569 reg5($a1)=00000000
-# time=6571 com_write_busy=0
 # [32m < -- id -- > time=6573 got instruction: pc=80000014 instr=afbf0024 [0m
 # time=6573 reg29($sp)=803fff98
 # [32m < -- id -- > time=6577 got instruction: pc=80000018 instr=afb30020 [0m
@@ -1595,11 +1568,9 @@
 # [31m <-- mem base --> time=7032 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=7041 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=7048 write: addr=fffec data=00000002[0m
-# time=7053 com_write_busy=1
 # [32m < -- id -- > time=7057 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=7061 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=7068 write: addr=fffeb data=00000001[0m
-# time=7075 com_write_busy=0
 # [32m < -- id -- > time=7077 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=7081 got instruction: pc=80000034 instr=10a0001e [0m
 # [32m < -- id -- > time=7085 got instruction: pc=80000038 instr=00808021 [0m
@@ -1703,14 +1674,12 @@
 # [31m <-- mem base --> time=7540 write: addr=ffff5 data=00000003[0m
 # [32m < -- id -- > time=7549 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=7553 got instruction: pc=80000034 instr=10a0001e [0m
-# time=7557 com_write_busy=1
 # [32m < -- id -- > time=7557 got instruction: pc=80000038 instr=00808021 [0m
 # [32m < -- id -- > time=7561 got instruction: pc=8000003c instr=00a09021 [0m
 # [32m < -- id -- > time=7565 got instruction: pc=80000040 instr=24b3ffff [0m
 # [32m < -- id -- > time=7569 got instruction: pc=80000044 instr=10000003 [0m
 # [32m < -- id -- > time=7573 got instruction: pc=80000048 instr=00008821 [0m
 # [32m < -- id -- > time=7577 got instruction: pc=80000054 instr=2610ffff [0m
-# time=7579 com_write_busy=0
 # [32m < -- id -- > time=7581 got instruction: pc=80000058 instr=02002021 [0m
 # [32m < -- id -- > time=7585 got instruction: pc=8000005c instr=0c000003 [0m
 # time=7585 reg16($s0)=00000002
@@ -1811,10 +1780,8 @@
 # [31m <-- mem base --> time=8044 write: addr=fffee data=00000000[0m
 # [32m < -- id -- > time=8053 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=8060 write: addr=fffed data=00000001[0m
-# time=8061 com_write_busy=1
 # [32m < -- id -- > time=8069 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=8076 write: addr=fffec data=00000002[0m
-# time=8083 com_write_busy=0
 # [32m < -- id -- > time=8085 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=8089 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=8096 write: addr=fffeb data=00000000[0m
@@ -1918,13 +1885,11 @@
 # time=8545 reg2($v0)=00000001
 # [32m < -- id -- > time=8553 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=8561 got instruction: pc=80000084 instr=8fb00014 [0m
-# time=8565 com_write_busy=1
 # [32m < -- id -- > time=8569 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=8577 got instruction: pc=8000008c instr=27bd0028 [0m
 # [32m < -- id -- > time=8581 got instruction: pc=80000064 instr=0212182a [0m
 # [32m < -- id -- > time=8585 got instruction: pc=80000068 instr=1060fff8 [0m
 # time=8585 reg29($sp)=803fffc0
-# time=8587 com_write_busy=0
 # [32m < -- id -- > time=8589 got instruction: pc=8000006c instr=02228821 [0m
 # [32m < -- id -- > time=8593 got instruction: pc=8000004c instr=12000010 [0m
 # [32m < -- id -- > time=8597 got instruction: pc=80000050 instr=8fbf0024 [0m
@@ -2031,11 +1996,9 @@
 # [31m <-- mem base --> time=9044 write: addr=fffef data=80000064[0m
 # [32m < -- id -- > time=9053 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=9060 write: addr=fffee data=00000000[0m
-# time=9069 com_write_busy=1
 # [32m < -- id -- > time=9069 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=9076 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=9085 got instruction: pc=80000024 instr=14400024 [0m
-# time=9091 com_write_busy=0
 # [31m <-- mem base --> time=9092 write: addr=fffec data=00000000[0m
 # [32m < -- id -- > time=9101 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=9105 got instruction: pc=8000002c instr=10800020 [0m
@@ -2143,11 +2106,9 @@
 # [32m < -- id -- > time=9553 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=9560 write: addr=ffff8 data=00000001[0m
 # [32m < -- id -- > time=9569 got instruction: pc=80000020 instr=afb10018 [0m
-# time=9573 com_write_busy=1
 # [31m <-- mem base --> time=9576 write: addr=ffff7 data=00000002[0m
 # [32m < -- id -- > time=9585 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=9592 write: addr=ffff6 data=00000000[0m
-# time=9595 com_write_busy=0
 # [32m < -- id -- > time=9601 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=9605 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=9612 write: addr=ffff5 data=00000004[0m
@@ -2247,7 +2208,6 @@
 # [32m < -- id -- > time=10069 got instruction: pc=80000058 instr=02002021 [0m
 # [32m < -- id -- > time=10073 got instruction: pc=8000005c instr=0c000003 [0m
 # time=10073 reg16($s0)=00000001
-# time=10077 com_write_busy=1
 # [32m < -- id -- > time=10077 got instruction: pc=80000060 instr=02602821 [0m
 # time=10077 reg4($a0)=00000001
 # [32m < -- id -- > time=10081 got instruction: pc=8000000c instr=27bdffd8 [0m
@@ -2256,7 +2216,6 @@
 # time=10089 reg29($sp)=803fff98
 # [32m < -- id -- > time=10093 got instruction: pc=80000018 instr=afb30020 [0m
 # time=10093 reg2($v0)=00000000
-# time=10099 com_write_busy=0
 # [31m <-- mem base --> time=10100 write: addr=fffef data=80000064[0m
 # [32m < -- id -- > time=10109 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=10116 write: addr=fffee data=00000000[0m
@@ -2359,11 +2318,9 @@
 # [32m < -- id -- > time=10565 got instruction: pc=80000018 instr=afb30020 [0m
 # time=10565 reg2($v0)=00000000
 # [31m <-- mem base --> time=10572 write: addr=ffff9 data=80000064[0m
-# time=10581 com_write_busy=1
 # [32m < -- id -- > time=10581 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=10588 write: addr=ffff8 data=00000001[0m
 # [32m < -- id -- > time=10597 got instruction: pc=80000020 instr=afb10018 [0m
-# time=10603 com_write_busy=0
 # [31m <-- mem base --> time=10604 write: addr=ffff7 data=00000002[0m
 # [32m < -- id -- > time=10613 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=10620 write: addr=ffff6 data=00000004[0m
@@ -2460,7 +2417,6 @@
 # time=11073 reg29($sp)=803fffc0
 # [32m < -- id -- > time=11077 got instruction: pc=8000006c instr=02228821 [0m
 # [32m < -- id -- > time=11081 got instruction: pc=8000004c instr=12000010 [0m
-# time=11085 com_write_busy=1
 # [32m < -- id -- > time=11085 got instruction: pc=80000050 instr=8fbf0024 [0m
 # [32m < -- id -- > time=11089 got instruction: pc=80000054 instr=2610ffff [0m
 # [32m < -- id -- > time=11097 got instruction: pc=80000058 instr=02002021 [0m
@@ -2468,7 +2424,6 @@
 # time=11101 reg16($s0)=00000000
 # [32m < -- id -- > time=11105 got instruction: pc=80000060 instr=02602821 [0m
 # time=11105 reg4($a0)=00000000
-# time=11107 com_write_busy=0
 # [32m < -- id -- > time=11109 got instruction: pc=8000000c instr=27bdffd8 [0m
 # [32m < -- id -- > time=11113 got instruction: pc=80000010 instr=0085102a [0m
 # [32m < -- id -- > time=11117 got instruction: pc=80000014 instr=afbf0024 [0m
@@ -2570,12 +2525,10 @@
 # [31m <-- mem base --> time=11564 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=11573 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=11580 write: addr=fffec data=00000000[0m
-# time=11589 com_write_busy=1
 # [32m < -- id -- > time=11589 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=11593 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=11600 write: addr=fffeb data=00000001[0m
 # [32m < -- id -- > time=11609 got instruction: pc=80000030 instr=00000000 [0m
-# time=11611 com_write_busy=0
 # [32m < -- id -- > time=11613 got instruction: pc=80000034 instr=10a0001e [0m
 # [32m < -- id -- > time=11617 got instruction: pc=80000038 instr=00808021 [0m
 # [32m < -- id -- > time=11621 got instruction: pc=800000b0 instr=1000ffef [0m
@@ -2679,14 +2632,12 @@
 # [32m < -- id -- > time=12081 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=12085 got instruction: pc=80000034 instr=10a0001e [0m
 # [32m < -- id -- > time=12089 got instruction: pc=80000038 instr=00808021 [0m
-# time=12093 com_write_busy=1
 # [32m < -- id -- > time=12093 got instruction: pc=8000003c instr=00a09021 [0m
 # [32m < -- id -- > time=12097 got instruction: pc=80000040 instr=24b3ffff [0m
 # [32m < -- id -- > time=12101 got instruction: pc=80000044 instr=10000003 [0m
 # [32m < -- id -- > time=12105 got instruction: pc=80000048 instr=00008821 [0m
 # [32m < -- id -- > time=12109 got instruction: pc=80000054 instr=2610ffff [0m
 # [32m < -- id -- > time=12113 got instruction: pc=80000058 instr=02002021 [0m
-# time=12115 com_write_busy=0
 # [32m < -- id -- > time=12117 got instruction: pc=8000005c instr=0c000003 [0m
 # time=12117 reg16($s0)=00000000
 # [32m < -- id -- > time=12121 got instruction: pc=80000060 instr=02602821 [0m
@@ -2789,7 +2740,6 @@
 # [32m < -- id -- > time=12585 got instruction: pc=80000034 instr=10a0001e [0m
 # [32m < -- id -- > time=12589 got instruction: pc=80000038 instr=00808021 [0m
 # [32m < -- id -- > time=12593 got instruction: pc=8000003c instr=00a09021 [0m
-# time=12597 com_write_busy=1
 # [32m < -- id -- > time=12597 got instruction: pc=80000040 instr=24b3ffff [0m
 # time=12597 reg16($s0)=00000005
 # [32m < -- id -- > time=12601 got instruction: pc=80000044 instr=10000003 [0m
@@ -2798,7 +2748,6 @@
 # [32m < -- id -- > time=12613 got instruction: pc=80000058 instr=02002021 [0m
 # [32m < -- id -- > time=12617 got instruction: pc=8000005c instr=0c000003 [0m
 # time=12617 reg16($s0)=00000004
-# time=12619 com_write_busy=0
 # [32m < -- id -- > time=12621 got instruction: pc=80000060 instr=02602821 [0m
 # time=12621 reg4($a0)=00000004
 # [32m < -- id -- > time=12625 got instruction: pc=8000000c instr=27bdffd8 [0m
@@ -2897,13 +2846,11 @@
 # [32m < -- id -- > time=13085 got instruction: pc=800000b4 instr=24110001 [0m
 # [32m < -- id -- > time=13089 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=13093 got instruction: pc=80000074 instr=02201021 [0m
-# time=13101 com_write_busy=1
 # [32m < -- id -- > time=13101 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=13105 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=13105 reg2($v0)=00000001
 # [32m < -- id -- > time=13113 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=13121 got instruction: pc=80000084 instr=8fb00014 [0m
-# time=13123 com_write_busy=0
 # [32m < -- id -- > time=13129 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=13137 got instruction: pc=8000008c instr=27bd0028 [0m
 # [32m < -- id -- > time=13141 got instruction: pc=80000064 instr=0212182a [0m
@@ -3001,7 +2948,6 @@
 # [32m < -- id -- > time=13585 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=13593 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=13601 got instruction: pc=80000088 instr=03e00008 [0m
-# time=13605 com_write_busy=1
 # [32m < -- id -- > time=13609 got instruction: pc=8000008c instr=27bd0028 [0m
 # time=13609 reg16($s0)=00000004
 # [32m < -- id -- > time=13613 got instruction: pc=80000064 instr=0212182a [0m
@@ -3010,7 +2956,6 @@
 # [32m < -- id -- > time=13621 got instruction: pc=8000006c instr=02228821 [0m
 # time=13621 reg3($v1)=00000000
 # [32m < -- id -- > time=13625 got instruction: pc=8000004c instr=12000010 [0m
-# time=13627 com_write_busy=0
 # [32m < -- id -- > time=13629 got instruction: pc=80000050 instr=8fbf0024 [0m
 # [32m < -- id -- > time=13633 got instruction: pc=80000054 instr=2610ffff [0m
 # [32m < -- id -- > time=13641 got instruction: pc=80000058 instr=02002021 [0m
@@ -3111,13 +3056,11 @@
 # [32m < -- id -- > time=14097 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=14101 got instruction: pc=80000034 instr=10a0001e [0m
 # [32m < -- id -- > time=14105 got instruction: pc=80000038 instr=00808021 [0m
-# time=14109 com_write_busy=1
 # [32m < -- id -- > time=14109 got instruction: pc=800000b0 instr=1000ffef [0m
 # [32m < -- id -- > time=14113 got instruction: pc=800000b4 instr=24110001 [0m
 # [32m < -- id -- > time=14117 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=14121 got instruction: pc=80000074 instr=02201021 [0m
 # [32m < -- id -- > time=14129 got instruction: pc=80000078 instr=8fb30020 [0m
-# time=14131 com_write_busy=0
 # [32m < -- id -- > time=14133 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=14133 reg2($v0)=00000001
 # [32m < -- id -- > time=14141 got instruction: pc=80000080 instr=8fb10018 [0m
@@ -3224,7 +3167,6 @@
 # time=14605 reg16($s0)=00000001
 # [32m < -- id -- > time=14609 got instruction: pc=80000060 instr=02602821 [0m
 # time=14609 reg4($a0)=00000001
-# time=14613 com_write_busy=1
 # [32m < -- id -- > time=14613 got instruction: pc=8000000c instr=27bdffd8 [0m
 # [32m < -- id -- > time=14617 got instruction: pc=80000010 instr=0085102a [0m
 # time=14617 reg5($a1)=00000000
@@ -3232,7 +3174,6 @@
 # time=14621 reg29($sp)=803fff98
 # [32m < -- id -- > time=14625 got instruction: pc=80000018 instr=afb30020 [0m
 # [31m <-- mem base --> time=14632 write: addr=fffef data=80000064[0m
-# time=14635 com_write_busy=0
 # [32m < -- id -- > time=14641 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=14648 write: addr=fffee data=00000000[0m
 # [32m < -- id -- > time=14657 got instruction: pc=80000020 instr=afb10018 [0m
@@ -3335,11 +3276,9 @@
 # time=15097 reg2($v0)=00000000
 # [31m <-- mem base --> time=15104 write: addr=ffff9 data=80000064[0m
 # [32m < -- id -- > time=15113 got instruction: pc=8000001c instr=afb2001c [0m
-# time=15117 com_write_busy=1
 # [31m <-- mem base --> time=15120 write: addr=ffff8 data=00000001[0m
 # [32m < -- id -- > time=15129 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=15136 write: addr=ffff7 data=00000002[0m
-# time=15139 com_write_busy=0
 # [32m < -- id -- > time=15145 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=15152 write: addr=ffff6 data=00000009[0m
 # [32m < -- id -- > time=15161 got instruction: pc=80000028 instr=afb00014 [0m
@@ -3445,10 +3384,8 @@
 # [31m <-- mem ext --> time=15604 write: addr=00003 data=800000e8[0m
 # [32m < -- id -- > time=15613 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem ext --> time=15620 write: addr=00002 data=00000000[0m
-# time=15621 com_write_busy=1
 # [32m < -- id -- > time=15629 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem ext --> time=15636 write: addr=00001 data=00000000[0m
-# time=15643 com_write_busy=0
 # [32m < -- id -- > time=15645 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem ext --> time=15652 write: addr=00000 data=00000000[0m
 # [32m < -- id -- > time=15661 got instruction: pc=80000028 instr=afb00014 [0m
@@ -3552,10 +3489,8 @@
 # [31m <-- mem base --> time=16108 write: addr=fffee data=00000000[0m
 # [32m < -- id -- > time=16117 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=16124 write: addr=fffed data=00000001[0m
-# time=16125 com_write_busy=1
 # [32m < -- id -- > time=16133 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=16140 write: addr=fffec data=00000001[0m
-# time=16147 com_write_busy=0
 # [32m < -- id -- > time=16149 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=16153 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=16160 write: addr=fffeb data=00000002[0m
@@ -3652,12 +3587,10 @@
 # [32m < -- id -- > time=16613 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=16613 reg2($v0)=00000001
 # [32m < -- id -- > time=16621 got instruction: pc=80000080 instr=8fb10018 [0m
-# time=16629 com_write_busy=1
 # [32m < -- id -- > time=16629 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=16637 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=16645 got instruction: pc=8000008c instr=27bd0028 [0m
 # [32m < -- id -- > time=16649 got instruction: pc=80000064 instr=0212182a [0m
-# time=16651 com_write_busy=0
 # [32m < -- id -- > time=16653 got instruction: pc=80000068 instr=1060fff8 [0m
 # time=16653 reg29($sp)=803fffc0
 # [32m < -- id -- > time=16657 got instruction: pc=8000006c instr=02228821 [0m
@@ -3767,11 +3700,9 @@
 # time=17113 reg2($v0)=00000000
 # [31m <-- mem base --> time=17120 write: addr=fffef data=80000064[0m
 # [32m < -- id -- > time=17129 got instruction: pc=8000001c instr=afb2001c [0m
-# time=17133 com_write_busy=1
 # [31m <-- mem base --> time=17136 write: addr=fffee data=00000000[0m
 # [32m < -- id -- > time=17145 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=17152 write: addr=fffed data=00000001[0m
-# time=17155 com_write_busy=0
 # [32m < -- id -- > time=17161 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=17168 write: addr=fffec data=00000001[0m
 # [32m < -- id -- > time=17177 got instruction: pc=80000028 instr=afb00014 [0m
@@ -3874,11 +3805,9 @@
 # [32m < -- id -- > time=17617 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=17624 write: addr=ffff7 data=00000002[0m
 # [32m < -- id -- > time=17633 got instruction: pc=80000024 instr=14400024 [0m
-# time=17637 com_write_busy=1
 # [31m <-- mem base --> time=17640 write: addr=ffff6 data=00000007[0m
 # [32m < -- id -- > time=17649 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=17653 got instruction: pc=8000002c instr=10800020 [0m
-# time=17659 com_write_busy=0
 # [31m <-- mem base --> time=17660 write: addr=ffff5 data=00000002[0m
 # [32m < -- id -- > time=17669 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=17673 got instruction: pc=80000034 instr=10a0001e [0m
@@ -3976,7 +3905,6 @@
 # [32m < -- id -- > time=18117 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=18125 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=18133 got instruction: pc=80000088 instr=03e00008 [0m
-# time=18141 com_write_busy=1
 # [32m < -- id -- > time=18141 got instruction: pc=8000008c instr=27bd0028 [0m
 # time=18141 reg16($s0)=00000002
 # [32m < -- id -- > time=18145 got instruction: pc=80000064 instr=0212182a [0m
@@ -3986,7 +3914,6 @@
 # time=18153 reg3($v1)=00000000
 # [32m < -- id -- > time=18157 got instruction: pc=8000004c instr=12000010 [0m
 # [32m < -- id -- > time=18161 got instruction: pc=80000050 instr=8fbf0024 [0m
-# time=18163 com_write_busy=0
 # [32m < -- id -- > time=18165 got instruction: pc=80000054 instr=2610ffff [0m
 # [32m < -- id -- > time=18173 got instruction: pc=80000058 instr=02002021 [0m
 # time=18173 reg31($ra)=800000e8
@@ -4095,11 +4022,9 @@
 # [32m < -- id -- > time=18637 got instruction: pc=800000d0 instr=afbf0014 [0m
 # [32m < -- id -- > time=18641 got instruction: pc=800000d4 instr=afbe0010 [0m
 # time=18641 reg29($sp)=80400010
-# time=18645 com_write_busy=1
 # [31m <-- mem ext --> time=18648 write: addr=00009 data=800000e8[0m
 # [32m < -- id -- > time=18657 got instruction: pc=800000d8 instr=03a0f021 [0m
 # [31m <-- mem ext --> time=18664 write: addr=00008 data=80400028[0m
-# time=18667 com_write_busy=0
 # [32m < -- id -- > time=18673 got instruction: pc=800000dc instr=24040005 [0m
 # [32m < -- id -- > time=18677 got instruction: pc=800000e0 instr=0c000003 [0m
 # [32m < -- id -- > time=18681 got instruction: pc=800000e4 instr=24050002 [0m
@@ -4201,7 +4126,6 @@
 # [32m < -- id -- > time=19141 got instruction: pc=8000006c instr=02228821 [0m
 # time=19141 reg3($v1)=00000000
 # [32m < -- id -- > time=19145 got instruction: pc=8000004c instr=12000010 [0m
-# time=19149 com_write_busy=1
 # [32m < -- id -- > time=19149 got instruction: pc=80000050 instr=8fbf0024 [0m
 # [32m < -- id -- > time=19153 got instruction: pc=80000054 instr=2610ffff [0m
 # [32m < -- id -- > time=19161 got instruction: pc=80000058 instr=02002021 [0m
@@ -4209,7 +4133,6 @@
 # time=19165 reg16($s0)=00000002
 # [32m < -- id -- > time=19169 got instruction: pc=80000060 instr=02602821 [0m
 # time=19169 reg4($a0)=00000002
-# time=19171 com_write_busy=0
 # [32m < -- id -- > time=19173 got instruction: pc=8000000c instr=27bdffd8 [0m
 # [32m < -- id -- > time=19177 got instruction: pc=80000010 instr=0085102a [0m
 # [32m < -- id -- > time=19181 got instruction: pc=80000014 instr=afbf0024 [0m
@@ -4306,11 +4229,9 @@
 # [32m < -- id -- > time=19633 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=19640 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=19649 got instruction: pc=80000024 instr=14400024 [0m
-# time=19653 com_write_busy=1
 # [31m <-- mem base --> time=19656 write: addr=fffec data=00000003[0m
 # [32m < -- id -- > time=19665 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=19669 got instruction: pc=8000002c instr=10800020 [0m
-# time=19675 com_write_busy=0
 # [31m <-- mem base --> time=19676 write: addr=fffeb data=00000000[0m
 # [32m < -- id -- > time=19685 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=19689 got instruction: pc=800000b0 instr=1000ffef [0m
@@ -4413,7 +4334,6 @@
 # [32m < -- id -- > time=20133 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=20141 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=20149 got instruction: pc=80000088 instr=03e00008 [0m
-# time=20157 com_write_busy=1
 # [32m < -- id -- > time=20157 got instruction: pc=8000008c instr=27bd0028 [0m
 # [32m < -- id -- > time=20161 got instruction: pc=80000064 instr=0212182a [0m
 # [32m < -- id -- > time=20165 got instruction: pc=80000068 instr=1060fff8 [0m
@@ -4421,7 +4341,6 @@
 # [32m < -- id -- > time=20169 got instruction: pc=8000006c instr=02228821 [0m
 # [32m < -- id -- > time=20173 got instruction: pc=8000004c instr=12000010 [0m
 # [32m < -- id -- > time=20177 got instruction: pc=80000050 instr=8fbf0024 [0m
-# time=20179 com_write_busy=0
 # [32m < -- id -- > time=20181 got instruction: pc=80000054 instr=2610ffff [0m
 # [32m < -- id -- > time=20189 got instruction: pc=80000058 instr=02002021 [0m
 # [32m < -- id -- > time=20193 got instruction: pc=8000005c instr=0c000003 [0m
@@ -4521,7 +4440,6 @@
 # [32m < -- id -- > time=20645 got instruction: pc=8000004c instr=12000010 [0m
 # [32m < -- id -- > time=20649 got instruction: pc=80000050 instr=8fbf0024 [0m
 # [32m < -- id -- > time=20653 got instruction: pc=80000054 instr=2610ffff [0m
-# time=20661 com_write_busy=1
 # [32m < -- id -- > time=20661 got instruction: pc=80000058 instr=02002021 [0m
 # time=20661 reg31($ra)=800000e8
 # [32m < -- id -- > time=20665 got instruction: pc=8000005c instr=0c000003 [0m
@@ -4534,7 +4452,6 @@
 # time=20677 reg5($a1)=00000001
 # [32m < -- id -- > time=20681 got instruction: pc=80000014 instr=afbf0024 [0m
 # time=20681 reg29($sp)=803fffc0
-# time=20683 com_write_busy=0
 # [32m < -- id -- > time=20685 got instruction: pc=80000018 instr=afb30020 [0m
 # time=20685 reg2($v0)=00000000
 # [31m <-- mem base --> time=20692 write: addr=ffff9 data=80000064[0m
@@ -4628,13 +4545,11 @@
 # time=21145 reg2($v0)=00000001
 # [32m < -- id -- > time=21153 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=21161 got instruction: pc=80000084 instr=8fb00014 [0m
-# time=21165 com_write_busy=1
 # [32m < -- id -- > time=21169 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=21177 got instruction: pc=8000008c instr=27bd0028 [0m
 # [32m < -- id -- > time=21181 got instruction: pc=80000064 instr=0212182a [0m
 # [32m < -- id -- > time=21185 got instruction: pc=80000068 instr=1060fff8 [0m
 # time=21185 reg29($sp)=803fffc0
-# time=21187 com_write_busy=0
 # [32m < -- id -- > time=21189 got instruction: pc=8000006c instr=02228821 [0m
 # time=21189 reg3($v1)=00000001
 # [32m < -- id -- > time=21193 got instruction: pc=80000070 instr=8fbf0024 [0m
@@ -4740,13 +4655,11 @@
 # [32m < -- id -- > time=21657 got instruction: pc=8000006c instr=02228821 [0m
 # [32m < -- id -- > time=21661 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=21665 got instruction: pc=80000074 instr=02201021 [0m
-# time=21669 com_write_busy=1
 # [32m < -- id -- > time=21673 got instruction: pc=80000078 instr=8fb30020 [0m
 # time=21673 reg31($ra)=800000e8
 # [32m < -- id -- > time=21677 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=21677 reg2($v0)=0000000a
 # [32m < -- id -- > time=21685 got instruction: pc=80000080 instr=8fb10018 [0m
-# time=21691 com_write_busy=0
 # [32m < -- id -- > time=21693 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=21701 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=21709 got instruction: pc=8000008c instr=27bd0028 [0m
@@ -4851,13 +4764,11 @@
 # [32m < -- id -- > time=22161 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=22165 got instruction: pc=80000034 instr=10a0001e [0m
 # [32m < -- id -- > time=22169 got instruction: pc=80000038 instr=00808021 [0m
-# time=22173 com_write_busy=1
 # [32m < -- id -- > time=22173 got instruction: pc=800000b0 instr=1000ffef [0m
 # [32m < -- id -- > time=22177 got instruction: pc=800000b4 instr=24110001 [0m
 # [32m < -- id -- > time=22181 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=22185 got instruction: pc=80000074 instr=02201021 [0m
 # [32m < -- id -- > time=22193 got instruction: pc=80000078 instr=8fb30020 [0m
-# time=22195 com_write_busy=0
 # [32m < -- id -- > time=22197 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=22197 reg2($v0)=00000001
 # [32m < -- id -- > time=22205 got instruction: pc=80000080 instr=8fb10018 [0m
@@ -4956,7 +4867,6 @@
 # [32m < -- id -- > time=22661 got instruction: pc=8000004c instr=12000010 [0m
 # [32m < -- id -- > time=22665 got instruction: pc=80000050 instr=8fbf0024 [0m
 # [32m < -- id -- > time=22669 got instruction: pc=80000054 instr=2610ffff [0m
-# time=22677 com_write_busy=1
 # [32m < -- id -- > time=22677 got instruction: pc=80000058 instr=02002021 [0m
 # [32m < -- id -- > time=22681 got instruction: pc=8000005c instr=0c000003 [0m
 # time=22681 reg16($s0)=00000000
@@ -4966,7 +4876,6 @@
 # [32m < -- id -- > time=22693 got instruction: pc=80000010 instr=0085102a [0m
 # [32m < -- id -- > time=22697 got instruction: pc=80000014 instr=afbf0024 [0m
 # time=22697 reg29($sp)=803fff98
-# time=22699 com_write_busy=0
 # [32m < -- id -- > time=22701 got instruction: pc=80000018 instr=afb30020 [0m
 # time=22701 reg2($v0)=00000000
 # [31m <-- mem base --> time=22708 write: addr=fffef data=80000064[0m
@@ -5067,12 +4976,10 @@
 # [32m < -- id -- > time=23169 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=23173 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=23180 write: addr=fffeb data=00000002[0m
-# time=23181 com_write_busy=1
 # [32m < -- id -- > time=23189 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=23193 got instruction: pc=80000034 instr=10a0001e [0m
 # [32m < -- id -- > time=23197 got instruction: pc=80000038 instr=00808021 [0m
 # [32m < -- id -- > time=23201 got instruction: pc=800000b0 instr=1000ffef [0m
-# time=23203 com_write_busy=0
 # [32m < -- id -- > time=23205 got instruction: pc=800000b4 instr=24110001 [0m
 # [32m < -- id -- > time=23209 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=23213 got instruction: pc=80000074 instr=02201021 [0m
@@ -5171,13 +5078,11 @@
 # [32m < -- id -- > time=23677 got instruction: pc=8000006c instr=02228821 [0m
 # time=23677 reg3($v1)=00000001
 # [32m < -- id -- > time=23681 got instruction: pc=80000070 instr=8fbf0024 [0m
-# time=23685 com_write_busy=1
 # [32m < -- id -- > time=23685 got instruction: pc=80000074 instr=02201021 [0m
 # [32m < -- id -- > time=23693 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=23697 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=23697 reg2($v0)=00000003
 # [32m < -- id -- > time=23705 got instruction: pc=80000080 instr=8fb10018 [0m
-# time=23707 com_write_busy=0
 # [32m < -- id -- > time=23713 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=23721 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=23729 got instruction: pc=8000008c instr=27bd0028 [0m
@@ -5282,11 +5187,9 @@
 # [31m <-- mem base --> time=24172 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=24181 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=24188 write: addr=fffec data=00000001[0m
-# time=24189 com_write_busy=1
 # [32m < -- id -- > time=24197 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=24201 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=24208 write: addr=fffeb data=00000000[0m
-# time=24211 com_write_busy=0
 # [32m < -- id -- > time=24217 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=24221 got instruction: pc=800000b0 instr=1000ffef [0m
 # [32m < -- id -- > time=24225 got instruction: pc=800000b4 instr=24110001 [0m
@@ -5390,14 +5293,12 @@
 # [32m < -- id -- > time=24685 got instruction: pc=80000064 instr=0212182a [0m
 # [32m < -- id -- > time=24689 got instruction: pc=80000068 instr=1060fff8 [0m
 # time=24689 reg29($sp)=803fffc0
-# time=24693 com_write_busy=1
 # [32m < -- id -- > time=24693 got instruction: pc=8000006c instr=02228821 [0m
 # time=24693 reg3($v1)=00000001
 # [32m < -- id -- > time=24697 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=24701 got instruction: pc=80000074 instr=02201021 [0m
 # [32m < -- id -- > time=24709 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=24713 got instruction: pc=8000007c instr=8fb2001c [0m
-# time=24715 com_write_busy=0
 # [32m < -- id -- > time=24721 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=24729 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=24737 got instruction: pc=80000088 instr=03e00008 [0m
@@ -5507,11 +5408,9 @@
 # [32m < -- id -- > time=25177 got instruction: pc=80000018 instr=afb30020 [0m
 # [31m <-- mem base --> time=25184 write: addr=fffef data=80000064[0m
 # [32m < -- id -- > time=25193 got instruction: pc=8000001c instr=afb2001c [0m
-# time=25197 com_write_busy=1
 # [31m <-- mem base --> time=25200 write: addr=fffee data=00000000[0m
 # [32m < -- id -- > time=25209 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=25216 write: addr=fffed data=00000001[0m
-# time=25219 com_write_busy=0
 # [32m < -- id -- > time=25225 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=25232 write: addr=fffec data=00000000[0m
 # [32m < -- id -- > time=25241 got instruction: pc=80000028 instr=afb00014 [0m
@@ -5608,13 +5507,11 @@
 # [32m < -- id -- > time=25689 got instruction: pc=800000b0 instr=1000ffef [0m
 # [32m < -- id -- > time=25693 got instruction: pc=800000b4 instr=24110001 [0m
 # [32m < -- id -- > time=25697 got instruction: pc=80000070 instr=8fbf0024 [0m
-# time=25701 com_write_busy=1
 # [32m < -- id -- > time=25701 got instruction: pc=80000074 instr=02201021 [0m
 # [32m < -- id -- > time=25709 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=25713 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=25713 reg2($v0)=00000001
 # [32m < -- id -- > time=25721 got instruction: pc=80000080 instr=8fb10018 [0m
-# time=25723 com_write_busy=0
 # [32m < -- id -- > time=25729 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=25737 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=25745 got instruction: pc=8000008c instr=27bd0028 [0m
@@ -5723,11 +5620,9 @@
 # time=26197 reg5($a1)=00000000
 # [32m < -- id -- > time=26201 got instruction: pc=80000014 instr=afbf0024 [0m
 # time=26201 reg29($sp)=803fff98
-# time=26205 com_write_busy=1
 # [32m < -- id -- > time=26205 got instruction: pc=80000018 instr=afb30020 [0m
 # [31m <-- mem base --> time=26212 write: addr=fffef data=80000064[0m
 # [32m < -- id -- > time=26221 got instruction: pc=8000001c instr=afb2001c [0m
-# time=26227 com_write_busy=0
 # [31m <-- mem base --> time=26228 write: addr=fffee data=00000000[0m
 # [32m < -- id -- > time=26237 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=26244 write: addr=fffed data=00000001[0m
@@ -5821,13 +5716,11 @@
 # [32m < -- id -- > time=26689 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=26696 write: addr=fffeb data=00000000[0m
 # [32m < -- id -- > time=26705 got instruction: pc=80000030 instr=00000000 [0m
-# time=26709 com_write_busy=1
 # [32m < -- id -- > time=26709 got instruction: pc=800000b0 instr=1000ffef [0m
 # [32m < -- id -- > time=26713 got instruction: pc=800000b4 instr=24110001 [0m
 # [32m < -- id -- > time=26717 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=26721 got instruction: pc=80000074 instr=02201021 [0m
 # [32m < -- id -- > time=26729 got instruction: pc=80000078 instr=8fb30020 [0m
-# time=26731 com_write_busy=0
 # [32m < -- id -- > time=26733 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=26733 reg2($v0)=00000001
 # [32m < -- id -- > time=26741 got instruction: pc=80000080 instr=8fb10018 [0m
@@ -5932,7 +5825,6 @@
 # [32m < -- id -- > time=27197 got instruction: pc=80000050 instr=8fbf0024 [0m
 # [32m < -- id -- > time=27201 got instruction: pc=80000054 instr=2610ffff [0m
 # [32m < -- id -- > time=27209 got instruction: pc=80000058 instr=02002021 [0m
-# time=27213 com_write_busy=1
 # [32m < -- id -- > time=27213 got instruction: pc=8000005c instr=0c000003 [0m
 # time=27213 reg16($s0)=00000000
 # [32m < -- id -- > time=27217 got instruction: pc=80000060 instr=02602821 [0m
@@ -5943,7 +5835,6 @@
 # time=27229 reg29($sp)=803fff98
 # [32m < -- id -- > time=27233 got instruction: pc=80000018 instr=afb30020 [0m
 # time=27233 reg2($v0)=00000000
-# time=27235 com_write_busy=0
 # [31m <-- mem base --> time=27240 write: addr=fffef data=80000064[0m
 # [32m < -- id -- > time=27249 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=27256 write: addr=fffee data=00000000[0m
@@ -6042,13 +5933,11 @@
 # [32m < -- id -- > time=27701 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=27705 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=27712 write: addr=fffeb data=00000000[0m
-# time=27717 com_write_busy=1
 # [32m < -- id -- > time=27721 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=27725 got instruction: pc=800000b0 instr=1000ffef [0m
 # [32m < -- id -- > time=27729 got instruction: pc=800000b4 instr=24110001 [0m
 # [32m < -- id -- > time=27733 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=27737 got instruction: pc=80000074 instr=02201021 [0m
-# time=27739 com_write_busy=0
 # [32m < -- id -- > time=27745 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=27749 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=27749 reg2($v0)=00000001
@@ -6153,14 +6042,12 @@
 # [32m < -- id -- > time=28201 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=28205 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=28212 write: addr=ffff5 data=00000004[0m
-# time=28221 com_write_busy=1
 # [32m < -- id -- > time=28221 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=28225 got instruction: pc=80000034 instr=10a0001e [0m
 # [32m < -- id -- > time=28229 got instruction: pc=80000038 instr=00808021 [0m
 # [32m < -- id -- > time=28233 got instruction: pc=8000003c instr=00a09021 [0m
 # [32m < -- id -- > time=28237 got instruction: pc=80000040 instr=24b3ffff [0m
 # [32m < -- id -- > time=28241 got instruction: pc=80000044 instr=10000003 [0m
-# time=28243 com_write_busy=0
 # [32m < -- id -- > time=28245 got instruction: pc=80000048 instr=00008821 [0m
 # [32m < -- id -- > time=28249 got instruction: pc=80000054 instr=2610ffff [0m
 # [32m < -- id -- > time=28253 got instruction: pc=80000058 instr=02002021 [0m
@@ -6262,11 +6149,9 @@
 # [31m <-- mem base --> time=28700 write: addr=fffef data=80000064[0m
 # [32m < -- id -- > time=28709 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=28716 write: addr=fffee data=00000000[0m
-# time=28725 com_write_busy=1
 # [32m < -- id -- > time=28725 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=28732 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=28741 got instruction: pc=80000024 instr=14400024 [0m
-# time=28747 com_write_busy=0
 # [31m <-- mem base --> time=28748 write: addr=fffec data=00000002[0m
 # [32m < -- id -- > time=28757 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=28761 got instruction: pc=8000002c instr=10800020 [0m
@@ -6369,12 +6254,10 @@
 # [31m <-- mem base --> time=29204 write: addr=ffff7 data=00000002[0m
 # [32m < -- id -- > time=29213 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=29220 write: addr=ffff6 data=00000004[0m
-# time=29229 com_write_busy=1
 # [32m < -- id -- > time=29229 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=29233 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=29240 write: addr=ffff5 data=00000003[0m
 # [32m < -- id -- > time=29249 got instruction: pc=80000030 instr=00000000 [0m
-# time=29251 com_write_busy=0
 # [32m < -- id -- > time=29253 got instruction: pc=80000034 instr=10a0001e [0m
 # [32m < -- id -- > time=29257 got instruction: pc=80000038 instr=00808021 [0m
 # [32m < -- id -- > time=29261 got instruction: pc=8000003c instr=00a09021 [0m
@@ -6478,11 +6361,9 @@
 # [32m < -- id -- > time=29721 got instruction: pc=80000018 instr=afb30020 [0m
 # time=29721 reg2($v0)=00000000
 # [31m <-- mem base --> time=29728 write: addr=fffef data=80000064[0m
-# time=29733 com_write_busy=1
 # [32m < -- id -- > time=29737 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=29744 write: addr=fffee data=00000000[0m
 # [32m < -- id -- > time=29753 got instruction: pc=80000020 instr=afb10018 [0m
-# time=29755 com_write_busy=0
 # [31m <-- mem base --> time=29760 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=29769 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=29776 write: addr=fffec data=00000002[0m
@@ -6584,12 +6465,10 @@
 # [32m < -- id -- > time=30225 got instruction: pc=800000b4 instr=24110001 [0m
 # [32m < -- id -- > time=30229 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=30233 got instruction: pc=80000074 instr=02201021 [0m
-# time=30237 com_write_busy=1
 # [32m < -- id -- > time=30241 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=30245 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=30245 reg2($v0)=00000001
 # [32m < -- id -- > time=30253 got instruction: pc=80000080 instr=8fb10018 [0m
-# time=30259 com_write_busy=0
 # [32m < -- id -- > time=30261 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=30269 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=30277 got instruction: pc=8000008c instr=27bd0028 [0m
@@ -6699,11 +6578,9 @@
 # [32m < -- id -- > time=30733 got instruction: pc=80000014 instr=afbf0024 [0m
 # time=30733 reg29($sp)=803fff98
 # [32m < -- id -- > time=30737 got instruction: pc=80000018 instr=afb30020 [0m
-# time=30741 com_write_busy=1
 # [31m <-- mem base --> time=30744 write: addr=fffef data=80000064[0m
 # [32m < -- id -- > time=30753 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=30760 write: addr=fffee data=00000000[0m
-# time=30763 com_write_busy=0
 # [32m < -- id -- > time=30769 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=30776 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=30785 got instruction: pc=80000024 instr=14400024 [0m
@@ -6811,10 +6688,8 @@
 # time=31233 reg29($sp)=803fffc0
 # [32m < -- id -- > time=31237 got instruction: pc=80000018 instr=afb30020 [0m
 # [31m <-- mem base --> time=31244 write: addr=ffff9 data=80000064[0m
-# time=31245 com_write_busy=1
 # [32m < -- id -- > time=31253 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=31260 write: addr=ffff8 data=00000001[0m
-# time=31267 com_write_busy=0
 # [32m < -- id -- > time=31269 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=31276 write: addr=ffff7 data=00000002[0m
 # [32m < -- id -- > time=31285 got instruction: pc=80000024 instr=14400024 [0m
@@ -6911,13 +6786,11 @@
 # [32m < -- id -- > time=31741 got instruction: pc=80000064 instr=0212182a [0m
 # [32m < -- id -- > time=31745 got instruction: pc=80000068 instr=1060fff8 [0m
 # time=31745 reg29($sp)=803fffc0
-# time=31749 com_write_busy=1
 # [32m < -- id -- > time=31749 got instruction: pc=8000006c instr=02228821 [0m
 # [32m < -- id -- > time=31753 got instruction: pc=8000004c instr=12000010 [0m
 # [32m < -- id -- > time=31757 got instruction: pc=80000050 instr=8fbf0024 [0m
 # [32m < -- id -- > time=31761 got instruction: pc=80000054 instr=2610ffff [0m
 # [32m < -- id -- > time=31769 got instruction: pc=80000058 instr=02002021 [0m
-# time=31771 com_write_busy=0
 # [32m < -- id -- > time=31773 got instruction: pc=8000005c instr=0c000003 [0m
 # time=31773 reg16($s0)=00000001
 # [32m < -- id -- > time=31777 got instruction: pc=80000060 instr=02602821 [0m
@@ -7021,7 +6894,6 @@
 # time=32245 reg16($s0)=00000003
 # [32m < -- id -- > time=32249 got instruction: pc=80000060 instr=02602821 [0m
 # time=32249 reg4($a0)=00000003
-# time=32253 com_write_busy=1
 # [32m < -- id -- > time=32253 got instruction: pc=8000000c instr=27bdffd8 [0m
 # time=32253 reg31($ra)=80000064
 # [32m < -- id -- > time=32257 got instruction: pc=80000010 instr=0085102a [0m
@@ -7031,7 +6903,6 @@
 # [32m < -- id -- > time=32265 got instruction: pc=80000018 instr=afb30020 [0m
 # time=32265 reg2($v0)=00000000
 # [31m <-- mem base --> time=32272 write: addr=ffff9 data=80000064[0m
-# time=32275 com_write_busy=0
 # [32m < -- id -- > time=32281 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=32288 write: addr=ffff8 data=00000001[0m
 # [32m < -- id -- > time=32297 got instruction: pc=80000020 instr=afb10018 [0m
@@ -7124,14 +6995,12 @@
 # time=32733 reg2($v0)=00000001
 # [32m < -- id -- > time=32741 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=32749 got instruction: pc=80000084 instr=8fb00014 [0m
-# time=32757 com_write_busy=1
 # [32m < -- id -- > time=32757 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=32765 got instruction: pc=8000008c instr=27bd0028 [0m
 # [32m < -- id -- > time=32769 got instruction: pc=80000064 instr=0212182a [0m
 # [32m < -- id -- > time=32773 got instruction: pc=80000068 instr=1060fff8 [0m
 # time=32773 reg29($sp)=803fffc0
 # [32m < -- id -- > time=32777 got instruction: pc=8000006c instr=02228821 [0m
-# time=32779 com_write_busy=0
 # [32m < -- id -- > time=32781 got instruction: pc=8000004c instr=12000010 [0m
 # [32m < -- id -- > time=32785 got instruction: pc=80000050 instr=8fbf0024 [0m
 # [32m < -- id -- > time=32789 got instruction: pc=80000054 instr=2610ffff [0m
@@ -7238,11 +7107,9 @@
 # [32m < -- id -- > time=33241 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=33248 write: addr=fffee data=00000000[0m
 # [32m < -- id -- > time=33257 got instruction: pc=80000020 instr=afb10018 [0m
-# time=33261 com_write_busy=1
 # [31m <-- mem base --> time=33264 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=33273 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=33280 write: addr=fffec data=00000000[0m
-# time=33283 com_write_busy=0
 # [32m < -- id -- > time=33289 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=33293 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=33300 write: addr=fffeb data=00000001[0m
@@ -7345,12 +7212,10 @@
 # [32m < -- id -- > time=33745 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=33752 write: addr=ffff6 data=00000009[0m
 # [32m < -- id -- > time=33761 got instruction: pc=80000028 instr=afb00014 [0m
-# time=33765 com_write_busy=1
 # [32m < -- id -- > time=33765 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=33772 write: addr=ffff5 data=00000001[0m
 # [32m < -- id -- > time=33781 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=33785 got instruction: pc=80000034 instr=10a0001e [0m
-# time=33787 com_write_busy=0
 # [32m < -- id -- > time=33789 got instruction: pc=80000038 instr=00808021 [0m
 # [32m < -- id -- > time=33793 got instruction: pc=8000003c instr=00a09021 [0m
 # [32m < -- id -- > time=33797 got instruction: pc=80000040 instr=24b3ffff [0m
@@ -7455,12 +7320,10 @@
 # [31m <-- mem ext --> time=34252 write: addr=00000 data=00000000[0m
 # [32m < -- id -- > time=34261 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=34265 got instruction: pc=8000002c instr=10800020 [0m
-# time=34269 com_write_busy=1
 # [31m <-- mem base --> time=34272 write: addr=fffff data=00000000[0m
 # [32m < -- id -- > time=34281 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=34285 got instruction: pc=80000034 instr=10a0001e [0m
 # [32m < -- id -- > time=34289 got instruction: pc=80000038 instr=00808021 [0m
-# time=34291 com_write_busy=0
 # [32m < -- id -- > time=34293 got instruction: pc=8000003c instr=00a09021 [0m
 # [32m < -- id -- > time=34297 got instruction: pc=80000040 instr=24b3ffff [0m
 # time=34297 reg16($s0)=00000005
@@ -7562,14 +7425,12 @@
 # [32m < -- id -- > time=34753 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=34760 write: addr=fffeb data=00000002[0m
 # [32m < -- id -- > time=34769 got instruction: pc=80000030 instr=00000000 [0m
-# time=34773 com_write_busy=1
 # [32m < -- id -- > time=34773 got instruction: pc=80000034 instr=10a0001e [0m
 # [32m < -- id -- > time=34777 got instruction: pc=80000038 instr=00808021 [0m
 # [32m < -- id -- > time=34781 got instruction: pc=800000b0 instr=1000ffef [0m
 # [32m < -- id -- > time=34785 got instruction: pc=800000b4 instr=24110001 [0m
 # [32m < -- id -- > time=34789 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=34793 got instruction: pc=80000074 instr=02201021 [0m
-# time=34795 com_write_busy=0
 # [32m < -- id -- > time=34801 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=34805 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=34805 reg2($v0)=00000001
@@ -7667,12 +7528,10 @@
 # [32m < -- id -- > time=35261 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=35265 got instruction: pc=80000074 instr=02201021 [0m
 # [32m < -- id -- > time=35273 got instruction: pc=80000078 instr=8fb30020 [0m
-# time=35277 com_write_busy=1
 # [32m < -- id -- > time=35277 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=35277 reg2($v0)=00000004
 # [32m < -- id -- > time=35285 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=35293 got instruction: pc=80000084 instr=8fb00014 [0m
-# time=35299 com_write_busy=0
 # [32m < -- id -- > time=35301 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=35309 got instruction: pc=8000008c instr=27bd0028 [0m
 # time=35309 reg16($s0)=00000004
@@ -7777,12 +7636,10 @@
 # [32m < -- id -- > time=35761 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=35768 write: addr=fffec data=00000001[0m
 # [32m < -- id -- > time=35777 got instruction: pc=80000028 instr=afb00014 [0m
-# time=35781 com_write_busy=1
 # [32m < -- id -- > time=35781 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=35788 write: addr=fffeb data=00000001[0m
 # [32m < -- id -- > time=35797 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=35801 got instruction: pc=80000034 instr=10a0001e [0m
-# time=35803 com_write_busy=0
 # [32m < -- id -- > time=35805 got instruction: pc=80000038 instr=00808021 [0m
 # [32m < -- id -- > time=35809 got instruction: pc=800000b0 instr=1000ffef [0m
 # [32m < -- id -- > time=35813 got instruction: pc=800000b4 instr=24110001 [0m
@@ -7886,7 +7743,6 @@
 # [32m < -- id -- > time=36273 got instruction: pc=80000034 instr=10a0001e [0m
 # [32m < -- id -- > time=36277 got instruction: pc=80000038 instr=00808021 [0m
 # [32m < -- id -- > time=36281 got instruction: pc=8000003c instr=00a09021 [0m
-# time=36285 com_write_busy=1
 # [32m < -- id -- > time=36285 got instruction: pc=80000040 instr=24b3ffff [0m
 # [32m < -- id -- > time=36289 got instruction: pc=80000044 instr=10000003 [0m
 # [32m < -- id -- > time=36293 got instruction: pc=80000048 instr=00008821 [0m
@@ -7894,7 +7750,6 @@
 # [32m < -- id -- > time=36301 got instruction: pc=80000058 instr=02002021 [0m
 # [32m < -- id -- > time=36305 got instruction: pc=8000005c instr=0c000003 [0m
 # time=36305 reg16($s0)=00000001
-# time=36307 com_write_busy=0
 # [32m < -- id -- > time=36309 got instruction: pc=80000060 instr=02602821 [0m
 # time=36309 reg4($a0)=00000001
 # [32m < -- id -- > time=36313 got instruction: pc=8000000c instr=27bdffd8 [0m
@@ -7998,7 +7853,6 @@
 # time=36781 reg4($a0)=00000001
 # [32m < -- id -- > time=36785 got instruction: pc=8000000c instr=27bdffd8 [0m
 # time=36785 reg31($ra)=80000064
-# time=36789 com_write_busy=1
 # [32m < -- id -- > time=36789 got instruction: pc=80000010 instr=0085102a [0m
 # time=36789 reg5($a1)=00000001
 # [32m < -- id -- > time=36793 got instruction: pc=80000014 instr=afbf0024 [0m
@@ -8006,7 +7860,6 @@
 # [32m < -- id -- > time=36797 got instruction: pc=80000018 instr=afb30020 [0m
 # time=36797 reg2($v0)=00000000
 # [31m <-- mem base --> time=36804 write: addr=ffff9 data=80000064[0m
-# time=36811 com_write_busy=0
 # [32m < -- id -- > time=36813 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=36820 write: addr=ffff8 data=00000001[0m
 # [32m < -- id -- > time=36829 got instruction: pc=80000020 instr=afb10018 [0m
@@ -8109,14 +7962,12 @@
 # [32m < -- id -- > time=37285 got instruction: pc=8000000c instr=27bdffd8 [0m
 # [32m < -- id -- > time=37289 got instruction: pc=80000010 instr=0085102a [0m
 # time=37289 reg5($a1)=00000002
-# time=37293 com_write_busy=1
 # [32m < -- id -- > time=37293 got instruction: pc=80000014 instr=afbf0024 [0m
 # time=37293 reg29($sp)=803fffe8
 # [32m < -- id -- > time=37297 got instruction: pc=80000018 instr=afb30020 [0m
 # time=37297 reg2($v0)=00000000
 # [31m <-- mem ext --> time=37304 write: addr=00003 data=800000e8[0m
 # [32m < -- id -- > time=37313 got instruction: pc=8000001c instr=afb2001c [0m
-# time=37315 com_write_busy=0
 # [31m <-- mem ext --> time=37320 write: addr=00002 data=00000000[0m
 # [32m < -- id -- > time=37329 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem ext --> time=37336 write: addr=00001 data=00000000[0m
@@ -8219,11 +8070,9 @@
 # [32m < -- id -- > time=37785 got instruction: pc=80000018 instr=afb30020 [0m
 # time=37785 reg2($v0)=00000000
 # [31m <-- mem base --> time=37792 write: addr=fffef data=80000064[0m
-# time=37797 com_write_busy=1
 # [32m < -- id -- > time=37801 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=37808 write: addr=fffee data=00000000[0m
 # [32m < -- id -- > time=37817 got instruction: pc=80000020 instr=afb10018 [0m
-# time=37819 com_write_busy=0
 # [31m <-- mem base --> time=37824 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=37833 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=37840 write: addr=fffec data=00000001[0m
@@ -8318,13 +8167,11 @@
 # [32m < -- id -- > time=38289 got instruction: pc=800000b0 instr=1000ffef [0m
 # [32m < -- id -- > time=38293 got instruction: pc=800000b4 instr=24110001 [0m
 # [32m < -- id -- > time=38297 got instruction: pc=80000070 instr=8fbf0024 [0m
-# time=38301 com_write_busy=1
 # [32m < -- id -- > time=38301 got instruction: pc=80000074 instr=02201021 [0m
 # [32m < -- id -- > time=38309 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=38313 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=38313 reg2($v0)=00000001
 # [32m < -- id -- > time=38321 got instruction: pc=80000080 instr=8fb10018 [0m
-# time=38323 com_write_busy=0
 # [32m < -- id -- > time=38329 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=38337 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=38345 got instruction: pc=8000008c instr=27bd0028 [0m
@@ -8431,14 +8278,12 @@
 # [32m < -- id -- > time=38797 got instruction: pc=80000060 instr=02602821 [0m
 # time=38797 reg4($a0)=00000001
 # [32m < -- id -- > time=38801 got instruction: pc=8000000c instr=27bdffd8 [0m
-# time=38805 com_write_busy=1
 # [32m < -- id -- > time=38805 got instruction: pc=80000010 instr=0085102a [0m
 # [32m < -- id -- > time=38809 got instruction: pc=80000014 instr=afbf0024 [0m
 # time=38809 reg29($sp)=803fff98
 # [32m < -- id -- > time=38813 got instruction: pc=80000018 instr=afb30020 [0m
 # time=38813 reg2($v0)=00000000
 # [31m <-- mem base --> time=38820 write: addr=fffef data=80000064[0m
-# time=38827 com_write_busy=0
 # [32m < -- id -- > time=38829 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=38836 write: addr=fffee data=00000000[0m
 # [32m < -- id -- > time=38845 got instruction: pc=80000020 instr=afb10018 [0m
@@ -8542,10 +8387,8 @@
 # [31m <-- mem base --> time=39292 write: addr=ffff9 data=80000064[0m
 # [32m < -- id -- > time=39301 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=39308 write: addr=ffff8 data=00000001[0m
-# time=39309 com_write_busy=1
 # [32m < -- id -- > time=39317 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=39324 write: addr=ffff7 data=00000002[0m
-# time=39331 com_write_busy=0
 # [32m < -- id -- > time=39333 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=39340 write: addr=ffff6 data=00000007[0m
 # [32m < -- id -- > time=39349 got instruction: pc=80000028 instr=afb00014 [0m
@@ -8644,11 +8487,9 @@
 # [32m < -- id -- > time=39805 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=39809 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=39809 reg2($v0)=00000002
-# time=39813 com_write_busy=1
 # [32m < -- id -- > time=39817 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=39825 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=39833 got instruction: pc=80000088 instr=03e00008 [0m
-# time=39835 com_write_busy=0
 # [32m < -- id -- > time=39841 got instruction: pc=8000008c instr=27bd0028 [0m
 # time=39841 reg16($s0)=00000002
 # [32m < -- id -- > time=39845 got instruction: pc=80000064 instr=0212182a [0m
@@ -8754,7 +8595,6 @@
 # [32m < -- id -- > time=40309 got instruction: pc=8000008c instr=27bd0028 [0m
 # time=40309 reg16($s0)=00000000
 # [32m < -- id -- > time=40313 got instruction: pc=800000e8 instr=08000030 [0m
-# time=40317 com_write_busy=1
 # [32m < -- id -- > time=40317 got instruction: pc=800000ec instr=0342d021 [0m
 # time=40317 reg29($sp)=80400010
 # [32m < -- id -- > time=40321 got instruction: pc=800000c0 instr=3c1d8040 [0m
@@ -8765,7 +8605,6 @@
 # [32m < -- id -- > time=40333 got instruction: pc=800000cc instr=27bdffe8 [0m
 # time=40333 reg29($sp)=80400028
 # [32m < -- id -- > time=40337 got instruction: pc=800000d0 instr=afbf0014 [0m
-# time=40339 com_write_busy=0
 # [32m < -- id -- > time=40341 got instruction: pc=800000d4 instr=afbe0010 [0m
 # time=40341 reg29($sp)=80400010
 # [31m <-- mem ext --> time=40348 write: addr=00009 data=800000e8[0m
@@ -8864,7 +8703,6 @@
 # time=40797 reg2($v0)=00000001
 # [32m < -- id -- > time=40805 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=40813 got instruction: pc=80000084 instr=8fb00014 [0m
-# time=40821 com_write_busy=1
 # [32m < -- id -- > time=40821 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=40829 got instruction: pc=8000008c instr=27bd0028 [0m
 # [32m < -- id -- > time=40833 got instruction: pc=80000064 instr=0212182a [0m
@@ -8872,7 +8710,6 @@
 # time=40837 reg29($sp)=803fffc0
 # [32m < -- id -- > time=40841 got instruction: pc=8000006c instr=02228821 [0m
 # time=40841 reg3($v1)=00000000
-# time=40843 com_write_busy=0
 # [32m < -- id -- > time=40845 got instruction: pc=8000004c instr=12000010 [0m
 # [32m < -- id -- > time=40849 got instruction: pc=80000050 instr=8fbf0024 [0m
 # [32m < -- id -- > time=40853 got instruction: pc=80000054 instr=2610ffff [0m
@@ -8974,10 +8811,8 @@
 # [31m <-- mem base --> time=41308 write: addr=fffef data=80000064[0m
 # [32m < -- id -- > time=41317 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=41324 write: addr=fffee data=00000000[0m
-# time=41325 com_write_busy=1
 # [32m < -- id -- > time=41333 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=41340 write: addr=fffed data=00000001[0m
-# time=41347 com_write_busy=0
 # [32m < -- id -- > time=41349 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=41356 write: addr=fffec data=00000003[0m
 # [32m < -- id -- > time=41365 got instruction: pc=80000028 instr=afb00014 [0m
@@ -9081,11 +8916,9 @@
 # [32m < -- id -- > time=41821 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=41825 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=41825 reg2($v0)=00000001
-# time=41829 com_write_busy=1
 # [32m < -- id -- > time=41833 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=41841 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=41849 got instruction: pc=80000088 instr=03e00008 [0m
-# time=41851 com_write_busy=0
 # [32m < -- id -- > time=41857 got instruction: pc=8000008c instr=27bd0028 [0m
 # [32m < -- id -- > time=41861 got instruction: pc=80000064 instr=0212182a [0m
 # [32m < -- id -- > time=41865 got instruction: pc=80000068 instr=1060fff8 [0m
@@ -9184,7 +9017,6 @@
 # [32m < -- id -- > time=42321 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=42329 got instruction: pc=8000008c instr=27bd0028 [0m
 # time=42329 reg16($s0)=00000003
-# time=42333 com_write_busy=1
 # [32m < -- id -- > time=42333 got instruction: pc=80000064 instr=0212182a [0m
 # [32m < -- id -- > time=42337 got instruction: pc=80000068 instr=1060fff8 [0m
 # time=42337 reg29($sp)=803fffe8
@@ -9193,7 +9025,6 @@
 # [32m < -- id -- > time=42345 got instruction: pc=8000004c instr=12000010 [0m
 # [32m < -- id -- > time=42349 got instruction: pc=80000050 instr=8fbf0024 [0m
 # [32m < -- id -- > time=42353 got instruction: pc=80000054 instr=2610ffff [0m
-# time=42355 com_write_busy=0
 # [32m < -- id -- > time=42361 got instruction: pc=80000058 instr=02002021 [0m
 # time=42361 reg31($ra)=800000e8
 # [32m < -- id -- > time=42365 got instruction: pc=8000005c instr=0c000003 [0m
@@ -9294,12 +9125,10 @@
 # [32m < -- id -- > time=42825 got instruction: pc=800000b4 instr=24110001 [0m
 # [32m < -- id -- > time=42829 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=42833 got instruction: pc=80000074 instr=02201021 [0m
-# time=42837 com_write_busy=1
 # [32m < -- id -- > time=42841 got instruction: pc=80000078 instr=8fb30020 [0m
 # [32m < -- id -- > time=42845 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=42845 reg2($v0)=00000001
 # [32m < -- id -- > time=42853 got instruction: pc=80000080 instr=8fb10018 [0m
-# time=42859 com_write_busy=0
 # [32m < -- id -- > time=42861 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=42869 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=42877 got instruction: pc=8000008c instr=27bd0028 [0m
@@ -9403,7 +9232,6 @@
 # [32m < -- id -- > time=43321 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=43329 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=43337 got instruction: pc=80000088 instr=03e00008 [0m
-# time=43341 com_write_busy=1
 # [32m < -- id -- > time=43345 got instruction: pc=8000008c instr=27bd0028 [0m
 # time=43345 reg16($s0)=00000001
 # [32m < -- id -- > time=43349 got instruction: pc=80000064 instr=0212182a [0m
@@ -9411,7 +9239,6 @@
 # time=43353 reg29($sp)=803fffe8
 # [32m < -- id -- > time=43357 got instruction: pc=8000006c instr=02228821 [0m
 # [32m < -- id -- > time=43361 got instruction: pc=80000070 instr=8fbf0024 [0m
-# time=43363 com_write_busy=0
 # [32m < -- id -- > time=43365 got instruction: pc=80000074 instr=02201021 [0m
 # [32m < -- id -- > time=43373 got instruction: pc=80000078 instr=8fb30020 [0m
 # time=43373 reg31($ra)=800000e8
@@ -9517,12 +9344,10 @@
 # [32m < -- id -- > time=43825 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=43832 write: addr=fffec data=00000000[0m
 # [32m < -- id -- > time=43841 got instruction: pc=80000028 instr=afb00014 [0m
-# time=43845 com_write_busy=1
 # [32m < -- id -- > time=43845 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=43852 write: addr=fffeb data=00000003[0m
 # [32m < -- id -- > time=43861 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=43865 got instruction: pc=80000034 instr=10a0001e [0m
-# time=43867 com_write_busy=0
 # [32m < -- id -- > time=43869 got instruction: pc=80000038 instr=00808021 [0m
 # [32m < -- id -- > time=43873 got instruction: pc=800000b0 instr=1000ffef [0m
 # [32m < -- id -- > time=43877 got instruction: pc=800000b4 instr=24110001 [0m
@@ -9620,7 +9445,6 @@
 # [32m < -- id -- > time=44329 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=44337 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=44345 got instruction: pc=8000008c instr=27bd0028 [0m
-# time=44349 com_write_busy=1
 # [32m < -- id -- > time=44349 got instruction: pc=80000064 instr=0212182a [0m
 # [32m < -- id -- > time=44353 got instruction: pc=80000068 instr=1060fff8 [0m
 # time=44353 reg29($sp)=803fffc0
@@ -9628,7 +9452,6 @@
 # [32m < -- id -- > time=44361 got instruction: pc=8000004c instr=12000010 [0m
 # [32m < -- id -- > time=44365 got instruction: pc=80000050 instr=8fbf0024 [0m
 # [32m < -- id -- > time=44369 got instruction: pc=80000054 instr=2610ffff [0m
-# time=44371 com_write_busy=0
 # [32m < -- id -- > time=44377 got instruction: pc=80000058 instr=02002021 [0m
 # [32m < -- id -- > time=44381 got instruction: pc=8000005c instr=0c000003 [0m
 # time=44381 reg16($s0)=00000000
@@ -9733,12 +9556,10 @@
 # [31m <-- mem base --> time=44828 write: addr=fffee data=00000000[0m
 # [32m < -- id -- > time=44837 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=44844 write: addr=fffed data=00000001[0m
-# time=44853 com_write_busy=1
 # [32m < -- id -- > time=44853 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=44860 write: addr=fffec data=00000000[0m
 # [32m < -- id -- > time=44869 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=44873 got instruction: pc=8000002c instr=10800020 [0m
-# time=44875 com_write_busy=0
 # [31m <-- mem base --> time=44880 write: addr=fffeb data=00000002[0m
 # [32m < -- id -- > time=44889 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=44893 got instruction: pc=80000034 instr=10a0001e [0m
@@ -9834,7 +9655,6 @@
 # time=45333 reg2($v0)=00000001
 # [32m < -- id -- > time=45341 got instruction: pc=80000080 instr=8fb10018 [0m
 # [32m < -- id -- > time=45349 got instruction: pc=80000084 instr=8fb00014 [0m
-# time=45357 com_write_busy=1
 # [32m < -- id -- > time=45357 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=45365 got instruction: pc=8000008c instr=27bd0028 [0m
 # [32m < -- id -- > time=45369 got instruction: pc=80000064 instr=0212182a [0m
@@ -9842,7 +9662,6 @@
 # time=45373 reg29($sp)=803fffc0
 # [32m < -- id -- > time=45377 got instruction: pc=8000006c instr=02228821 [0m
 # time=45377 reg3($v1)=00000001
-# time=45379 com_write_busy=0
 # [32m < -- id -- > time=45381 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=45385 got instruction: pc=80000074 instr=02201021 [0m
 # [32m < -- id -- > time=45393 got instruction: pc=80000078 instr=8fb30020 [0m
@@ -9949,11 +9768,9 @@
 # [31m <-- mem base --> time=45840 write: addr=fffef data=80000064[0m
 # [32m < -- id -- > time=45849 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=45856 write: addr=fffee data=00000000[0m
-# time=45861 com_write_busy=1
 # [32m < -- id -- > time=45865 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=45872 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=45881 got instruction: pc=80000024 instr=14400024 [0m
-# time=45883 com_write_busy=0
 # [31m <-- mem base --> time=45888 write: addr=fffec data=00000001[0m
 # [32m < -- id -- > time=45897 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=45901 got instruction: pc=8000002c instr=10800020 [0m
@@ -10055,12 +9872,10 @@
 # [32m < -- id -- > time=46349 got instruction: pc=8000007c instr=8fb2001c [0m
 # time=46349 reg2($v0)=00000001
 # [32m < -- id -- > time=46357 got instruction: pc=80000080 instr=8fb10018 [0m
-# time=46365 com_write_busy=1
 # [32m < -- id -- > time=46365 got instruction: pc=80000084 instr=8fb00014 [0m
 # [32m < -- id -- > time=46373 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=46381 got instruction: pc=8000008c instr=27bd0028 [0m
 # [32m < -- id -- > time=46385 got instruction: pc=80000064 instr=0212182a [0m
-# time=46387 com_write_busy=0
 # [32m < -- id -- > time=46389 got instruction: pc=80000068 instr=1060fff8 [0m
 # time=46389 reg29($sp)=803fffc0
 # [32m < -- id -- > time=46393 got instruction: pc=8000006c instr=02228821 [0m
@@ -10171,14 +9986,12 @@
 # [32m < -- id -- > time=46861 got instruction: pc=80000060 instr=02602821 [0m
 # time=46861 reg4($a0)=00000003
 # [32m < -- id -- > time=46865 got instruction: pc=8000000c instr=27bdffd8 [0m
-# time=46869 com_write_busy=1
 # [32m < -- id -- > time=46869 got instruction: pc=80000010 instr=0085102a [0m
 # time=46869 reg5($a1)=00000000
 # [32m < -- id -- > time=46873 got instruction: pc=80000014 instr=afbf0024 [0m
 # time=46873 reg29($sp)=803fff98
 # [32m < -- id -- > time=46877 got instruction: pc=80000018 instr=afb30020 [0m
 # [31m <-- mem base --> time=46884 write: addr=fffef data=80000064[0m
-# time=46891 com_write_busy=0
 # [32m < -- id -- > time=46893 got instruction: pc=8000001c instr=afb2001c [0m
 # [31m <-- mem base --> time=46900 write: addr=fffee data=00000000[0m
 # [32m < -- id -- > time=46909 got instruction: pc=80000020 instr=afb10018 [0m
@@ -10273,13 +10086,11 @@
 # [32m < -- id -- > time=47357 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=47361 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=47368 write: addr=fffeb data=00000001[0m
-# time=47373 com_write_busy=1
 # [32m < -- id -- > time=47377 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=47381 got instruction: pc=80000034 instr=10a0001e [0m
 # [32m < -- id -- > time=47385 got instruction: pc=80000038 instr=00808021 [0m
 # [32m < -- id -- > time=47389 got instruction: pc=800000b0 instr=1000ffef [0m
 # [32m < -- id -- > time=47393 got instruction: pc=800000b4 instr=24110001 [0m
-# time=47395 com_write_busy=0
 # [32m < -- id -- > time=47397 got instruction: pc=80000070 instr=8fbf0024 [0m
 # [32m < -- id -- > time=47401 got instruction: pc=80000074 instr=02201021 [0m
 # [32m < -- id -- > time=47409 got instruction: pc=80000078 instr=8fb30020 [0m
@@ -10383,7 +10194,6 @@
 # [32m < -- id -- > time=47865 got instruction: pc=80000040 instr=24b3ffff [0m
 # [32m < -- id -- > time=47869 got instruction: pc=80000044 instr=10000003 [0m
 # [32m < -- id -- > time=47873 got instruction: pc=80000048 instr=00008821 [0m
-# time=47877 com_write_busy=1
 # [32m < -- id -- > time=47877 got instruction: pc=80000054 instr=2610ffff [0m
 # [32m < -- id -- > time=47881 got instruction: pc=80000058 instr=02002021 [0m
 # [32m < -- id -- > time=47885 got instruction: pc=8000005c instr=0c000003 [0m
@@ -10393,7 +10203,6 @@
 # [32m < -- id -- > time=47893 got instruction: pc=8000000c instr=27bdffd8 [0m
 # [32m < -- id -- > time=47897 got instruction: pc=80000010 instr=0085102a [0m
 # time=47897 reg5($a1)=00000000
-# time=47899 com_write_busy=0
 # [32m < -- id -- > time=47901 got instruction: pc=80000014 instr=afbf0024 [0m
 # time=47901 reg29($sp)=803fff98
 # [32m < -- id -- > time=47905 got instruction: pc=80000018 instr=afb30020 [0m
@@ -10488,11 +10297,9 @@
 # [31m <-- mem base --> time=48360 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=48369 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=48376 write: addr=fffec data=00000002[0m
-# time=48381 com_write_busy=1
 # [32m < -- id -- > time=48385 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=48389 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=48396 write: addr=fffeb data=00000000[0m
-# time=48403 com_write_busy=0
 # [32m < -- id -- > time=48405 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=48409 got instruction: pc=800000b0 instr=1000ffef [0m
 # [32m < -- id -- > time=48413 got instruction: pc=800000b4 instr=24110001 [0m
@@ -10596,14 +10403,12 @@
 # [32m < -- id -- > time=48869 got instruction: pc=80000088 instr=03e00008 [0m
 # [32m < -- id -- > time=48877 got instruction: pc=8000008c instr=27bd0028 [0m
 # [32m < -- id -- > time=48881 got instruction: pc=80000064 instr=0212182a [0m
-# time=48885 com_write_busy=1
 # [32m < -- id -- > time=48885 got instruction: pc=80000068 instr=1060fff8 [0m
 # time=48885 reg29($sp)=803fffc0
 # [32m < -- id -- > time=48889 got instruction: pc=8000006c instr=02228821 [0m
 # [32m < -- id -- > time=48893 got instruction: pc=8000004c instr=12000010 [0m
 # [32m < -- id -- > time=48897 got instruction: pc=80000050 instr=8fbf0024 [0m
 # [32m < -- id -- > time=48901 got instruction: pc=80000054 instr=2610ffff [0m
-# time=48907 com_write_busy=0
 # [32m < -- id -- > time=48909 got instruction: pc=80000058 instr=02002021 [0m
 # [32m < -- id -- > time=48913 got instruction: pc=8000005c instr=0c000003 [0m
 # time=48913 reg16($s0)=00000000
@@ -10709,11 +10514,9 @@
 # [32m < -- id -- > time=49369 got instruction: pc=80000020 instr=afb10018 [0m
 # [31m <-- mem base --> time=49376 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=49385 got instruction: pc=80000024 instr=14400024 [0m
-# time=49389 com_write_busy=1
 # [31m <-- mem base --> time=49392 write: addr=fffec data=00000000[0m
 # [32m < -- id -- > time=49401 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=49405 got instruction: pc=8000002c instr=10800020 [0m
-# time=49411 com_write_busy=0
 # [31m <-- mem base --> time=49412 write: addr=fffeb data=00000000[0m
 # [32m < -- id -- > time=49421 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=49425 got instruction: pc=800000b0 instr=1000ffef [0m
@@ -10821,11 +10624,9 @@
 # [31m <-- mem base --> time=49876 write: addr=ffff7 data=00000002[0m
 # [32m < -- id -- > time=49885 got instruction: pc=80000024 instr=14400024 [0m
 # [31m <-- mem base --> time=49892 write: addr=ffff6 data=00000000[0m
-# time=49893 com_write_busy=1
 # [32m < -- id -- > time=49901 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=49905 got instruction: pc=8000002c instr=10800020 [0m
 # [31m <-- mem base --> time=49912 write: addr=ffff5 data=00000004[0m
-# time=49915 com_write_busy=0
 # [32m < -- id -- > time=49921 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=49925 got instruction: pc=80000034 instr=10a0001e [0m
 # [32m < -- id -- > time=49929 got instruction: pc=80000038 instr=00808021 [0m

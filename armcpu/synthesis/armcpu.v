@@ -1,6 +1,6 @@
 /*
  * $File: armcpu.v
- * $Date: Mon Nov 25 23:26:55 2013 +0800
+ * $Date: Tue Nov 26 20:38:47 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -39,6 +39,7 @@ module armcpu(
 	wire [25:0] cpu_speed = params[25:0];
 	wire [4:0] monitor_data_shift = params[30:26];
 	wire rom_selector = params[31];
+	reg rom_selector_prev, set_rst_by_rom_selector;
 	reg [25:0] clk50M_cnt;
 	always @(posedge clk50M) begin
 		if (clk50M_cnt >= cpu_speed) begin
@@ -48,13 +49,20 @@ module armcpu(
 			clk50M_cnt <= clk50M_cnt + 1'b1;
 	end
 
+	always @(posedge clk_cpu) begin
+		rom_selector_prev <= rom_selector;
+		set_rst_by_rom_selector <= (rom_selector != rom_selector_prev);
+	end
+
 	reg [7:0] monitor_data;
 	wire [31:0] segdisp_data;
 	assign write_protect = 0;	//baseram_addr <= 512;  // XXX: write-protect for code
 	wire baseram_we_set;
 	assign baseram_we = baseram_we_set | write_protect;
 
-	system usys(.clk_cpu(clk_cpu), .clk50M(clk50M), .rst(~rst),
+	system usys(.clk_cpu(clk_cpu), .clk50M(clk50M),
+		.rst(!rst || set_rst_by_rom_selector),
+
 		.segdisp(segdisp_data),
 
 		.rom_selector(rom_selector),

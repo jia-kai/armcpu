@@ -1,4 +1,4 @@
-# vsim -do {run 100ns; quit} -c top 
+# vsim -do {run 200ns; quit} -c top 
 # Loading work.top
 # Loading work.ram_sim
 # Loading work.system
@@ -18,12 +18,12 @@
 # Loading work.serial_port
 # Loading work.uart_async_transmitter
 # Loading work.uart_async_receiver
-# run 100ns 
+# run 200ns 
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
-# time=0 come_read_data=00
 # ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
 #    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
+# time=0 com_read_data=00
 # ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
 #    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=0 segdisp=xxxxxxxx
@@ -48,26 +48,57 @@
 # time=1 cp0_cause: IP=00000000 ExcCode=00
 # [32m < -- id -- > time=9 got instruction: pc=xxxxxxxx instr=00000000 [0m
 # time=9 cp0_cause: IP=10000000 ExcCode=00
-# [32m < -- id -- > time=13 got instruction: pc=80000000 instr=24020007 [0m
+# [32m < -- id -- > time=13 got instruction: pc=80000000 instr=24020003 [0m
 # [32m < -- id -- > time=17 got instruction: pc=80000004 instr=40821000 [0m
-# [32m < -- id -- > time=21 got instruction: pc=80000008 instr=42000002 [0m
-# time=21 reg2($v0)=00000007
-# [32m < -- id -- > time=29 got instruction: pc=8000000c instr=8c020000 [0m
-# time=33 write TLB: index=0 VPN2=00000 P1=(00000, 00) P0=(00000, 11)
-# [32m < -- id -- > time=37 got instruction: pc=80000010 instr=08000004 [0m
-# [32m < -- id -- > time=45 got instruction: pc=80000014 instr=00000000 [0m
-# time=45 reg2($v0)=24020007
-# [32m < -- id -- > time=49 got instruction: pc=80000010 instr=08000004 [0m
-# [32m < -- id -- > time=53 got instruction: pc=80000014 instr=00000000 [0m
-# [32m < -- id -- > time=57 got instruction: pc=80000010 instr=08000004 [0m
-# [32m < -- id -- > time=61 got instruction: pc=80000014 instr=00000000 [0m
-# [32m < -- id -- > time=65 got instruction: pc=80000010 instr=08000004 [0m
-# [32m < -- id -- > time=69 got instruction: pc=80000014 instr=00000000 [0m
-# [32m < -- id -- > time=73 got instruction: pc=80000010 instr=08000004 [0m
-# [32m < -- id -- > time=77 got instruction: pc=80000014 instr=00000000 [0m
-# [32m < -- id -- > time=81 got instruction: pc=80000010 instr=08000004 [0m
-# [32m < -- id -- > time=85 got instruction: pc=80000014 instr=00000000 [0m
-# [32m < -- id -- > time=89 got instruction: pc=80000010 instr=08000004 [0m
-# [32m < -- id -- > time=93 got instruction: pc=80000014 instr=00000000 [0m
-# [32m < -- id -- > time=97 got instruction: pc=80000010 instr=08000004 [0m
+# [32m < -- id -- > time=21 got instruction: pc=80000008 instr=3c022300 [0m
+# time=21 reg2($v0)=00000003
+# [32m < -- id -- > time=29 got instruction: pc=8000000c instr=40825000 [0m
+# [32m < -- id -- > time=33 got instruction: pc=80000010 instr=42000002 [0m
+# time=33 reg2($v0)=23000000
+# [32m < -- id -- > time=41 got instruction: pc=80000014 instr=24020001 [0m
+# time=45 write TLB: index=0 VPN2=11800 P1=(00000, 00) P0=(00000, 01)
+# [32m < -- id -- > time=49 got instruction: pc=80000018 instr=40820000 [0m
+# [32m < -- id -- > time=53 got instruction: pc=8000001c instr=3c022400 [0m
+# time=53 reg2($v0)=00000001
+# [32m < -- id -- > time=61 got instruction: pc=80000020 instr=40825000 [0m
+# [32m < -- id -- > time=65 got instruction: pc=80000024 instr=42000002 [0m
+# time=65 reg2($v0)=24000000
+# [32m < -- id -- > time=73 got instruction: pc=80000028 instr=24021000 [0m
+# time=77 write TLB: index=1 VPN2=12000 P1=(00000, 00) P0=(00000, 01)
+# [32m < -- id -- > time=81 got instruction: pc=8000002c instr=40827801 [0m
+# [32m < -- id -- > time=85 got instruction: pc=80000030 instr=3c1c2300 [0m
+# time=85 reg2($v0)=00001000
+# [32m < -- id -- > time=93 got instruction: pc=80000034 instr=8f820000 [0m
+# [32m < -- id -- > time=97 got instruction: pc=80000038 instr=3c1c2400 [0m
+# [32m < -- id -- > time=105 got instruction: pc=8000003c instr=379c0004 [0m
+# time=105 reg2($v0)=24020003
+# [32m < -- id -- > time=109 got instruction: pc=80000040 instr=8f830000 [0m
+# [32m < -- id -- > time=113 got instruction: pc=80000044 instr=af820000 [0m
+# [32m < -- id -- > time=121 got instruction: pc=80000048 instr=1000ffff [0m
+# time=121 reg3($v1)=40821000
+# ** Warning: time=123 write to read-only page, vaddr=24000004
+#    Time: 123 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 124
+# time=129 impending exception: ip=10000000 code=01 epc=80000044
+# time=129 cp0_cause: IP=10000000 ExcCode=01
+# time=129 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
+# [32m < -- id -- > time=133 got instruction: pc=80000048 instr=00000000 [0m
+# [32m < -- id -- > time=137 got instruction: pc=80001180 instr=11000002 [0m
+# [32m < -- id -- > time=141 got instruction: pc=80001184 instr=40025000 [0m
+# [32m < -- id -- > time=145 got instruction: pc=8000118c instr=24080001 [0m
+# [32m < -- id -- > time=149 got instruction: pc=80001190 instr=10000001 [0m
+# time=149 reg2($v0)=24000000
+# [32m < -- id -- > time=153 got instruction: pc=80001194 instr=8c020004 [0m
+# [32m < -- id -- > time=157 got instruction: pc=80001198 instr=1000ffff [0m
+# ** Warning: time=159 TLB read missing, vaddr=00000004
+#    Time: 159 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
+# time=165 impending exception: ip=10000000 code=02 epc=80001190
+# [32m < -- id -- > time=169 got instruction: pc=80001198 instr=00000000 [0m
+# [32m < -- id -- > time=173 got instruction: pc=80001180 instr=11000002 [0m
+# [32m < -- id -- > time=177 got instruction: pc=80001184 instr=40025000 [0m
+# [32m < -- id -- > time=181 got instruction: pc=80001188 instr=ac020004 [0m
+# [32m < -- id -- > time=185 got instruction: pc=8000118c instr=24080001 [0m
+# ** Warning: time=187 TLB write missing, vaddr=00000004
+#    Time: 187 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 115
+# time=193 impending exception: ip=10000000 code=03 epc=80001188
+# [32m < -- id -- > time=197 got instruction: pc=80001194 instr=00000000 [0m
 #  quit 
