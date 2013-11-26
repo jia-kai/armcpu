@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Mon Nov 25 17:05:53 2013 +0800
+ * $Date: Tue Nov 26 11:12:27 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -77,7 +77,7 @@ module top;
 		.RxD_waiting_data(), .RxD_data(com_read_data));
 
 	always @(com_read_ready)
-		$display("time=%g come_read_data=%h", $time, com_read_data);
+		$display("time=%g com_read_data=%h", $time, com_read_data);
 
 	always @(com_write_busy)
 		$display("time=%g com_write_busy=%b", $time, com_write_busy);
