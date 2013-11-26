@@ -1,6 +1,6 @@
 #!/bin/bash -e
 # $File: check_instr.sh
-# $Date: Fri Nov 22 23:14:54 2013 +0800
+# $Date: Tue Nov 26 10:57:24 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 if [ ! -z "$1" ]
@@ -13,5 +13,5 @@ fi
 
 ./compile.sh
 
-vsim -c -do "run 10000ns; quit" check_instr
+vsim -c -do "run 1000000ns; quit" check_instr
 

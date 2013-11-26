@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Tue Nov 26 11:12:27 2013 +0800
+ * $Date: Tue Nov 26 11:13:35 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -81,12 +81,6 @@ module top;
 
 	always @(com_write_busy)
 		$display("time=%g com_write_busy=%b", $time, com_write_busy);
-
-	always begin
-		write_com_data = 8'hff;
-		# 500 write_com = 1;
-		# 4 write_com = 0;
-	end
 
 	// $monitor seems to override privious ones
 
