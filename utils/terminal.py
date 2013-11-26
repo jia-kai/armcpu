@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: terminal.py
-# $Date: Tue Nov 26 18:27:04 2013 +0800
+# $Date: Tue Nov 26 22:17:12 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 DEVICE = '/dev/ttyUSB0'
@@ -21,7 +21,7 @@ def com_reader():
 
 def com_writer():
     while True:
-        data = raw_input() + '\r\n'
+        data = raw_input() + '\n'
         ser.write(data)
 
 threads = [threading.Thread(target = i) for i in [com_reader, com_writer]]

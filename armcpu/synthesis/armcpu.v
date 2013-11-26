@@ -1,12 +1,13 @@
 /*
  * $File: armcpu.v
- * $Date: Tue Nov 26 20:38:47 2013 +0800
+ * $Date: Tue Nov 26 21:57:45 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 module armcpu(
 	input clk50M,
 	input rst,
+	input clk_manual,
 	output [0:6] segdisp0,
 	output [0:6] segdisp1,
 
@@ -36,13 +37,21 @@ module armcpu(
 
 
 	reg clk_cpu;
-	wire [25:0] cpu_speed = params[25:0];
+	assign single_step_mode = params[25];
+	wire [24:0] cpu_speed = params[24:0];
 	wire [4:0] monitor_data_shift = params[30:26];
-	wire rom_selector = params[31];
+	assign rom_selector = params[31];
 	reg rom_selector_prev, set_rst_by_rom_selector;
-	reg [25:0] clk50M_cnt;
+	reg [24:0] clk50M_cnt;
+
+	reg clk_manual_prev;
+	assign clk_manual_posedge = !clk_manual_prev && clk_manual;
+	always @(posedge clk50M)
+		clk_manual_prev <= clk_manual;
+
 	always @(posedge clk50M) begin
-		if (clk50M_cnt >= cpu_speed) begin
+		if ((!single_step_mode && clk50M_cnt >= cpu_speed) ||
+				(single_step_mode && clk_manual_posedge)) begin
 			clk50M_cnt <= 0;
 			clk_cpu <= ~clk_cpu;
 		end else
