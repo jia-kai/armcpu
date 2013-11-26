@@ -397,6 +397,7 @@ check_boot_pgdir(void) {
   assert(boot_pgdir[0] == 0);
   struct Page *p;
   p = alloc_page();
+  kprintf("%s: allocated page at %p\n", __func__, p);
   *(int*)(page2kva(p) + 0x100) = 0x1234;
   //printhex(page2kva(p));
   //kprintf("\n");

@@ -5,6 +5,7 @@
 
 #define KERNBASE            0x80000000
 #define KMEMSIZE            0x100000                 // 512M the maximum amount of physical memory
+//#define KMEMSIZE            0x00800000               // well, I have only 8MB RAM ...
 #define KERNTOP             (KERNBASE + KMEMSIZE)
 
 #define KSTACKPAGE          2                           // # of pages in kernel stack

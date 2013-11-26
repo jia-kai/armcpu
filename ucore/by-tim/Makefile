@@ -2,7 +2,7 @@ EMPTY	:=
 SPACE	:= $(EMPTY) $(EMPTY)
 SLASH	:= /
 
-ON_FPGA :=y
+ON_FPGA := n
 
 V       := @
 
@@ -176,7 +176,7 @@ ROOTFS_IMG:= $(USER_OBJDIR)/initrd.img
 $(TOOL_MKSFS): tools/mksfs.c
 	$(HOSTCC) $(HOSTCFLAGS) -o $@ $^
 
-$(OBJDIR)/ucore-kernel-initrd:  $(BUILD_DIR) $(TOOL_MKSFS) $(OBJ) $(USER_APP_BINS) tools/kernel.ld
+$(OBJDIR)/ucore-kernel-initrd: gen_tag $(BUILD_DIR) $(TOOL_MKSFS) $(OBJ) $(USER_APP_BINS) tools/kernel.ld
 	rm -rf $(ROOTFS_DIR) $(ROOTFS_IMG)
 	mkdir $(ROOTFS_DIR)
 	cp $(USER_APP_BINS) $(ROOTFS_DIR)
@@ -195,3 +195,8 @@ boot/loader.bin: boot/bootasm.S
 	$(CC) $(CFLAGS) -g -c -o boot/loader.o $^
 	$(LD) -EL -n -G0 -Ttext 0xbfc00000 -o boot/loader boot/loader.o
 	$(OBJCOPY) -O binary  -S boot/loader $@
+
+gen_tag:
+	ctags -R .
+
+.PHONY: gen_tag
