@@ -35,8 +35,8 @@ case (rom_addr)
 132: rom_data = 32'h240200ff;
 136: rom_data = 32'h14a2ffdf;
 140: rom_data = 32'h00000000;
-144: rom_data = 32'h3c028000;
-148: rom_data = 32'h00400008;
+144: rom_data = 32'h00cc3021;
+148: rom_data = 32'h00c00008;
 152: rom_data = 32'h00000000;
 156: rom_data = 32'h00cc3021;
 160: rom_data = 32'h03e00008;

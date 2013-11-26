@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: controller.py
-# $Date: Mon Nov 25 17:10:46 2013 +0800
+# $Date: Mon Nov 25 23:22:41 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 from ctllib import MemtransController
@@ -12,8 +12,6 @@ import serial
 import sys
 import os
 import time
-
-CMD_JMP_TO_MEM_START = 0b11111111
 
 CHUNKSIZE = 4096
 FLASH_BLOCK_SIZE = 128 * 1024
@@ -55,7 +53,7 @@ def parse_addr(addr):
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        sys.exit('usage: {} <flash|ram read|write|erase> | <jmp_mem_start>\n'.
+        sys.exit('usage: {} [flash|ram read|write|erase] | [jmp <addr>]\n'.
                 format(sys.argv[0]) +
                 '  read: <start addr> <length> <output file>\n' +
                 '  write: <start addr> <input file>\n' +
@@ -64,9 +62,11 @@ if __name__ == '__main__':
 
     ser = serial.Serial(DEVICE, 115201,
             stopbits=2, parity=serial.PARITY_NONE, timeout=1)
+    ctl = MemtransController(ser)
 
-    if sys.argv[1] == 'jmp_mem_start':
-        ser.write(chr(CMD_JMP_TO_MEM_START) + '\x00' * 6)   # cmd + fake addr
+    if sys.argv[1] == 'jmp':
+        addr = parse_addr(sys.argv[2])
+        ctl.jmp(addr)
         sys.exit()
 
     module = sys.argv[1]
@@ -78,7 +78,6 @@ if __name__ == '__main__':
         assert function != 'erase'
 
     args = sys.argv[3:]
-    ctl = MemtransController(ser)
 
     if module == 'flash':
         reader = ctl.read_flash

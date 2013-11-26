@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: ctllib.py
-# $Date: Mon Nov 25 09:05:05 2013 +0800
+# $Date: Tue Nov 26 09:52:17 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 import sys
@@ -14,6 +14,7 @@ CMD_RAM_WRITE	= chr(0b11110011)
 CMD_RAM_READ	= chr(0b10010011)
 CMD_ERASE_IN_PROGRESS	= chr(0b11001100)
 CMD_ERASE_FINISHED		= chr(0b00110011)
+CMD_JMP_TO_ADDR = chr(0b11111111)
 
 FLASH_ADDR_SIZE = 22
 CHEKSUM_INIT = 0x23
@@ -66,7 +67,8 @@ class MemtransController(object):
 
     def _cmd(self, cmd, start_addr, end_addr):
         assert start_addr < end_addr or (
-                cmd == CMD_FLASH_ERASE and start_addr == end_addr)
+                cmd in (CMD_FLASH_ERASE, CMD_JMP_TO_ADDR)
+                and start_addr == end_addr)
         self._raw_write(cmd)
         self._reset_checksum()
         self._write_addr(start_addr)
@@ -123,4 +125,9 @@ class MemtransController(object):
 
     def read_ram(self, start_addr, size):
         return self._perform_read(CMD_RAM_READ, start_addr, size, 4)
+
+    def jmp(self, addr):
+        assert addr % 4 == 0
+        addr /= 4
+        self._cmd(CMD_JMP_TO_ADDR,  addr, addr)
 

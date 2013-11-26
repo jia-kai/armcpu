@@ -1,6 +1,6 @@
 /*
  * $File: armcpu.v
- * $Date: Mon Nov 25 15:13:44 2013 +0800
+ * $Date: Mon Nov 25 23:26:55 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -36,10 +36,10 @@ module armcpu(
 
 
 	reg clk_cpu;
-	wire [23:0] cpu_speed = params[23:0];
-	wire [4:0] monitor_data_shift = params[28:24];
+	wire [25:0] cpu_speed = params[25:0];
+	wire [4:0] monitor_data_shift = params[30:26];
 	wire rom_selector = params[31];
-	reg [23:0] clk50M_cnt;
+	reg [25:0] clk50M_cnt;
 	always @(posedge clk50M) begin
 		if (clk50M_cnt >= cpu_speed) begin
 			clk50M_cnt <= 0;

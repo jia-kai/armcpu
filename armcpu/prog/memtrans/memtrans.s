@@ -1,6 +1,6 @@
 #
 # $File: memtrans.s
-# $Date: Mon Nov 25 16:31:34 2013 +0800
+# $Date: Tue Nov 26 09:53:38 2013 +0800
 # $Author: Xinyu Zhou <zxytim@gmail.com>
 #
 
@@ -33,8 +33,8 @@
 #define CMD_RAM_READ	0b10010011
 #define CMD_ERASE_IN_PROGRESS	0b11001100
 #define CMD_ERASE_FINISHED		0b00110011
-
-#define CMD_JMP_TO_MEM_START 0b11111111
+// jump to start addr
+#define CMD_JMP_TO_ADDR 0b11111111
 
 #define RESET_CHECKSUM()	li $CHECKSUM, 0x23
 
@@ -78,12 +78,12 @@ main:
 		beq $a1, $v0, flash_write
 		li $v0, CMD_FLASH_ERASE
 		beq $a1, $v0, flash_erase
-		li $v0, CMD_JMP_TO_MEM_START
+		li $v0, CMD_JMP_TO_ADDR
 		bne $a1, $v0, main_loop
 
-		# jmp to mem start
-		li $v0, 0x80000000
-		jr $v0
+		# jmp to addr
+		addu $a2, $RAM_START
+		jr $a2
 
 		init_ram_rw:
 			addu $a2, $RAM_START

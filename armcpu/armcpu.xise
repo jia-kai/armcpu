@@ -456,8 +456,8 @@
     <file xil_pn:name="src/gencode/id2ex_param.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/ex2mem_param.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/int_def.vh" xil_pn:type="FILE_VERILOG"/>
-    <file xil_pn:name="src/rom/bootloader.v" xil_pn:type="FILE_VERILOG"/>
-    <file xil_pn:name="src/rom/memtrans.v" xil_pn:type="FILE_VERILOG"/>
+    <file xil_pn:name="rom/bootloader.v" xil_pn:type="FILE_VERILOG"/>
+    <file xil_pn:name="rom/memtrans.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/id2ex_extract_load.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/ex2mem_extract_store.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/if2id_extract_load.v" xil_pn:type="FILE_VERILOG"/>
