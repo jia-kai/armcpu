@@ -4,7 +4,13 @@
 /* This file contains the definitions for memory management in our OS. */
 
 #define KERNBASE            0x80000000
-#define KMEMSIZE            0x200000                 // 512M the maximum amount of physical memory
+
+#ifdef MACH_QEMU
+#define KMEMSIZE            0x500000 
+#else
+#define KMEMSIZE            0x200000 
+#endif
+
 #define KERNTOP             (KERNBASE + KMEMSIZE)
 
 #define KSTACKPAGE          2                           // # of pages in kernel stack
