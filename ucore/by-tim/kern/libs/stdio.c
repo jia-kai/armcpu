@@ -92,7 +92,7 @@ void printbase10(int x){
     kputchar('-');
   x = (x<0)?-x:x;
   while(x >= 10){
-    t = __divu10(x); 
+    t = __divu10(x);
     buf[i++] = ('0'+(x-__mulu10(t)));
     x = t;
   }

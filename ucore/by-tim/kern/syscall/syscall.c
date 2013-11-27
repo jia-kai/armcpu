@@ -8,6 +8,7 @@
 #include <stat.h>
 #include <dirent.h>
 #include <sysfile.h>
+#include <fetchrun.h>
 
 extern volatile int ticks;
 
@@ -129,7 +130,7 @@ sys_fsync(uint32_t arg[]) {
     return sysfile_fsync(fd);
 }
 
-static int 
+static int
 sys_chdir(uint32_t arg[]) {
     const char *path = (const char *)arg[0];
     return sysfile_chdir(path);
@@ -157,6 +158,18 @@ sys_dup(uint32_t arg[]) {
     return sysfile_dup(fd1, fd2);
 }
 
+/**
+ * fetch a program from serial bus
+ * args:
+ *		0 fd
+ */
+static int
+sys_fetchrun(uint32_t arg[]) {
+	int fd = (int)arg[0];
+	dprintf("fd: %d\n", fd);
+	fetchrun(fd);
+}
+
 
 static int (*syscalls[])(uint32_t arg[]) = {
   [SYS_exit]              sys_exit,
@@ -180,6 +193,7 @@ static int (*syscalls[])(uint32_t arg[]) = {
   [SYS_getcwd]            sys_getcwd,
   [SYS_getdirentry]       sys_getdirentry,
   [SYS_dup]               sys_dup,
+  [SYS_fetchrun]          sys_fetchrun,
 };
 
 #define NUM_SYSCALLS        ((sizeof(syscalls)) / (sizeof(syscalls[0])))

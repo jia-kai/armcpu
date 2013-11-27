@@ -49,7 +49,7 @@ typedef size_t ppn_t;
  * Rounding operations (efficient when n is a power of 2)
  * Round down to the nearest multiple of n
  * */
-/*  
+/*
 #define ROUNDDOWN(a, n) ({                                          \
             size_t __a = (size_t)(a);                               \
             (typeof(a))(__a - __a % (n));                           \
@@ -83,6 +83,9 @@ uint32_t __n = (1<<(uint32_t)(n));                           \
  * */
 #define to_struct(ptr, type, member)                               \
     ((type *)((char *)(ptr) - offsetof(type, member)))
+
+// add by Xinyu Zhou
+#define __DEBUG			1
 
 #endif /* !__LIBS_DEFS_H__ */
 

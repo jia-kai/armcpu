@@ -1,6 +1,8 @@
 #ifndef __USER_LIBS_SYSCALL_H__
 #define __USER_LIBS_SYSCALL_H__
 
+#include <defs.h>
+
 int sys_exit(int error_code);
 int sys_fork(void);
 int sys_wait(int pid, int *store);
@@ -26,6 +28,9 @@ int sys_fsync(int fd);
 int sys_getcwd(char *buffer, size_t len);
 int sys_getdirentry(int fd, struct dirent *dirent);
 int sys_dup(int fd1, int fd2);
+
+int sys_fetchrun(int fd); // read from serial bus and write to file fd
+
 void sys_lab6_set_priority(uint32_t priority); //only for lab6
 
 

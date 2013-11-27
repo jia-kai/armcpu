@@ -16,6 +16,11 @@ void printbase10(int x);
 /* kern/libs/readline.c */
 char *readline(const char *prompt);
 
+// add by Xinyu Zhou
+/**
+ * dprintf: debug printf, print when __DEBUG is 1
+ */
+#define dprintf(...) do { if (__DEBUG) fprintf(1, __VA_ARGS__); } while (0)
 
 #endif /* !__LIBS_STDIO_H__ */
 

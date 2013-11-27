@@ -1,9 +1,15 @@
 #include <ulib.h>
 #include <file.h>
 #include <stat.h>
+#include <stdio.h>
 #include <unistd.h>
 
+#include "progdef.h"
+
 #define BUFSIZE                         4096
+
+#define printf(...) fprintf(1, __VA_ARGS__)
+
 
 int
 cat(int fd) {
@@ -20,20 +26,13 @@ cat(int fd) {
 
 int
 main(int argc, char **argv) {
-    if (argc == 1) {
-        return cat(0);
-    }
-    else {
-        int i, ret;
-        for (i = 1; i < argc; i ++) {
-            if ((ret = open(argv[i], O_RDONLY)) < 0) {
-                return ret;
-            }
-            if ((ret = cat(ret)) != 0) {
-                return ret;
-            }
-        }
-    }
-    return 0;
+	int fd, ret;
+	fd = open(PROG_FILE_NAME, O_RDONLY);
+	if (fd < 0)
+		return fd;
+	if ((ret = cat(fd)) != 0) {
+		return ret;
+	}
+	return 0;
 }
 

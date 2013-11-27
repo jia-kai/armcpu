@@ -30,7 +30,7 @@ syscall(int num, ...) {
       "nop;\n"
       "move %0, $v0;\n"
       : "=r"(ret)
-      : "r"(num), "r"(arg[0]), "r"(arg[1]), "r"(arg[2]), "r"(arg[3]) 
+      : "r"(num), "r"(arg[0]), "r"(arg[1]), "r"(arg[2]), "r"(arg[3])
       : "a0", "a1", "a2", "a3", "v0"
     );
     return ret;
@@ -140,4 +140,9 @@ sys_getdirentry(int fd, struct dirent *dirent) {
 int
 sys_dup(int fd1, int fd2) {
     return syscall(SYS_dup, fd1, fd2);
+}
+
+int
+sys_fetchrun(int fd) {
+	return syscall(SYS_fetchrun, fd);
 }

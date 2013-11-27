@@ -52,7 +52,7 @@ SRCDIR  := kern
 DEPDIR  := dep
 
 
-MODULES   := init libs debug driver trap mm sync process schedule syscall fs fs/vfs fs/sfs fs/devs
+MODULES   := init libs debug driver trap mm sync process schedule syscall fs fs/vfs fs/sfs fs/devs fetchrun
 SRC_DIR   := $(addprefix $(SRCDIR)/,$(MODULES))
 BUILD_DIR := $(addprefix $(OBJDIR)/,$(MODULES))
 DEP_DIR   := $(addprefix $(DEPDIR)/,$(MODULES))
@@ -66,12 +66,12 @@ INCLUDES  := $(addprefix -I,$(SRC_DIR))
 INCLUDES  += -I$(SRCDIR)/include
 
 ifeq  ($(ON_FPGA), y)
-USER_APPLIST:= sh ls c pr fk
-INITRD_BLOCK_CNT:=1100
+USER_APPLIST:= sh l c r q pr #h # pr fk
+INITRD_BLOCK_CNT:=1400
 FPGA_LD_FLAGS += -S
 MACH_DEF := -DMACH_FPGA
 else
-USER_APPLIST:= pwd cat sh ls forktest yield hello faultreadkernel faultread badarg waitkill pgdir exit sleep
+USER_APPLIST:= pwd c sh ls fk yield hello faultreadkernel faultread badarg waitkill pg exit sleep pr r h
 # 2M
 INITRD_BLOCK_CNT:=4000
 MACH_DEF := -DMACH_QEMU
