@@ -5,10 +5,11 @@ const int max_child = 3;
 
 int
 main(void) {
-    int n, pid;
+    int n, pid, k;
     for (n = 0; n < max_child; n ++) {
         if ((pid = fork()) == 0) {
-            cprintf("I am child %d\n", n);
+			for (k = 0; k < 100; k ++)
+				cprintf("I am child %d: %d\n", n, k);
             exit(0);
         }
         assert(pid > 0);
