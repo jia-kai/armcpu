@@ -75,8 +75,6 @@ sysfile_read(int fd, void *base, size_t len) {
             alen = len;
         }
         ret = file_read(fd, buffer, alen, &alen);
-		kprintf("sysfile_read: file_read: fd=%d alen=%d ret=%d\n",
-				fd, alen, ret);
         if (alen != 0) {
             lock_mm(mm);
             {
@@ -96,7 +94,6 @@ sysfile_read(int fd, void *base, size_t len) {
     }
 
 out:
-	kprintf("sysfile_read: fd=%d copied=%d buffer=%s\n", fd, copied, buffer);
     kfree(buffer);
     if (copied != 0) {
         return copied;

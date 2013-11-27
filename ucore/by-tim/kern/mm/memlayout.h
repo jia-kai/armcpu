@@ -4,13 +4,7 @@
 /* This file contains the definitions for memory management in our OS. */
 
 #define KERNBASE            0x80000000
-
-#ifdef MACH_FPGA
-#define KMEMSIZE            0x00150000               // well, I have only 8MB RAM ...
-#else
-#define KMEMSIZE            0x00450000  
-#endif
-
+#define KMEMSIZE            0x200000                 // 512M the maximum amount of physical memory
 #define KERNTOP             (KERNBASE + KMEMSIZE)
 
 #define KSTACKPAGE          2                           // # of pages in kernel stack
