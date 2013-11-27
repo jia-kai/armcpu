@@ -1,8 +1,10 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: terminal.py
-# $Date: Thu Nov 28 04:44:17 2013 +0800
+# $Date: Thu Nov 28 04:47:48 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
+#          Xinyu Zhou <zxytim@gmail.com>
+
 
 WRITER_MUTE_STR = '`'
 TERMINAL_OUTUT_MAGIC = 't'
