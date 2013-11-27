@@ -6,7 +6,7 @@
 
 /* kern/libs/stdio.c */
 int vkprintf(const char *fmt, va_list ap);
-int kprintf(const char *fmt, ...);
+int kprintf(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 void kputchar(int c);
 int kputs(const char *str);
 int getchar(void);

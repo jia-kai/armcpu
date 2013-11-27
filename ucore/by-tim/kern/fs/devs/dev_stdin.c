@@ -34,25 +34,48 @@ dev_stdin_write(char c) {
         }
         local_intr_restore(intr_flag);
     }
+	kprintf("%s: final: char=%d(%c) buf_pos=[%d, %d]\n", __func__,
+			c, c, p_rpos, p_wpos);
 }
 
 static int
 dev_stdin_read(char *buf, size_t len) {
+	kprintf("%s: enter: cp0_status=%x\n", __func__,
+			read_c0_status());
     int ret = 0;
     bool intr_flag;
+
+	kprintf("%s: before intr_save, buf_pos=[%d, %d]\n",
+			__func__, p_rpos, p_wpos);
     local_intr_save(intr_flag);
+	kprintf("%s: after intr_save, buf_pos=[%d, %d]\n",
+			__func__, p_rpos, p_wpos);
+	kprintf("%s: after intr_save1, buf_pos=[%d, %d]\n",
+			__func__, p_rpos, p_wpos);
+
     {
+		kprintf("%s: before loop, buf_pos=[%d, %d]\n",
+				__func__, p_rpos, p_wpos);
+		kprintf("%s: before loop1, buf_pos=[%d, %d]\n",
+				__func__, p_rpos, p_wpos);
         for (; ret < len; ret ++, p_rpos ++) {
         try_again:
             if (p_rpos < p_wpos) {
                 *buf ++ = stdin_buffer[p_rpos % STDIN_BUFSIZE];
+				kprintf("%s: read char: %d\n",
+						__func__, stdin_buffer[p_rpos % STDIN_BUFSIZE]);
             }
             else {
+				kprintf("%s: going to sched\n", __func__);
                 wait_t __wait, *wait = &__wait;
                 wait_current_set(wait_queue, wait, WT_KBD);
                 local_intr_restore(intr_flag);
 
+				kprintf("%s: before sched: buf_pos=[%d, %d]\n",
+						__func__, p_rpos, p_wpos);
                 schedule();
+				kprintf("%s: after sched: buf_pos=[%d, %d]\n",
+						__func__, p_rpos, p_wpos);
 
                 local_intr_save(intr_flag);
                 wait_current_del(wait_queue, wait);
@@ -64,6 +87,8 @@ dev_stdin_read(char *buf, size_t len) {
         }
     }
     local_intr_restore(intr_flag);
+	kprintf("%s: exit, ret=%d buf_pos=[%d, %d]\n", __func__, ret,
+			p_rpos, p_wpos);
     return ret;
 }
 

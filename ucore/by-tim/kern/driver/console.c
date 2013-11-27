@@ -113,7 +113,7 @@ serial_proc_data(void) {
     if( (t & 0x02) == 0)
       return -1;
     c = inw(COM1 + 0x00) & 0xFF;
-    //kprintf("proc_data:0x%x\n", c);
+    kprintf("serial_proc_data:0x%x\n", c);
 #endif
     if (c == 127) {
         c = '\b';
@@ -129,8 +129,8 @@ void serial_int_handler(void *opaque)
   if(id & 0x01)
     return ;
 #endif
-  //int c = serial_proc_data();
-  int c = cons_getc(c);
+  int c = serial_proc_data();
+  //int c = cons_getc(c);
   extern void dev_stdin_write(char c);
   dev_stdin_write(c);
 }
@@ -227,7 +227,8 @@ cons_getc(void) {
         }
     }
     local_intr_restore(intr_flag);
-    //if (c) kprintf("cons_get(0x%x)\n", c);
+    if (c)
+		kprintf("cons_get: %d\n", c);
     return c;
 }
 

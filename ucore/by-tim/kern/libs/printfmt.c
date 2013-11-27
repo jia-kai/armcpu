@@ -5,6 +5,8 @@
 #include <string.h>
 #include <unistd.h>
 
+void printfmt(void (*putch)(int, void*, int), int fd, void *putdat, const char *fmt, ...);
+
 /* *
  * Space or zero padding and a field width are supported for the numeric
  * formats only.
