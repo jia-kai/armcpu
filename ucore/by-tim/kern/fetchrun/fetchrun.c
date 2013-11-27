@@ -1,6 +1,6 @@
 /*
  * $File: fetchrun.c
- * $Date: Thu Nov 28 02:05:24 2013 +0800
+ * $Date: Thu Nov 28 04:28:59 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -15,6 +15,7 @@
 static const uint32_t COM_DATA = COM1;
 static const uint32_t COM_STAT = COM1 + 4;
 static const uint32_t CHECKSUM_INIT = 0x23;
+static const uint32_t FETCH_MAGIC = 'r';
 
 static uint32_t checksum;
 
@@ -71,11 +72,12 @@ static uint32_t read_word() {
 /**
  * fetch a program from serial buf and write to file fd
  * protocol:
- *		4 byte:	size
- *		1 byte: checksum
- *		size byte: data
- *		1 byte: checksum
- *		4 byte: retval of file_write
+ *	c -> s 2 byte: FETCH_MAGIC + 0
+ *	s -> c 4 byte:	size
+ *	c -> s 1 byte: checksum
+ *	s -> c size byte: data
+ *	c -> s 1 byte: checksum
+ *	c -> s 4 byte: retval of file_write
  *
  * return: size
  *
@@ -87,6 +89,8 @@ int fetchrun(int fd) {
 	bool intr_flag;
 	local_intr_save(intr_flag);
 	{
+		write_byte(FETCH_MAGIC);
+		write_byte(0);
 		// read size
 		reset_checksum();
 		uint32_t size = read_word();

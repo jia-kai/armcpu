@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 # $File: terminal-input.py
-# $Date: Thu Nov 28 02:11:50 2013 +0800
+# $Date: Thu Nov 28 02:45:12 2013 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 DEVICE = '/dev/ttyUSB0'
@@ -9,6 +9,7 @@ DEVICE = '/dev/ttyUSB0'
 import serial
 import sys
 import time
+import os
 
 MAGIC_CHAR = '`'
 
@@ -16,8 +17,8 @@ def usage():
     print "a solely terminal input."
     print "input of Magic Char {} terminates this program." . format(MAGIC_CHAR)
 
-if len(sys.argv) >= 2:
-    DEVICE = sys.argv[1]
+if os.getenv('DEVICE'):
+    DEVICE = os.getenv('DEVICE')
 
 usage()
 

@@ -67,7 +67,7 @@ INCLUDES  += -I$(SRCDIR)/include
 
 ifeq  ($(ON_FPGA), y)
 USER_APPLIST:= sh l c r q pr #h # pr fk
-INITRD_BLOCK_CNT:=1400
+INITRD_BLOCK_CNT:=1500
 FPGA_LD_FLAGS += -S
 MACH_DEF := -DMACH_FPGA
 else

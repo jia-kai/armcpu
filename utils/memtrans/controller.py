@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: controller.py
-# $Date: Tue Nov 26 18:31:28 2013 +0800
+# $Date: Thu Nov 28 02:40:38 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 from ctllib import MemtransController
@@ -12,6 +12,9 @@ import serial
 import sys
 import os
 import time
+
+if os.getenv('DEVICE'):
+    DEVICE = os.getenv('DEVICE')
 
 CHUNKSIZE = 4096
 FLASH_BLOCK_SIZE = 128 * 1024

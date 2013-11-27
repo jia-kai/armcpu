@@ -166,7 +166,6 @@ sys_dup(uint32_t arg[]) {
 static int
 sys_fetchrun(uint32_t arg[]) {
 	int fd = (int)arg[0];
-	dprintf("fd: %d\n", fd);
 	fetchrun(fd);
 }
 

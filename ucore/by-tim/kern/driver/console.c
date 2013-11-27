@@ -7,6 +7,9 @@
 #include <memlayout.h>
 #include <sync.h>
 
+// used to differentiate ordinary console output and a transfer command
+static const uint32_t TERMINAL_OUTPUT_MAGIC = 't';
+
 /* stupid I/O delay routine necessitated by historical PC design flaws */
 static void
 delay(void) {
@@ -76,9 +79,11 @@ serial_putc_sub(int c) {
 #elif defined MACH_FPGA
     //TODO
     while( (inw(COM1 + 0x04) & 0x01) == 0 );
+    outw(COM1 + 0x00, TERMINAL_OUTPUT_MAGIC & 0xFF);
+    while( (inw(COM1 + 0x04) & 0x01) == 0 );
     outw(COM1 + 0x00, c & 0xFF);
-    
-    
+
+
 #define VGA 0xBFC03000
 
 #endif

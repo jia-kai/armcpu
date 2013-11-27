@@ -1,16 +1,17 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 # $File: terminal-output.py
-# $Date: Thu Nov 28 02:11:52 2013 +0800
+# $Date: Thu Nov 28 02:46:02 2013 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 DEVICE = '/dev/ttyUSB0'
 
 import serial
 import sys
+import os
 
-if len(sys.argv) >= 2:
-    DEVICE = sys.argv[1]
+if os.getenv('DEVICE'):
+    DEVICE = os.getenv('DEVICE')
 
 ser = serial.Serial(DEVICE, 115201,
         stopbits=2, parity=serial.PARITY_NONE,

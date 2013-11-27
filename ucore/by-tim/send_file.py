@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 # $File: send_file.py
-# $Date: Thu Nov 28 02:07:33 2013 +0800
+# $Date: Thu Nov 28 04:44:42 2013 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 DEVICE = '/dev/ttyUSB0'
@@ -10,6 +10,10 @@ import serial
 import sys
 import os
 import time
+import traceback
+
+if os.getenv('DEVICE'):
+    DEVICE = os.getenv('DEVICE')
 
 CHUNKSIZE = 4096
 
@@ -43,9 +47,11 @@ class WriteChecksumSerial(object):
         self.checksum = CHECKSUM_INIT
         self.reset_checksum()
         self.ser = ser
+        self.read_buf = []
 
     def reset_checksum(self):
         self.checksum = CHECKSUM_INIT
+        self.read_buf = []
 
     def _do_write(self, data):
         self.ser.write(data)
@@ -59,25 +65,19 @@ class WriteChecksumSerial(object):
         self._update_checksum(data)
 
     def read(self, size = 1):
-        return self.ser.read(size)
+        data = self.ser.read(size)
+        self.read_buf = data
+        return data
 
-
-def main():
-    if len(sys.argv) != 2 and len(sys.argv) != 3:
-        print "Usage: {} <input> [dev]" . format(sys.argv[0])
-        sys.exit(1);
-
-    if len(sys.argv) == 3:
-        DEVICE = sys.argv[2]
-
-    fpath = sys.argv[1]
-
-    ser = serial.Serial(DEVICE, 115201,
-            stopbits = 2, parity = serial.PARITY_NONE, timeout = 1)
-
+# param: ser, a Serial object
+def send_file(ser, fpath):
     ser = WriteChecksumSerial(ser)
 
-    fsize = os.stat(fpath).st_size
+    try:
+        fsize = os.stat(fpath).st_size
+    except OSError as e:
+        print e
+        return False
     speed = SpeedCalc(fsize)
 
     def int2data(int32):
@@ -100,36 +100,64 @@ def main():
     # c -> s: checksum
     # c -> s: file_write retval
 
-    print "writing size: {} ..." . format(fsize)
-    ser.reset_checksum()
-    ser.write(int2data(fsize))
-    checksum = ord(ser.read()) & 0xFF
-    assert ser.checksum == checksum, \
-            "local checksum {} != {} received checksum" . format(
-                    ser.checksum, checksum)
-    ser.reset_checksum()
-    with open(fpath) as fin:
-        print "writing data ..."
-        size = 0
-        while True:
-            data = fin.read(CHUNKSIZE)
-            size += len(data)
-            if not data:
-                break
-            cnt += len(data)
-            ser.write(data)
-            speed.trigger(len(data))
+    try:
+        print "writing size: {} ..." . format(fsize)
+        ser.reset_checksum()
+        ser.write(int2data(fsize))
         checksum = ord(ser.read()) & 0xFF
-        file_write_retval = data2int(ser.read(4))
-        assert ser.checksum == checksum
-        print "{}/{} bytes written." . format(size, fsize)
-        if file_write_retval == 0:
-            print "file write succeed"
-        else:
-            print "file write failed: {}" . format(file_write_retval)
+        assert ser.checksum == checksum, \
+                "local checksum {} != {} received checksum" . format(
+                        ser.checksum, checksum)
+        ser.reset_checksum()
+        with open(fpath) as fin:
+            print "writing data ..."
+            size = 0
+            while True:
+                data = fin.read(CHUNKSIZE)
+                size += len(data)
+                if not data:
+                    break
+                cnt += len(data)
+                ser.write(data)
+                speed.trigger(len(data))
+            checksum = ord(ser.read()) & 0xFF
+            file_write_retval = data2int(ser.read(4))
+            assert ser.checksum == checksum
+            print "{}/{} bytes written." . format(size, fsize)
+            if file_write_retval == 0:
+                print "file write succeed"
+            else:
+                print "file write failed: {}" . format(file_write_retval)
+    except AssertionError as e:
+        print traceback.format_exc()
+        print "possible interpretation:"
+        buflen = len(ser.read_buf)
+        print "---------"
+        print "".join(ser.read_buf[i] for i in range(buflen) if i % 2 == 0)
+        print "---------"
+        print "".join(ser.read_buf[i] for i in range(buflen) if i % 2 == 1)
+        print "---------"
+        return False
+    return True
+
+
+def main(argv):
+    global DEVICE
+    if len(argv) != 2:
+        print "Usage: {} <input>" . format(argv[0])
+        sys.exit(1);
+
+    ser = serial.Serial(DEVICE, 115201,
+            stopbits = 2, parity = serial.PARITY_NONE, timeout = 1)
+    fpath = argv[1]
+    if send_file(ser, fpath):
+        print "transfer succeed."
+    else:
+        print "transfer failed."
+
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
 
 # vim: foldmethod=marker
 
