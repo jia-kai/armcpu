@@ -1,6 +1,6 @@
 /*
  * $File: armcpu.v
- * $Date: Tue Nov 26 21:57:45 2013 +0800
+ * $Date: Fri Nov 29 00:40:56 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -33,7 +33,12 @@ module armcpu(
 	// flash interface
 	output [22:0] flash_addr,
 	inout [15:0] flash_data,
-	output [7:0] flash_ctl);
+	output [7:0] flash_ctl,
+
+	// VGA interface
+	output [8:0] vga_color_out,
+	output vga_hsync,
+	output vga_vsync);
 
 
 	reg clk_cpu;
@@ -76,18 +81,27 @@ module armcpu(
 
 		.rom_selector(rom_selector),
 
-		.baseram_addr(baseram_addr), .baseram_data(baseram_data),
+		.baseram_addr(baseram_addr),
+		.baseram_data(baseram_data),
 		.baseram_ce(baseram_ce),
 		.baseram_oe(baseram_oe),	
 		.baseram_we(baseram_we_set),
-		.extram_addr(extram_addr), .extram_data(extram_data),
-		.extram_ce(extram_ce), .extram_oe(extram_oe), .extram_we(extram_we),
+		.extram_addr(extram_addr),
+		.extram_data(extram_data),
+		.extram_ce(extram_ce),
+		.extram_oe(extram_oe),
+		.extram_we(extram_we),
 
-		.com_TxD(com_TxD), .com_RxD(com_RxD),
+		.com_TxD(com_TxD),
+		.com_RxD(com_RxD),
 	
 		.flash_addr(flash_addr),
 		.flash_data(flash_data),
-		.flash_ctl(flash_ctl));
+		.flash_ctl(flash_ctl),
+	
+		.vga_color_out(vga_color_out),
+		.vga_hsync(vga_hsync),
+		.vga_vsync(vga_vsync));
 
 	always @(posedge clk_cpu)
 		led[7:0] <= {led[6:0], !led[6:0]};

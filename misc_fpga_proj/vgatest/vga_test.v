@@ -1,6 +1,6 @@
 /*
  * $File: vga_test.v
- * $Date: Sat Nov 02 19:38:36 2013 +0800
+ * $Date: Fri Nov 29 02:06:54 2013 +0800
  * $Author: Xinyu Zhou <zxytim@gmail.com>
  */
 
@@ -8,9 +8,9 @@
 
 module vga_test(
 	input clk50M,
-	output [8:0] color_out,
-	output hsync,
-	output vsync,
+	output [8:0] vga_color_out,
+	output vga_hsync,
+	output vga_vsync,
 
 	// debug
 	output [0:6] segdisp0,
@@ -35,19 +35,19 @@ module vga_test(
 		end
 	end
 
-	assign led = {clk_ind, color_out, sec};
+	assign led = {clk_ind, vga_color_out, sec};
 
-	vga_driver vga(clk50M, color_out, hsync, vsync);
+	vga_driver vga(clk50M, vga_color_out, vga_hsync, vga_vsync);
 
 	digseg_driver digsegv(sec, segdisp0);
 	digseg_driver digsegh(sec, segdisp1);
 
 	reg vsync_prev;
 	always @(posedge clk50M)
-		vsync_prev <= vsync;
+		vsync_prev <= vga_vsync;
 
 	always @(posedge clk50M) begin
-		if (vsync_prev & ~vsync) begin
+		if (vsync_prev & ~vga_vsync) begin
 			if (vsync_cnt == 59) begin
 				vsync_cnt <= {10{1'b0}};
 				sec <= sec + 1'b1;
@@ -57,7 +57,7 @@ module vga_test(
 		end
 	end
 
-	always @(negedge hsync) begin hsync_cnt <= hsync_cnt + 1'b1; end
+	always @(negedge vga_hsync) begin hsync_cnt <= hsync_cnt + 1'b1; end
 
 //    always #10 clk50M = !clk50M;
 //    initial begin
@@ -65,8 +65,8 @@ module vga_test(
 //        $dumpvars(0, clk50M);
 //        $dumpvars(0, vsync_cnt);
 //        $dumpvars(0, hsync_cnt);
-//        $dumpvars(0, vsync);
-//        $dumpvars(0, hsync);
+//        $dumpvars(0, vga_vsync);
+//        $dumpvars(0, vga_hsync);
 //        $dumpvars(0, sec);
 //        $dumpvars(0, led);
 //        #50000000 $finish;

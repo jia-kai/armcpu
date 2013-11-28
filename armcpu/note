@@ -129,6 +129,9 @@ physical address mapping
 [0x00000000, 0x007FFFFF]	RAM		8MB
 [0x10000000, 0x10000FFF]	ROM		4KB
 [0x1E000000, 0x1EFFFFFF]	flash	16MB, but only lower half word is used
+[0x1A000000, 0x1A096000]	VGA		400x300 resolution, but store 512x300 words
+									in ram; lower 8 bit in each word counts;
+									this area is writeonly
 0x1FD003F8					com data
 0x1FD003FC					com stat
 0x1FD00400					segment display monitor

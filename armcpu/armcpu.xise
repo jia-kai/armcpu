@@ -25,7 +25,7 @@
     </file>
     <file xil_pn:name="src/cpu.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="3"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="15"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="17"/>
     </file>
     <file xil_pn:name="src/forward.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="4"/>
@@ -49,7 +49,7 @@
     </file>
     <file xil_pn:name="synthesis/digseg_driver.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="24"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="16"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="18"/>
     </file>
     <file xil_pn:name="synthesis/misc.ucf" xil_pn:type="FILE_UCF">
       <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
@@ -59,7 +59,7 @@
     </file>
     <file xil_pn:name="src/system.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="112"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="17"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="19"/>
     </file>
     <file xil_pn:name="src/mmu.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="115"/>
@@ -67,7 +67,7 @@
     </file>
     <file xil_pn:name="src/phy_mem_ctrl.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="116"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="14"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="16"/>
     </file>
     <file xil_pn:name="synthesis/led.ucf" xil_pn:type="FILE_UCF">
       <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
@@ -77,7 +77,7 @@
     </file>
     <file xil_pn:name="synthesis/armcpu.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="132"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="18"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="20"/>
     </file>
     <file xil_pn:name="src/cp0.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="171"/>
@@ -89,7 +89,7 @@
     </file>
     <file xil_pn:name="src/serial_port.v" xil_pn:type="FILE_VERILOG">
       <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="92"/>
-      <association xil_pn:name="Implementation" xil_pn:seqID="13"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="15"/>
     </file>
     <file xil_pn:name="synthesis/com.ucf" xil_pn:type="FILE_UCF">
       <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
@@ -105,7 +105,21 @@
     <file xil_pn:name="src/flash.ucf" xil_pn:type="FILE_UCF">
       <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
     </file>
+    <file xil_pn:name="synthesis/vga.ucf" xil_pn:type="FILE_UCF">
+      <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
+    </file>
+    <file xil_pn:name="src/vga.v" xil_pn:type="FILE_VERILOG">
+      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="106"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="14"/>
+    </file>
+    <file xil_pn:name="ipcore_dir/vga_ram.xco" xil_pn:type="FILE_COREGEN">
+      <association xil_pn:name="BehavioralSimulation" xil_pn:seqID="107"/>
+      <association xil_pn:name="Implementation" xil_pn:seqID="13"/>
+    </file>
     <file xil_pn:name="ipcore_dir/multiplier.xise" xil_pn:type="FILE_COREGENISE">
+      <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
+    </file>
+    <file xil_pn:name="ipcore_dir/vga_ram.xise" xil_pn:type="FILE_COREGENISE">
       <association xil_pn:name="Implementation" xil_pn:seqID="0"/>
     </file>
   </files>
@@ -456,6 +470,7 @@
     <file xil_pn:name="src/gencode/id2ex_param.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/ex2mem_param.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/int_def.vh" xil_pn:type="FILE_VERILOG"/>
+    <file xil_pn:name="src/vga_def.vh" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="rom/bootloader.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="rom/memtrans.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/id2ex_extract_load.v" xil_pn:type="FILE_VERILOG"/>

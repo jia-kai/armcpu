@@ -8,14 +8,16 @@
       <ClosedNodes>
          <ClosedNodesVersion>2</ClosedNodesVersion>
          <ClosedNode>/Automatic `includes</ClosedNode>
-         <ClosedNode>/armcpu |home|jiakai|document|original|thu|2013-fall|assignment|computer-organization|armcpu|armcpu|synthesis|armcpu.v</ClosedNode>
+         <ClosedNode>/armcpu |home|jiakai|document|original|thu|2013-fall|assignment|computer-organization|armcpu|armcpu|synthesis|armcpu.v/usys - system/ucom - serial_port</ClosedNode>
+         <ClosedNode>/armcpu |home|jiakai|document|original|thu|2013-fall|assignment|computer-organization|armcpu|armcpu|synthesis|armcpu.v/usys - system/ucpu - cpu</ClosedNode>
+         <ClosedNode>/armcpu |home|jiakai|document|original|thu|2013-fall|assignment|computer-organization|armcpu|armcpu|synthesis|armcpu.v/usys - system/uvga - vga</ClosedNode>
       </ClosedNodes>
       <SelectedItems>
          <SelectedItem>armcpu (/home/jiakai/document/original/thu/2013-fall/assignment/computer-organization/armcpu/armcpu/synthesis/armcpu.v)</SelectedItem>
       </SelectedItems>
-      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="vertical" >3</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
-      <ViewHeaderState orientation="horizontal" >000000ff000000000000000100000001000000000000000000000000000000000202000000010000000100000064000000cb000000020000000000000000000000000200000064ffffffff000000810000000300000002000000cb0000000100000003000000000000000100000003</ViewHeaderState>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000100000000000000000000000000000000020200000001000000010000006400000169000000020000000000000000000000000200000064ffffffff000000810000000300000002000001690000000100000003000000000000000100000003</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
       <CurrentItem>armcpu (/home/jiakai/document/original/thu/2013-fall/assignment/computer-organization/armcpu/armcpu/synthesis/armcpu.v)</CurrentItem>
    </ItemView>
@@ -33,7 +35,7 @@
       <SelectedItems>
          <SelectedItem>Generate Programming File</SelectedItem>
       </SelectedItems>
-      <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
+      <ScrollbarPosition orientation="vertical" >2</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff000000000000000100000001000000000000000000000000000000000000000000000001a3000000010000000100000000000000000000000064ffffffff000000810000000000000001000001a30000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
@@ -46,7 +48,7 @@
       <SelectedItems/>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
-      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000000000000010000000000000000000000000000000000000637000000040101000100000000000000000000000064ffffffff000000810000000000000004000000b60000000100000000000000df00000001000000000000007800000001000000000000042a0000000100000000</ViewHeaderState>
+      <ViewHeaderState orientation="horizontal" >000000ff00000000000000010000000000000000010000000000000000000000000000000000000277000000040101000100000000000000000000000064ffffffff000000810000000000000004000000b60000000100000000000000df00000001000000000000007800000001000000000000006a0000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
       <CurrentItem>alu.v</CurrentItem>
    </ItemView>
@@ -68,13 +70,13 @@
          <ClosedNode>Design Utilities</ClosedNode>
       </ClosedNodes>
       <SelectedItems>
-         <SelectedItem/>
+         <SelectedItem></SelectedItem>
       </SelectedItems>
       <ScrollbarPosition orientation="vertical" >0</ScrollbarPosition>
       <ScrollbarPosition orientation="horizontal" >0</ScrollbarPosition>
       <ViewHeaderState orientation="horizontal" >000000ff000000000000000100000001000000000000000000000000000000000000000000000001b3000000010000000100000000000000000000000064ffffffff000000810000000000000001000001b30000000100000000</ViewHeaderState>
       <UserChangedColumnWidths orientation="horizontal" >false</UserChangedColumnWidths>
-      <CurrentItem/>
+      <CurrentItem></CurrentItem>
    </ItemView>
    <SourceProcessView>000000ff00000000000000020000014e0000012001000000060100000002</SourceProcessView>
    <CurrentView>Implementation</CurrentView>

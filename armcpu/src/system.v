@@ -1,9 +1,10 @@
 /*
  * $File: system.v
- * $Date: Mon Nov 25 15:04:09 2013 +0800
+ * $Date: Fri Nov 29 00:40:46 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
+`include "vga_def.vh"
 
 // top-level system
 module system
@@ -35,7 +36,12 @@ module system
 	// flash interface
 	output [22:0] flash_addr,
 	inout [15:0] flash_data,
-	output [7:0] flash_ctl);
+	output [7:0] flash_ctl,
+
+	// VGA interface
+	output [8:0] vga_color_out, // 3 red, 3 green, 3 blue
+	output vga_hsync,
+	output vga_vsync);
 
 	// ------------------------------------------------------------------
 
@@ -44,6 +50,10 @@ module system
 
 	wire int_com_req, int_com_ack, com_write_enable, com_write_busy;
 	wire [7:0] data_to_com, data_from_com;
+
+	wire [`VGA_ADDR_WIDTH-1:0] vga_write_addr;
+	wire [`VGA_DATA_WIDTH-1:0] vga_write_data;
+	wire vga_write_enable;
 
 	cpu ucpu(.clk(clk_cpu), .clk_fast(clk50M), .rst(rst),
 		.int_com_req(int_com_req),
@@ -76,7 +86,11 @@ module system
 	
 		.flash_addr(flash_addr),
 		.flash_data(flash_data),
-		.flash_ctl(flash_ctl));
+		.flash_ctl(flash_ctl),
+	
+		.vga_write_addr(vga_write_addr),
+		.vga_write_data(vga_write_data),
+		.vga_write_enable(vga_write_enable));
 
 
 	serial_port #(.CLK_FREQ(50000000)) ucom(
@@ -86,6 +100,16 @@ module system
 		.write_enable(com_write_enable),
 		.write_busy(com_write_busy),
 		.TxD(com_TxD), .RxD(com_RxD));
+
+
+	vga uvga(.clk50M(clk50M),
+		.write_addr(vga_write_addr),
+		.write_data(vga_write_data),
+		.write_enable(vga_write_enable),
+		
+		.color_out(vga_color_out),
+		.hsync(vga_hsync),
+		.vsync(vga_vsync));
 
 endmodule
 

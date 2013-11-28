@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Tue Nov 26 11:13:35 2013 +0800
+ * $Date: Fri Nov 29 00:15:17 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -36,17 +36,33 @@ module top;
 		.ce(flash_ctl[5]), .oe(flash_ctl[3]), .we(flash_ctl[0]));
 
 	wire com_to_sys, com_from_sys;
+
+	wire [8:0] vga_color_out;
+	wire vga_hsync, vga_vsync;
+
 	system usystem(.clk_cpu(clk_half), .clk50M(clk), .rst(rst),
 		.segdisp(segdisp),
 		.rom_selector(1'b0),
-		.baseram_addr(baseram_addr), .baseram_data(baseram_data),
-		.baseram_ce(baseram_ce), .baseram_oe(baseram_oe), .baseram_we(baseram_we),
-		.extram_addr(extram_addr), .extram_data(extram_data),
-		.extram_ce(extram_ce), .extram_oe(extram_oe), .extram_we(extram_we),
-		.com_TxD(com_from_sys), .com_RxD(com_to_sys),
+		.baseram_addr(baseram_addr),
+		.baseram_data(baseram_data),
+		.baseram_ce(baseram_ce),
+		.baseram_oe(baseram_oe),
+		.baseram_we(baseram_we),
+		.extram_addr(extram_addr),
+		.extram_data(extram_data),
+		.extram_ce(extram_ce),
+		.extram_oe(extram_oe),
+		.extram_we(extram_we),
+
+		.com_TxD(com_from_sys),
+		.com_RxD(com_to_sys),
 	
 		.flash_addr(flash_addr), .flash_data(flash_data_ext[15:0]),
-		.flash_ctl(flash_ctl));
+		.flash_ctl(flash_ctl),
+	
+		.vga_color_out(vga_color_out),
+		.vga_hsync(vga_hsync),
+		.vga_vsync(vga_vsync));
 
 	always #1 clk <= ~clk;
 
@@ -55,9 +71,7 @@ module top;
 
 	initial begin
 		$dumpfile("dump.vcd");
-		$dumpvars(0, usystem);
-		$dumpvars(0, ubaseram);
-		$dumpvars(0, uextram);
+		$dumpvars(0, top);
 
 		$monitor("time=%g segdisp=%h", $time, segdisp);
 

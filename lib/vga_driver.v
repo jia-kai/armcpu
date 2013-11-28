@@ -1,6 +1,6 @@
 /*
  * $File: vga_driver.v
- * $Date: Sun Nov 03 11:12:10 2013 +0800
+ * $Date: Fri Nov 29 02:07:38 2013 +0800
  * $Author: Xinyu Zhou <zxytim@gmail.com>
  *          jiakai <jia.kai66@gmail.com>
  */
@@ -56,7 +56,8 @@ module vga_driver(
 			hsync_cnt <= hsync_cnt + 1'b1;
 		end
 		if (should_draw) begin
-			`include "logo.v"
+			//`include "logo.v"
+			color_out <= {9{1'b1}};
 		end else
 			color_out <= 0;
 	end

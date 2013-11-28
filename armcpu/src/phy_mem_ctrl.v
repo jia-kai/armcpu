@@ -1,19 +1,26 @@
 /*
  * $File: phy_mem_ctrl.v
- * $Date: Mon Nov 25 15:07:37 2013 +0800
+ * $Date: Fri Nov 29 01:01:58 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 `timescale 1ns/1ps
+
+`include "vga_def.vh"
 
 `define COM_DATA_ADDR	32'h1FD003F8	// only lowest byte contributes
 `define COM_STAT_ADDR	32'h1FD003FC	// {30'b0, read_ready, write_ready}
 
 `define SEGDISP_ADDR	32'h1FD00400	// 7-segment display monitor
 
+`define VGA_ADDR_START	32'h1A000000
+`define VGA_ADDR_END	32'h1A096000
+
 `define ADDR_IS_RAM(addr) ((addr & 32'h007FFFFF) == addr)
 `define ADDR_IS_FLASH(addr) (addr[31:24] == 8'h1E)
 `define ADDR_IS_ROM(addr) (addr[31:12] == 20'h10000)
+`define ADDR_IS_VGA(addr) (addr >= `VGA_ADDR_START && addr < `VGA_ADDR_END)
+
 
 `define ROM_ADDR_WIDTH	12
 
@@ -63,8 +70,12 @@ module phy_mem_ctrl(
 	// flash interface
 	output [22:0] flash_addr,
 	inout [15:0] flash_data,
-	output [7:0] flash_ctl);
+	output [7:0] flash_ctl,
 
+	// VGA interface
+	output reg [`VGA_ADDR_WIDTH-1:0] vga_write_addr,
+	output reg [`VGA_DATA_WIDTH-1:0] vga_write_data,
+	output reg vga_write_enable);
 
 	// ------------------------------------------------------------------
 
@@ -88,7 +99,10 @@ module phy_mem_ctrl(
 			addr_is_com_stat = (addr == `COM_STAT_ADDR),
 			addr_is_flash = `ADDR_IS_FLASH(addr),
 			addr_is_segdisp = (addr == `SEGDISP_ADDR),
-			addr_is_rom = `ADDR_IS_ROM(addr);
+			addr_is_rom = `ADDR_IS_ROM(addr),
+			addr_is_vga = `ADDR_IS_VGA(addr);
+
+	wire [31:0] addr_vga_offset = addr - `VGA_ADDR_START;
 
 	assign flash_byte = 1, flash_vpen = 1, flash_ce = 0, flash_rp = 1,
 		flash_oe = (state == WRITE_FLASH),
@@ -165,6 +179,8 @@ module phy_mem_ctrl(
 	always @(negedge clk50M) begin
 		enable_com_write <= 0;
 		is_write_prev <= is_write;
+		vga_write_enable <= 0;
+
 		if (rst)
 			state <= READ;
 		else case (state)
@@ -172,21 +188,29 @@ module phy_mem_ctrl(
 				write_addr_latch <= addr;
 				write_data_latch <= data_in;
 				write_cnt <= 0;
-				case ({addr_is_ram, addr_is_com_data, addr_is_flash, addr_is_segdisp})
-					4'b1000: state <= WRITE_RAM;
-					4'b0100: enable_com_write <= 1;
-					4'b0010: state <= WRITE_FLASH;
-					4'b0001: segdisp <= data_in;
+				case ({addr_is_ram, addr_is_com_data, addr_is_flash,
+						addr_is_segdisp, addr_is_vga})
+					5'b10000: state <= WRITE_RAM;
+					5'b01000: enable_com_write <= 1;
+					5'b00100: state <= WRITE_FLASH;
+					5'b00010: segdisp <= data_in;
+					5'b00001: begin
+						vga_write_addr <= addr_vga_offset[`VGA_ADDR_WIDTH+1:2];
+						vga_write_data <= data_in[7:0];
+						vga_write_enable <= 1;
+					end
 				endcase
 			end
 			WRITE_RAM: begin
 				write_cnt <= write_cnt_next;
-				if (write_cnt_next == `RAM_WRITE_READ_RECOVERY + `RAM_WRITE_WIDTH)
+				if (write_cnt_next ==
+						`RAM_WRITE_READ_RECOVERY + `RAM_WRITE_WIDTH)
 					state <= RECOVERY_READ;
 			end
 			WRITE_FLASH: begin
 				write_cnt <= write_cnt_next;
-				if (write_cnt_next == `FLASH_WRITE_READ_RECOVERY + `FLASH_WRITE_WIDTH)
+				if (write_cnt_next ==
+						`FLASH_WRITE_READ_RECOVERY + `FLASH_WRITE_WIDTH)
 					state <= RECOVERY_READ;
 			end
 			RECOVERY_READ:
