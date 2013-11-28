@@ -1,6 +1,6 @@
 /*
  * $File: vga.v
- * $Date: Fri Nov 29 02:43:27 2013 +0800
+ * $Date: Fri Nov 29 04:53:45 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -29,7 +29,8 @@ module vga(
 		V_BACK_PORCH = 23,
 		V_WHOLE = 666;
 
-	localparam RAM_ADDR_BASE = 18'h8000;
+	localparam RAM_ADDR_BASE = 18'h2000;
+	// i do not know why lower addr of uram does not work
 
 	reg [10:0] hsync_cnt = 0;
 	reg [10:0] vsync_cnt = 0;

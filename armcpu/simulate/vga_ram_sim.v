@@ -1,6 +1,6 @@
 /*
  * $File: vga_ram_sim.v
- * $Date: Fri Nov 29 00:35:32 2013 +0800
+ * $Date: Fri Nov 29 03:20:39 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -21,11 +21,8 @@ module vga_ram(input clka, input wea,
 	end
 
 	always @(posedge clka)
-		if (wea) begin
+		if (wea)
 			mem[addra] <= dina;
-			$display("time=%g write to vga ram: addr=%h data=%h",
-				$time, addra, dina);
-		end
 
 	assign doutb = mem[addrb];
 
