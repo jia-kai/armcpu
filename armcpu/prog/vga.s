@@ -13,6 +13,7 @@ li $VGA_START, 0x9A000000
 li $FLASH, 0x9EE00000
 li $WIDTH, 400
 li $HEIGHT, 300
+li $out_switch, 0
 
 start_load:
 move $dest, $VGA_START
@@ -23,12 +24,7 @@ load_row:
 li $col_num, 0
 
 load_pxl:
-bnez $out_switch, 1f
-li $val, 0
-b 2f
-1:
 lw $val, 0($src)
-2:
 addiu $src, 4
 sw $val, 0($dest)
 addiu $dest, 4
@@ -42,7 +38,7 @@ addiu $dest, (512 - 400) * 4
 addiu $row_num, 1
 bne $row_num, $HEIGHT, load_row
 
-xori $out_switch, 1
+#xori $out_switch, 1
 b start_load
 
 # vim: ft=mips
