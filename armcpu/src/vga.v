@@ -1,6 +1,6 @@
 /*
  * $File: vga.v
- * $Date: Fri Nov 29 02:21:53 2013 +0800
+ * $Date: Fri Nov 29 02:43:27 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -29,6 +29,8 @@ module vga(
 		V_BACK_PORCH = 23,
 		V_WHOLE = 666;
 
+	localparam RAM_ADDR_BASE = 18'h8000;
+
 	reg [10:0] hsync_cnt = 0;
 	reg [10:0] vsync_cnt = 0;
 
@@ -46,13 +48,16 @@ module vga(
 		pixel_y >= 0 && pixel_y < V_VISIBLE_AREA;
 
 	wire [7:0] data_from_ram;
+	wire [17:0] addr_to_ram =
+		write_enable ? write_addr + RAM_ADDR_BASE
+			: {1'b1, {`VGA_WIDTH_MULT_SHIFT{1'b0}}};
 
 	vga_ram uram(.clka(clk50M), .wea(1'b1),
-		.addra(write_enable ? write_addr :
-			{1'b1, {`VGA_WIDTH_MULT_SHIFT{1'b0}}}),
+		.addra(addr_to_ram),
 		.dina(write_data),
 		.clkb(clk50M),
-		.addrb(pixel_ram_addr), .doutb(data_from_ram));
+		.addrb(pixel_ram_addr + RAM_ADDR_BASE),
+		.doutb(data_from_ram));
 
 	wire [2:0] red = data_from_ram[7:5], green = data_from_ram[4:2];
 	reg [2:0] blue;
