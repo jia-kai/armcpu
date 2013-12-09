@@ -1,2 +1,4 @@
 Makefile
 qemu-system-mipsel
+loader
+loader.bin
