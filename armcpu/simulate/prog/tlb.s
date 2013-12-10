@@ -1,4 +1,4 @@
-# simu: 200ns
+# simu: 300ns
 start:
 
 li $v0, 3		# valid, global
@@ -10,6 +10,10 @@ tlbwi
 
 li $v0, 1
 mtc0 $v0, $0	# index
+
+li $v0, 0x00000087		# PFN=2, writable, valid, global
+mtc0 $v0, $3	# EntryLo1
+
 li $v0, 0x24000000	# VPN2
 mtc0 $v0, $10	# EntryHI
 tlbwi
@@ -20,6 +24,10 @@ mtc0 $v0, $15, 1 # EBase
 li $gp, 0x23000000
 lw $v0, 0($gp)	# should got first instr
 li $gp, 0x24000004
+lw $v1, 0($gp)	# should got second instr
+li $v0, 0x19931102
+sw $v0, 0x1000($gp)	# test for EntryLo1, phy_addr=0x2004
+lw $v1, 0x1000($gp)
 lw $v1, 0($gp)	# should got second instr
 sw $v0, 0($gp)	# should cause exception
 
