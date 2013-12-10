@@ -2,3 +2,7 @@
 *.o
 tags
 dep
+Makefile
+qemu-system-mipsel
+loader
+loader.bin

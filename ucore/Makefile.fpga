@@ -22,13 +22,13 @@ GDB		:= $(GCCPREFIX)gdb
 THUMIPSCC		:= ./thumips-cc
 CLANG := clang
 CC :=$(GCCPREFIX)gcc
-CFLAGS	:=  -fno-builtin -nostdlib  -nostdinc -g  -EL -G0 -fno-delayed-branch -Wa,-O0 -Wformat
+CFLAGS	:=  -fno-builtin -nostdlib  -nostdinc -EL -G0 -Wa,-O0 -Wformat
 CTYPE	:= c S
 
 LD      := $(GCCPREFIX)ld
 AS      := $(GCCPREFIX)as -EL -g -mips32
 AR      := $(GCCPREFIX)ar
-LDFLAGS	+= -nostdlib
+LDFLAGS	+= -nostdlib -s
 
 OBJCOPY := $(GCCPREFIX)objcopy
 OBJDUMP := $(GCCPREFIX)objdump

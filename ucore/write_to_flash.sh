@@ -1,10 +1,10 @@
 #!/bin/bash -e
 # $File: write_to_flash.sh
-# $Date: Thu Nov 28 02:38:40 2013 +0800
+# $Date: Tue Dec 10 22:28:19 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 
-MEMTRANS=../../utils/memtrans/controller.py
+MEMTRANS=../utils/memtrans/controller.py
 OBJ=obj/ucore-kernel-initrd
 [ $# = 1 ] && export DEVICE=$1
 
