@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Fri Nov 29 00:15:17 2013 +0800
+ * $Date: Tue Dec 10 20:11:19 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -9,8 +9,13 @@
 `include "src/cp0_def.vh"
 
 module top;
-	reg clk = 0, clk_half = 0;
-	reg rst = 1;
+	reg clk = 0, clk_cpu = 0;
+	reg rst = 0;
+
+	always
+		#1 clk <= ~clk;	// 500MB
+	always @(posedge clk)
+		clk_cpu <= ~clk_cpu;
 
 	wire [31:0] baseram_data, extram_data;
 	wire [19:0] baseram_addr, extram_addr;
@@ -40,7 +45,7 @@ module top;
 	wire [8:0] vga_color_out;
 	wire vga_hsync, vga_vsync;
 
-	system usystem(.clk_cpu(clk_half), .clk50M(clk), .rst(rst),
+	system usystem(.clk_cpu(clk_cpu), .clk50M(clk), .rst(rst),
 		.segdisp(segdisp),
 		.rom_selector(1'b0),
 		.baseram_addr(baseram_addr),
@@ -64,17 +69,13 @@ module top;
 		.vga_hsync(vga_hsync),
 		.vga_vsync(vga_vsync));
 
-	always #1 clk <= ~clk;
-
-	always @(posedge clk)
-		clk_half <= ~clk_half;
-
 	initial begin
 		$dumpfile("dump.vcd");
 		$dumpvars(0, top);
 
 		$monitor("time=%g segdisp=%h", $time, segdisp);
 
+		#1 rst = 1;
 		#6 rst = 0;
 	end
 

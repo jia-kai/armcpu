@@ -1,6 +1,6 @@
 /*
  * $File: ram_sim.v
- * $Date: Fri Nov 22 20:35:26 2013 +0800
+ * $Date: Tue Dec 10 20:36:02 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -16,31 +16,40 @@ module ram_sim
 
 	reg [31:0] storage [0:(1 << ADDR_WIDTH)-1];
 
-	function is_valid_data(input [31:0] data);
+	function is_valid_data(input [31:0] data); begin
+		// $display("time=%g is_valid_data: data=%h", $time, data);
 		is_valid_data = (|data) === 1'b1 || data === 32'b0;
-	endfunction
+	end endfunction
 
 	always @(posedge we)
 		if (!ce && $time > 0) begin
 			storage[addr] <= data;
-			if (!is_valid_data(data)) begin
-				$warning("time=%g mem %s: write bad data: addr=%h data=%h",
-					$time, NAME, addr, data);
+			if (!is_valid_data(data) || !oe) begin
+				$warning("time=%g mem %s: write bad data: addr=%h data=%h oe=%b",
+					$time, NAME, addr, data, oe);
 				#1 $fatal("exit due to previous error");
 			end else
 				$display("\033[31m <-- mem %s --> time=%g write: addr=%h data=%h\033[0m",
 					NAME, $time, addr, data);
 		end
 
-	wire [31:0] data_from_mem = storage[addr];
+	wire [31:0] data_from_mem;
+	ram_output_delay uoutdelay(.in(storage[addr]), .out(data_from_mem));
 	assign data = (!ce && !oe ? data_from_mem : {32{1'bz}});
 
+	specify
+		$setup(data, posedge we, 1);
+		$setup(oe, posedge we, 1);
+	endspecify
+
+	/*
 	always @(*)
 		if (CHECK_BAD_READ && !oe && !ce && !is_valid_data(data_from_mem)) begin
-			$warning("time=%g mem %s: read uninitialized memory: addr=%h, return rand",
-				$time, NAME, addr);
 			storage[addr] = $random;
+			$warning("time=%g mem %s: read uninitialized memory: addr=%h, return rand: %h",
+				$time, NAME, addr, storage[addr]);
 		end
+	*/
 
 	always @(*)
 		if (!ce && !oe && !we)
@@ -68,5 +77,15 @@ module ram_sim
 		*/
 	end
 
+endmodule
+
+module ram_output_delay(
+	input [31:0] in,
+	output [31:0] out);
+
+	specify
+		(in => out) = 1.9;
+	endspecify
+	assign out = in;
 endmodule
 
