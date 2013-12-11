@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
-# $File: terminal-input.py
-# $Date: Thu Nov 28 02:45:12 2013 +0800
+# $File: terminal_input.py
+# $Date: Thu Dec 12 02:16:46 2013 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 DEVICE = '/dev/ttyUSB0'
@@ -79,6 +79,8 @@ def com_writer():
             ser.write(i)
             time.sleep(0.03)
 
-com_writer()
+if __name__ == '__main__':
+    com_writer()
+
 # vim: foldmethod=marker
 

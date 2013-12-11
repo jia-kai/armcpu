@@ -1,6 +1,6 @@
 /*
  * $File: mmu.v
- * $Date: Tue Nov 26 20:22:03 2013 +0800
+ * $Date: Thu Dec 12 01:55:30 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -108,7 +108,8 @@ module mmu(
 				$warning("time=%g unaligned mem_addr write word: %h", $time,
 					mem_unaligned_addr);
 			end
-		end else if (tlb_missing) begin
+		end
+		if (tlb_missing) begin
 			if (mem_opt_is_write) begin
 				exc_code = `EC_TLBS;
 				$warning("time=%g TLB write missing, vaddr=%h",
@@ -201,7 +202,7 @@ module mmu(
 		endcase
 
 
-	// handl tlb write
+	// handle tlb write
 	always @(posedge clk)
 		if (rst) begin: INIT_TLB
 			integer i;

@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: terminal.py
-# $Date: Wed Dec 11 20:49:50 2013 +0800
+# $Date: Thu Dec 12 02:20:33 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 #          Xinyu Zhou <zxytim@gmail.com>
 
@@ -10,9 +10,11 @@ WRITER_MUTE_STR = '`'
 TERMINAL_OUTUT_MAGIC = 't'
 FETCH_MAGIC = 'r'
 
-SLEEP_TIME = 0.6
+SLEEP_TIME = 0.04
 
 DEVICE = '/dev/ttyUSB0'
+
+from terminal_input import getch
 
 import sys
 import serial
@@ -67,10 +69,13 @@ def com_writer():
     while running:
         if disable_input:
             continue
+
         try:
             data = raw_input() + '\n'
         except EOFError:
             data = '\x03\n'
+        #data = getch()
+
         if data.startswith(WRITER_MUTE_STR):
             running = False
             break

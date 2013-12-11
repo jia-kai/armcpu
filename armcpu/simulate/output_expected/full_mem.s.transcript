@@ -1,6 +1,7 @@
-# vsim -do {run 200ns; quit} -c top 
+# vsim -do {run 400ns; quit} -c top 
 # Loading work.top
 # Loading work.ram_sim
+# Loading work.ram_output_delay
 # Loading work.system
 # Loading work.cpu
 # Loading work.forward
@@ -18,7 +19,9 @@
 # Loading work.serial_port
 # Loading work.uart_async_transmitter
 # Loading work.uart_async_receiver
-# run 200ns 
+# Loading work.vga
+# Loading work.vga_ram
+# run 400ns 
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
 # ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
@@ -55,8 +58,6 @@
 # time=25 reg2($v0)=19930000
 # [32m < -- id -- > time=29 got instruction: pc=80000010 instr=83840000 [0m
 # time=29 reg2($v0)=19931102
-# ** Warning: time=31 mem ext: read uninitialized memory: addr=40000, return rand
-#    Time: 31 ns  Scope: top.uextram File: ram_sim.v Line: 41
 # [31m <-- mem ext --> time=36 write: addr=40000 data=19931102[0m
 # [32m < -- id -- > time=45 got instruction: pc=80000014 instr=83840001 [0m
 # [32m < -- id -- > time=53 got instruction: pc=80000018 instr=83840002 [0m
@@ -82,8 +83,46 @@
 # [31m <-- mem ext --> time=144 write: addr=40000 data=19011101[0m
 # [32m < -- id -- > time=153 got instruction: pc=80000040 instr=a3830003 [0m
 # [31m <-- mem ext --> time=164 write: addr=40000 data=19010101[0m
-# [32m < -- id -- > time=173 got instruction: pc=80000044 instr=1000ffff [0m
+# [32m < -- id -- > time=173 got instruction: pc=80000044 instr=24020000 [0m
 # [31m <-- mem ext --> time=184 write: addr=40000 data=01010101[0m
-# [32m < -- id -- > time=193 got instruction: pc=80000048 instr=00000000 [0m
-# [32m < -- id -- > time=197 got instruction: pc=80000044 instr=1000ffff [0m
+# [32m < -- id -- > time=193 got instruction: pc=80000048 instr=a3820000 [0m
+# [32m < -- id -- > time=197 got instruction: pc=8000004c instr=24020001 [0m
+# time=197 reg2($v0)=00000000
+# [31m <-- mem ext --> time=208 write: addr=40000 data=01010100[0m
+# [32m < -- id -- > time=217 got instruction: pc=80000050 instr=a3820001 [0m
+# [32m < -- id -- > time=221 got instruction: pc=80000054 instr=24020002 [0m
+# time=221 reg2($v0)=00000001
+# [31m <-- mem ext --> time=232 write: addr=40000 data=01010100[0m
+# [32m < -- id -- > time=241 got instruction: pc=80000058 instr=a3820002 [0m
+# [32m < -- id -- > time=245 got instruction: pc=8000005c instr=24020003 [0m
+# time=245 reg2($v0)=00000002
+# [31m <-- mem ext --> time=256 write: addr=40000 data=01020100[0m
+# [32m < -- id -- > time=265 got instruction: pc=80000060 instr=a3820003 [0m
+# [32m < -- id -- > time=269 got instruction: pc=80000064 instr=24020004 [0m
+# time=269 reg2($v0)=00000003
+# [31m <-- mem ext --> time=280 write: addr=40000 data=03020100[0m
+# [32m < -- id -- > time=289 got instruction: pc=80000068 instr=a3820004 [0m
+# [32m < -- id -- > time=293 got instruction: pc=8000006c instr=24020005 [0m
+# time=293 reg2($v0)=00000004
+# [31m <-- mem ext --> time=304 write: addr=40001 data=xxxxxx04[0m
+# [32m < -- id -- > time=313 got instruction: pc=80000070 instr=a3820005 [0m
+# [32m < -- id -- > time=317 got instruction: pc=80000074 instr=1000ffff [0m
+# time=317 reg2($v0)=00000005
+# [31m <-- mem ext --> time=328 write: addr=40001 data=xxxx0504[0m
+# [32m < -- id -- > time=337 got instruction: pc=80000078 instr=00000000 [0m
+# [32m < -- id -- > time=341 got instruction: pc=80000074 instr=1000ffff [0m
+# [32m < -- id -- > time=345 got instruction: pc=80000078 instr=00000000 [0m
+# [32m < -- id -- > time=349 got instruction: pc=80000074 instr=1000ffff [0m
+# [32m < -- id -- > time=353 got instruction: pc=80000078 instr=00000000 [0m
+# [32m < -- id -- > time=357 got instruction: pc=80000074 instr=1000ffff [0m
+# [32m < -- id -- > time=361 got instruction: pc=80000078 instr=00000000 [0m
+# [32m < -- id -- > time=365 got instruction: pc=80000074 instr=1000ffff [0m
+# [32m < -- id -- > time=369 got instruction: pc=80000078 instr=00000000 [0m
+# [32m < -- id -- > time=373 got instruction: pc=80000074 instr=1000ffff [0m
+# [32m < -- id -- > time=377 got instruction: pc=80000078 instr=00000000 [0m
+# [32m < -- id -- > time=381 got instruction: pc=80000074 instr=1000ffff [0m
+# [32m < -- id -- > time=385 got instruction: pc=80000078 instr=00000000 [0m
+# [32m < -- id -- > time=389 got instruction: pc=80000074 instr=1000ffff [0m
+# [32m < -- id -- > time=393 got instruction: pc=80000078 instr=00000000 [0m
+# [32m < -- id -- > time=397 got instruction: pc=80000074 instr=1000ffff [0m
 #  quit 

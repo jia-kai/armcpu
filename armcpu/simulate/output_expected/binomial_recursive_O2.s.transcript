@@ -1,6 +1,7 @@
 # vsim -do {run 50000ns; quit} -c top 
 # Loading work.top
 # Loading work.ram_sim
+# Loading work.ram_output_delay
 # Loading work.system
 # Loading work.cpu
 # Loading work.forward
@@ -18,6 +19,8 @@
 # Loading work.serial_port
 # Loading work.uart_async_transmitter
 # Loading work.uart_async_receiver
+# Loading work.vga
+# Loading work.vga_ram
 # run 50000ns 
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
@@ -59,12 +62,8 @@
 # [32m < -- id -- > time=37 got instruction: pc=800000d0 instr=afbf0014 [0m
 # [32m < -- id -- > time=41 got instruction: pc=800000d4 instr=afbe0010 [0m
 # time=41 reg29($sp)=80400010
-# ** Warning: time=43 mem ext: read uninitialized memory: addr=00009, return rand
-#    Time: 43 ns  Scope: top.uextram File: ram_sim.v Line: 41
 # [31m <-- mem ext --> time=48 write: addr=00009 data=00000000[0m
 # [32m < -- id -- > time=57 got instruction: pc=800000d8 instr=03a0f021 [0m
-# ** Warning: time=59 mem ext: read uninitialized memory: addr=00008, return rand
-#    Time: 59 ns  Scope: top.uextram File: ram_sim.v Line: 41
 # [31m <-- mem ext --> time=64 write: addr=00008 data=80400028[0m
 # [32m < -- id -- > time=73 got instruction: pc=800000dc instr=24040005 [0m
 # [32m < -- id -- > time=77 got instruction: pc=800000e0 instr=0c000003 [0m
@@ -77,25 +76,15 @@
 # [32m < -- id -- > time=93 got instruction: pc=80000014 instr=afbf0024 [0m
 # time=93 reg29($sp)=803fffe8
 # [32m < -- id -- > time=97 got instruction: pc=80000018 instr=afb30020 [0m
-# ** Warning: time=99 mem ext: read uninitialized memory: addr=00003, return rand
-#    Time: 99 ns  Scope: top.uextram File: ram_sim.v Line: 41
 # [31m <-- mem ext --> time=104 write: addr=00003 data=800000e8[0m
 # [32m < -- id -- > time=113 got instruction: pc=8000001c instr=afb2001c [0m
-# ** Warning: time=115 mem ext: read uninitialized memory: addr=00002, return rand
-#    Time: 115 ns  Scope: top.uextram File: ram_sim.v Line: 41
 # [31m <-- mem ext --> time=120 write: addr=00002 data=00000000[0m
 # [32m < -- id -- > time=129 got instruction: pc=80000020 instr=afb10018 [0m
-# ** Warning: time=131 mem ext: read uninitialized memory: addr=00001, return rand
-#    Time: 131 ns  Scope: top.uextram File: ram_sim.v Line: 41
 # [31m <-- mem ext --> time=136 write: addr=00001 data=00000000[0m
 # [32m < -- id -- > time=145 got instruction: pc=80000024 instr=14400024 [0m
-# ** Warning: time=147 mem ext: read uninitialized memory: addr=00000, return rand
-#    Time: 147 ns  Scope: top.uextram File: ram_sim.v Line: 41
 # [31m <-- mem ext --> time=152 write: addr=00000 data=00000000[0m
 # [32m < -- id -- > time=161 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=165 got instruction: pc=8000002c instr=10800020 [0m
-# ** Warning: time=167 mem base: read uninitialized memory: addr=fffff, return rand
-#    Time: 167 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
 # [31m <-- mem base --> time=172 write: addr=fffff data=00000000[0m
 # [32m < -- id -- > time=181 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=185 got instruction: pc=80000034 instr=10a0001e [0m
@@ -118,25 +107,15 @@
 # [32m < -- id -- > time=233 got instruction: pc=80000014 instr=afbf0024 [0m
 # time=233 reg29($sp)=803fffc0
 # [32m < -- id -- > time=237 got instruction: pc=80000018 instr=afb30020 [0m
-# ** Warning: time=239 mem base: read uninitialized memory: addr=ffff9, return rand
-#    Time: 239 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
 # [31m <-- mem base --> time=244 write: addr=ffff9 data=80000064[0m
 # [32m < -- id -- > time=253 got instruction: pc=8000001c instr=afb2001c [0m
-# ** Warning: time=255 mem base: read uninitialized memory: addr=ffff8, return rand
-#    Time: 255 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
 # [31m <-- mem base --> time=260 write: addr=ffff8 data=00000001[0m
 # [32m < -- id -- > time=269 got instruction: pc=80000020 instr=afb10018 [0m
-# ** Warning: time=271 mem base: read uninitialized memory: addr=ffff7, return rand
-#    Time: 271 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
 # [31m <-- mem base --> time=276 write: addr=ffff7 data=00000002[0m
 # [32m < -- id -- > time=285 got instruction: pc=80000024 instr=14400024 [0m
-# ** Warning: time=287 mem base: read uninitialized memory: addr=ffff6, return rand
-#    Time: 287 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
 # [31m <-- mem base --> time=292 write: addr=ffff6 data=00000000[0m
 # [32m < -- id -- > time=301 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=305 got instruction: pc=8000002c instr=10800020 [0m
-# ** Warning: time=307 mem base: read uninitialized memory: addr=ffff5, return rand
-#    Time: 307 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
 # [31m <-- mem base --> time=312 write: addr=ffff5 data=00000004[0m
 # [32m < -- id -- > time=321 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=325 got instruction: pc=80000034 instr=10a0001e [0m
@@ -157,25 +136,15 @@
 # [32m < -- id -- > time=373 got instruction: pc=80000014 instr=afbf0024 [0m
 # time=373 reg29($sp)=803fff98
 # [32m < -- id -- > time=377 got instruction: pc=80000018 instr=afb30020 [0m
-# ** Warning: time=379 mem base: read uninitialized memory: addr=fffef, return rand
-#    Time: 379 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
 # [31m <-- mem base --> time=384 write: addr=fffef data=80000064[0m
 # [32m < -- id -- > time=393 got instruction: pc=8000001c instr=afb2001c [0m
-# ** Warning: time=395 mem base: read uninitialized memory: addr=fffee, return rand
-#    Time: 395 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
 # [31m <-- mem base --> time=400 write: addr=fffee data=00000000[0m
 # [32m < -- id -- > time=409 got instruction: pc=80000020 instr=afb10018 [0m
-# ** Warning: time=411 mem base: read uninitialized memory: addr=fffed, return rand
-#    Time: 411 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
 # [31m <-- mem base --> time=416 write: addr=fffed data=00000001[0m
 # [32m < -- id -- > time=425 got instruction: pc=80000024 instr=14400024 [0m
-# ** Warning: time=427 mem base: read uninitialized memory: addr=fffec, return rand
-#    Time: 427 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
 # [31m <-- mem base --> time=432 write: addr=fffec data=00000000[0m
 # [32m < -- id -- > time=441 got instruction: pc=80000028 instr=afb00014 [0m
 # [32m < -- id -- > time=445 got instruction: pc=8000002c instr=10800020 [0m
-# ** Warning: time=447 mem base: read uninitialized memory: addr=fffeb, return rand
-#    Time: 447 ns  Scope: top.ubaseram File: ram_sim.v Line: 41
 # [31m <-- mem base --> time=452 write: addr=fffeb data=00000003[0m
 # [32m < -- id -- > time=461 got instruction: pc=80000030 instr=00000000 [0m
 # [32m < -- id -- > time=465 got instruction: pc=80000034 instr=10a0001e [0m

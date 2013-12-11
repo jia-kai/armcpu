@@ -1,6 +1,6 @@
 /*
  * $File: cp0.v
- * $Date: Tue Nov 26 19:42:05 2013 +0800
+ * $Date: Wed Dec 11 23:09:41 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -65,8 +65,8 @@ module cp0(
 
 
 	task setup_exc; begin
-		$display("time=%g impending exception: ip=%b code=%h epc=%h",
-			$time, cause_ip, exc_code, exc_epc);
+		$display("time=%g impending exception: ip=%b code=%h epc=%h badaddr=%h",
+			$time, cause_ip, exc_code, exc_epc, exc_badvaddr);
 
 		// no other modification when EXL = 1,
 		// see MIPS32 Architecture For Programmers, ch5

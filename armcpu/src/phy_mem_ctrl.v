@@ -80,10 +80,10 @@ module phy_mem_ctrl(
 	// ------------------------------------------------------------------
 
 	always @(*)
-        if (addr[1:0]) begin
+		if (addr[1:0]) begin
 			$warning("time=%g access unaligned addr: %h", $time, addr);
-            $fatal("exit due to previous error");
-        end
+			$fatal("exit due to previous error");
+		end
 
 	reg [31:0] write_addr_latch, write_data_latch;
 	reg [1:0] state;

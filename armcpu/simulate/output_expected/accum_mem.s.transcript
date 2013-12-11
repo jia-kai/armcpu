@@ -1,6 +1,7 @@
 # vsim -do {run 100ns; quit} -c top 
 # Loading work.top
 # Loading work.ram_sim
+# Loading work.ram_output_delay
 # Loading work.system
 # Loading work.cpu
 # Loading work.forward
@@ -18,6 +19,8 @@
 # Loading work.serial_port
 # Loading work.uart_async_transmitter
 # Loading work.uart_async_receiver
+# Loading work.vga
+# Loading work.vga_ram
 # run 100ns 
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
@@ -52,8 +55,6 @@
 # [32m < -- id -- > time=17 got instruction: pc=80000004 instr=ac800000 [0m
 # [32m < -- id -- > time=21 got instruction: pc=80000008 instr=8c9a0000 [0m
 # time=21 reg4($a0)=80500000
-# ** Warning: time=23 mem ext: read uninitialized memory: addr=40000, return rand
-#    Time: 23 ns  Scope: top.uextram File: ram_sim.v Line: 41
 # [31m <-- mem ext --> time=28 write: addr=40000 data=00000000[0m
 # [32m < -- id -- > time=37 got instruction: pc=8000000c instr=275a0001 [0m
 # [32m < -- id -- > time=45 got instruction: pc=80000010 instr=1000fffd [0m

@@ -153,7 +153,7 @@ module cpu(
 		.lohi_write_opt(lohi_write_opt),
 		.lohi_write_data(lohi_write_data),
 
-        .int_req(int_req), 
+		.int_req(int_req), 
 
 		.mmu_tlb_write_struct(mmu_tlb_write_struct),
 		.mmu_addr(mmu_data_addr),

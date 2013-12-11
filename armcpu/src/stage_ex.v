@@ -1,6 +1,6 @@
 /*
  * $File: stage_ex.v
- * $Date: Sat Nov 23 19:32:56 2013 +0800
+ * $Date: Wed Dec 11 23:49:14 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -74,8 +74,11 @@ module stage_ex(
 			exc_badvaddr_ex2mem <= exc_badvaddr_id2ex;
 			if (exc_code_id2ex != `EC_NONE)
 				exc_code_ex2mem <= exc_code_id2ex;
-			else if (alu_illegal_opt)
+			else if (alu_illegal_opt) begin
 				exc_code_ex2mem <= `EC_RI;
+				exc_badvaddr_ex2mem <= {4'hf,
+					{28-`ALU_OPT_WIDTH{1'b0}}, alu_opt};
+			end
 			else begin
 				if (alu_opt == `ALU_OPT_MULT) begin
 					mult_opr1 <= reg1_data;

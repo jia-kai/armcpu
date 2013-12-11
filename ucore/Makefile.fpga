@@ -22,13 +22,13 @@ GDB		:= $(GCCPREFIX)gdb
 THUMIPSCC		:= ./thumips-cc
 CLANG := clang
 CC :=$(GCCPREFIX)gcc
-CFLAGS	:=  -fno-builtin -nostdlib  -nostdinc -EL -G0 -Wa,-O0 -Wformat
+CFLAGS	:=  -fno-builtin -nostdlib  -nostdinc -g  -EL -G0 -fno-delayed-branch -Wa,-O0 -Wformat
 CTYPE	:= c S
 
 LD      := $(GCCPREFIX)ld
 AS      := $(GCCPREFIX)as -EL -g -mips32
 AR      := $(GCCPREFIX)ar
-LDFLAGS	+= -nostdlib -s
+LDFLAGS	+= -nostdlib 
 
 OBJCOPY := $(GCCPREFIX)objcopy
 OBJDUMP := $(GCCPREFIX)objdump
@@ -66,12 +66,12 @@ INCLUDES  := $(addprefix -I,$(SRC_DIR))
 INCLUDES  += -I$(SRCDIR)/include
 
 ifeq  ($(ON_FPGA), y)
-USER_APPLIST:= sh l r q #h # pr fk c pr
+USER_APPLIST:= sh ls cat fork r q 
 INITRD_BLOCK_CNT:=1500
 FPGA_LD_FLAGS += -S
 MACH_DEF := -DMACH_FPGA
 else
-USER_APPLIST:= pwd c sh ls fk yield hello faultreadkernel faultread badarg waitkill pg exit sleep pr r h
+USER_APPLIST:= pwd cat sh ls fork yield hello faultreadkernel faultread badarg waitkill pg exit sleep prime r head
 # 2M
 INITRD_BLOCK_CNT:=4000
 MACH_DEF := -DMACH_QEMU

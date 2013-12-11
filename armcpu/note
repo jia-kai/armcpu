@@ -154,3 +154,7 @@ V1		[22]
 PFN0	[21:2]
 D0		[1]
 V0		[0]
+
+
+for invalid instruction exception, badvaddr would be the instruction,
+or 0xF...alu_opt for illegal alu opt

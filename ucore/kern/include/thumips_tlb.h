@@ -21,6 +21,7 @@
 #include <asm/mipsregs.h>
 #include <memlayout.h>
 #include <glue_pgmap.h>
+#include <stdio.h>
 
 #define THUMIPS_TLB_ENTRYL_V (1<<1)
 #define THUMIPS_TLB_ENTRYL_D (1<<2)
@@ -34,6 +35,11 @@ static inline void write_one_tlb(int index, unsigned int pagemask, unsigned int 
 	write_c0_entrylo1(low1);
 	write_c0_entryhi(hi);
 	write_c0_index(index);
+	/*
+	if (hi < 0x80000000u || hi >= 0xc0000000u)
+		kprintf("write_one_tlb: %d %x %x %x %x\n",
+				index, pagemask, hi, low0, low1);
+				*/
 	tlb_write_indexed();
 }
 /*

@@ -8,7 +8,6 @@
 #include <buddy_pmm.h>
 #include <sync.h>
 #include <error.h>
-#include <thumips_tlb.h>
 
 
 

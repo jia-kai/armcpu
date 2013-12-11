@@ -1,6 +1,7 @@
 # vsim -do {run 100ns; quit} -c top 
 # Loading work.top
 # Loading work.ram_sim
+# Loading work.ram_output_delay
 # Loading work.system
 # Loading work.cpu
 # Loading work.forward
@@ -18,6 +19,8 @@
 # Loading work.serial_port
 # Loading work.uart_async_transmitter
 # Loading work.uart_async_receiver
+# Loading work.vga
+# Loading work.vga_ram
 # run 100ns 
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0

@@ -46,31 +46,14 @@ gettoken(char **p1, char **p2) {
     return token;
 }
 
-int _fake_read(int fd, char *ch, int size) {
-	static int cnt = 0;
-	if (cnt < 4)
-		*ch = 'a';
-	else if (cnt < 8)
-		*ch = 'b';
-	else {
-		cnt = 0;
-		return 0;
-	}
-	cnt ++;
-	// printf("cnt=%d\n", cnt);
-	return 1;
-}
-
 char *
 readline(const char *prompt) {
     static char buffer[BUFSIZE];
-	char *p0 = buffer + 1, *p1 = buffer + 5;
     if (prompt != NULL) {
         printf("%s", prompt);
     }
     int ret, i = 0;
     while (1) {
-		printf("before read: buffer[1]=%p:%x buffer[5]=%p:%x\n", p0, *p0, p1, *p1);
         char c;
         if ((ret = read(0, &c, sizeof(char))) < 0) {
             return NULL;
@@ -82,27 +65,23 @@ readline(const char *prompt) {
             }
             return NULL;
         }
-		printf("after read: buffer[1]=%p:%x buffer[5]=%p:%x\n", p0, *p0, p1, *p1);
-
-		/*
-		printf("readline: got=%c(%x) ptr=%p buf=%s\n",
-				c, c, buffer + i, buffer);
-				*/
 
         if (c == 3) {
             return NULL;
         }
         else if (c >= ' ' && i < BUFSIZE - 1) {
+            putc(c);
             buffer[i ++] = c;
         }
         else if (c == '\b' && i > 0) {
+            putc(c);
             i --;
         }
         else if (c == '\n' || c == '\r') {
+            putc(c);
             buffer[i] = '\0';
             break;
         }
-		printf("after assign %c: buffer[1]=%p:%x buffer[5]=%p:%x\n", c, p0, *p0, p1, *p1);
     }
     return buffer;
 }
@@ -141,6 +120,7 @@ runcmd(char *cmd) {
     char *t;
     int argc, token, ret, p[2];
 again:
+	printf("sh: run cmd `%s'\n", cmd);
     argc = 0;
     while (1) {
         switch (token = gettoken(&cmd, &t)) {
@@ -255,7 +235,6 @@ main(int argc, char **argv) {
     char *buffer;
     while ((buffer = readline((interactive) ? "$ " : NULL)) != NULL) {
         printf("\r\n");
-		printf("sh: readline got `%s' %x %x\n", buffer, buffer[1], buffer[2]);
         shcwd[0] = '\0';
         int pid;
         if ((pid = fork()) == 0) {

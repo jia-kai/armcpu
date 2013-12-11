@@ -1,6 +1,7 @@
 # vsim -do {run 100ns; quit} -c top 
 # Loading work.top
 # Loading work.ram_sim
+# Loading work.ram_output_delay
 # Loading work.system
 # Loading work.cpu
 # Loading work.forward
@@ -18,6 +19,8 @@
 # Loading work.serial_port
 # Loading work.uart_async_transmitter
 # Loading work.uart_async_receiver
+# Loading work.vga
+# Loading work.vga_ram
 # run 100ns 
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
@@ -48,36 +51,26 @@
 # time=1 cp0_cause: IP=00000000 ExcCode=00
 # [32m < -- id -- > time=9 got instruction: pc=xxxxxxxx instr=00000000 [0m
 # time=9 cp0_cause: IP=10000000 ExcCode=00
-# [32m < -- id -- > time=13 got instruction: pc=80000000 instr=08000000 [0m
-# [32m < -- id -- > time=17 got instruction: pc=80000004 instr=24e70001 [0m
-# [32m < -- id -- > time=21 got instruction: pc=80000000 instr=08000000 [0m
-# [32m < -- id -- > time=25 got instruction: pc=80000004 instr=24e70001 [0m
-# time=25 reg7($a3)=00000001
-# [32m < -- id -- > time=29 got instruction: pc=80000000 instr=08000000 [0m
-# [32m < -- id -- > time=33 got instruction: pc=80000004 instr=24e70001 [0m
-# time=33 reg7($a3)=00000002
-# [32m < -- id -- > time=37 got instruction: pc=80000000 instr=08000000 [0m
-# [32m < -- id -- > time=41 got instruction: pc=80000004 instr=24e70001 [0m
-# time=41 reg7($a3)=00000003
-# [32m < -- id -- > time=45 got instruction: pc=80000000 instr=08000000 [0m
-# [32m < -- id -- > time=49 got instruction: pc=80000004 instr=24e70001 [0m
-# time=49 reg7($a3)=00000004
-# [32m < -- id -- > time=53 got instruction: pc=80000000 instr=08000000 [0m
-# [32m < -- id -- > time=57 got instruction: pc=80000004 instr=24e70001 [0m
-# time=57 reg7($a3)=00000005
-# [32m < -- id -- > time=61 got instruction: pc=80000000 instr=08000000 [0m
-# [32m < -- id -- > time=65 got instruction: pc=80000004 instr=24e70001 [0m
-# time=65 reg7($a3)=00000006
-# [32m < -- id -- > time=69 got instruction: pc=80000000 instr=08000000 [0m
-# [32m < -- id -- > time=73 got instruction: pc=80000004 instr=24e70001 [0m
-# time=73 reg7($a3)=00000007
-# [32m < -- id -- > time=77 got instruction: pc=80000000 instr=08000000 [0m
-# [32m < -- id -- > time=81 got instruction: pc=80000004 instr=24e70001 [0m
-# time=81 reg7($a3)=00000008
-# [32m < -- id -- > time=85 got instruction: pc=80000000 instr=08000000 [0m
-# [32m < -- id -- > time=89 got instruction: pc=80000004 instr=24e70001 [0m
-# time=89 reg7($a3)=00000009
-# [32m < -- id -- > time=93 got instruction: pc=80000000 instr=08000000 [0m
-# [32m < -- id -- > time=97 got instruction: pc=80000004 instr=24e70001 [0m
-# time=97 reg7($a3)=0000000a
+# [32m < -- id -- > time=13 got instruction: pc=80000000 instr=24e70001 [0m
+# [32m < -- id -- > time=17 got instruction: pc=80000004 instr=3c1cbfd0 [0m
+# [32m < -- id -- > time=21 got instruction: pc=80000008 instr=379c0400 [0m
+# time=21 reg7($a3)=00000001
+# [32m < -- id -- > time=25 got instruction: pc=8000000c instr=1000fffc [0m
+# [32m < -- id -- > time=29 got instruction: pc=80000010 instr=af870000 [0m
+# [32m < -- id -- > time=33 got instruction: pc=80000000 instr=24e70001 [0m
+# time=38 segdisp=00000001
+# [32m < -- id -- > time=45 got instruction: pc=80000004 instr=3c1cbfd0 [0m
+# [32m < -- id -- > time=49 got instruction: pc=80000008 instr=379c0400 [0m
+# time=49 reg7($a3)=00000002
+# [32m < -- id -- > time=53 got instruction: pc=8000000c instr=1000fffc [0m
+# [32m < -- id -- > time=57 got instruction: pc=80000010 instr=af870000 [0m
+# [32m < -- id -- > time=61 got instruction: pc=80000000 instr=24e70001 [0m
+# time=66 segdisp=00000002
+# [32m < -- id -- > time=73 got instruction: pc=80000004 instr=3c1cbfd0 [0m
+# [32m < -- id -- > time=77 got instruction: pc=80000008 instr=379c0400 [0m
+# time=77 reg7($a3)=00000003
+# [32m < -- id -- > time=81 got instruction: pc=8000000c instr=1000fffc [0m
+# [32m < -- id -- > time=85 got instruction: pc=80000010 instr=af870000 [0m
+# [32m < -- id -- > time=89 got instruction: pc=80000000 instr=24e70001 [0m
+# time=94 segdisp=00000003
 #  quit 
