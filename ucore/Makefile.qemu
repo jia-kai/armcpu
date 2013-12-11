@@ -71,7 +71,7 @@ INITRD_BLOCK_CNT:=1100
 FPGA_LD_FLAGS += -S
 MACH_DEF := -DMACH_FPGA
 else
-USER_APPLIST:= c sh ls fk
+USER_APPLIST:= pwd cat sh ls fork yield hello faultreadkernel faultread badarg waitkill pgdir exit sleep prime r head
 # 2M
 INITRD_BLOCK_CNT:=4000
 MACH_DEF := -DMACH_QEMU
