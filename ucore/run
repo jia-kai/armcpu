@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/sh -e
 
+make -f Makefile.qemu
 ./qemu-system-mipsel -M mipssim -m 32M -serial stdio -bios boot/loader.bin
 

@@ -8,6 +8,7 @@
 #include <buddy_pmm.h>
 #include <sync.h>
 #include <error.h>
+#include <thumips_tlb.h>
 
 
 
@@ -311,6 +312,7 @@ page_insert(pde_t *pgdir, struct Page *page, uintptr_t la, uint32_t perm) {
     }
     *ptep = page2pa(page) | PTE_P | perm;
     tlb_invalidate(pgdir, la);
+	// kprintf("page_insert: %p -> %p\n", la, pte2tlblow(*ptep));
     return 0;
 }
 

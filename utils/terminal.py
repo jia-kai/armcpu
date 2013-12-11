@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: terminal.py
-# $Date: Thu Nov 28 04:47:48 2013 +0800
+# $Date: Wed Dec 11 20:49:50 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 #          Xinyu Zhou <zxytim@gmail.com>
 
@@ -9,6 +9,8 @@
 WRITER_MUTE_STR = '`'
 TERMINAL_OUTUT_MAGIC = 't'
 FETCH_MAGIC = 'r'
+
+SLEEP_TIME = 0.6
 
 DEVICE = '/dev/ttyUSB0'
 
@@ -65,7 +67,10 @@ def com_writer():
     while running:
         if disable_input:
             continue
-        data = raw_input() + '\n'
+        try:
+            data = raw_input() + '\n'
+        except EOFError:
+            data = '\x03\n'
         if data.startswith(WRITER_MUTE_STR):
             running = False
             break
@@ -73,7 +78,7 @@ def com_writer():
             continue
         for i in data:
             ser.write(i)
-            time.sleep(0.03)
+            time.sleep(SLEEP_TIME)
 
 threads = [threading.Thread(target = i) for i in [com_reader, com_writer]]
 for i in threads:

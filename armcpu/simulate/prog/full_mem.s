@@ -1,4 +1,4 @@
-# simu: 200ns
+# simu: 400ns
 li $gp, 5 * 1024 * 1024 + 0x80000000
 li $v0, 0x19931102
 sw $v0, 0($gp)
@@ -18,6 +18,19 @@ sb $v1, 2($gp)
 sb $v1, 0($gp)
 sb $v1, 1($gp)
 sb $v1, 3($gp)
+
+li $v0, 0
+sb $v0, 0($gp)
+li $v0, 1
+sb $v0, 1($gp)
+li $v0, 2
+sb $v0, 2($gp)
+li $v0, 3
+sb $v0, 3($gp)
+li $v0, 4
+sb $v0, 4($gp)
+li $v0, 5
+sb $v0, 5($gp)
 
 halt: b halt
 
