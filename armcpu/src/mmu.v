@@ -1,6 +1,6 @@
 /*
  * $File: mmu.v
- * $Date: Thu Dec 12 19:36:08 2013 +0800
+ * $Date: Thu Dec 12 17:07:33 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -23,7 +23,7 @@ module mmu(
 	input [`MEM_OPT_WIDTH-1:0] data_opt,
 	input [31:0] data_addr,
 	input [31:0] data_in,
-	// data_out is valid the next cycle after data_opt is set
+	// data_out is valid for one cycle after busy is deasserted
 	output reg [31:0] data_out,
 
 	// busy would be asserted immediately after data_opt != NONE,
@@ -35,8 +35,8 @@ module mmu(
 	output reg [`EXC_CODE_WIDTH-1:0] exc_code,
 	
 	// interface to physical memory controller
-	// it is required to finish reading within one cycle,
-	// and also latch both data and addr for writing
+	// it is required to response before next posedge
+	// and also latch both data and addr, if multiple-cycle for one operation
 	// needed
 	output [31:0] dev_mem_addr,
 	input [31:0] dev_mem_data_in,
@@ -66,8 +66,11 @@ module mmu(
 	localparam READ = 2'b00, WRITE_SB = 2'b01, WRITE_DO_WRITE = 2'b10;
 	reg [1:0] state;
 
-	assign busy = (state != READ || mem_opt_is_write || dev_mem_busy)
-		&& exc_code == `EC_NONE;
+	// if multiple-cycle read is needed, dev_mem_busy should be set before
+	// next posedge, so busy is also set
+	assign busy =
+		(state != READ || dev_mem_busy || mem_opt_is_write) &&
+		exc_code == `EC_NONE;
 
 
 	wire [31:0]

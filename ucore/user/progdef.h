@@ -1,13 +1,13 @@
 /*
  * $File: progdef.h
- * $Date: Wed Nov 27 22:42:58 2013 +0800
+ * $Date: Thu Dec 12 22:30:31 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #ifndef __PROGDEF_H__
 #define __PROGDEF_H__
 
-#define PROG_FILE_NAME	"p"
+#define PROG_FILE_NAME	"prog_holder"
 
 #endif // __PROGDEF_H__
 

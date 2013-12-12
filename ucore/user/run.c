@@ -1,87 +1,83 @@
-#include <stdio.h>
+/*
+ * $File: run.c
+ * $Date: Thu Dec 12 22:30:42 2013 +0800
+ * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ */
+
+#include <syscall.h>
+#include <error.h>
 #include <file.h>
 #include <unistd.h>
-#include <string.h>
 #include <ulib.h>
+#include <stdio.h>
 
-#define VERBOSE			0
+#include "progdef.h"
 
-#define printf(...)		fprintf(1, __VA_ARGS__)
-#define putc(c)			printf("%c", c)
 
-#define PROG_FILE_NAME	"prog"
-#define BUFSIZE			1
-#define FILE_SIZE_MAX	1000000
-#define ARGV0_SIZE_MAX	256
+#define BUFSIZE			4096
 
-int read_wrapper(int fin, void *ptr, int size) {
-	int ret = read(fin, ptr, size);
-	if (VERBOSE) {
-		char *str = (char *)ptr;
-		int i;
-		for (i = 0; i < size; i ++)
-			printf("0x%x\n", str[i]);
+int testfile(const char *name) {
+    int ret;
+    if ((ret = open(name, O_RDONLY)) < 0) {
+		dprintf("testfile: %s, ret = %d\n", name, ret);
+        return ret;
+    }
+	dprintf("testfile: %s, ret = %d\n", name, ret);
+    close(ret);
+    return ret;
+}
+
+int run_prog(const char *fname, int argc, char *_argv[]) {
+	static char argv0[BUFSIZE];
+	const char *argv[EXEC_MAX_ARG_NUM + 1];
+	int ret;
+	dprintf("fname: %s\n", fname);
+	if ((ret = testfile(fname)) != 0) {
+		if (ret < 0) {
+			return ret;
+		}
+		snprintf(argv0, sizeof(argv0), "/%s", fname);
+		dprintf("argv0: %s\n", argv0);
+		argv[0] = argv0;
+		dprintf("argv[0]: %s\n", argv[0]);
+	}
+	int i;
+	for (i = 1; i < argc; i ++)
+		argv[i] = _argv[i];
+	argv[argc] = NULL;
+	for (i = 0; i < argc; i ++)
+		dprintf("%d: %s\n", i, argv[i]);
+
+	return __exec(NULL, argv);
+}
+
+int main(int argc, char *argv[]) {
+	int fd;
+	dprintf("opening file `%s' ...\n", PROG_FILE_NAME);
+	fd = open(PROG_FILE_NAME, O_WRONLY);
+	dprintf("invoking sys_fetchrun(%d)", fd);
+	sys_fetchrun(fd);
+	dprintf("closing file ...\n");
+	close(fd);
+	dprintf("executing program ...\n");
+	int pid, ret, i;
+	for (i = 0; i < argc; i ++)
+		dprintf("%d: %s\n", i, argv[i]);
+	if ((pid = fork()) == 0) {
+		dprintf("forked program here ...\n");
+		ret = run_prog(PROG_FILE_NAME, argc, argv);
+		exit(ret);
+	}
+	dprintf("master program here ...\n");
+	if (waitpid(pid, &ret) == 0) {
+		if (ret != 0) {
+			dprintf("error: %d - %e\n", ret, ret);
+		}
 	}
 	return ret;
 }
 
-int
-copy(int fin, int fout) {
-	int size = 0;
-    static char buffer[BUFSIZE];
-    int ret1, ret2;
-	int filesize = FILE_SIZE_MAX;
-
-	if (fin == 0)
-		read_wrapper(fin, &filesize, sizeof(filesize));
-	int p = 0;
-    while ((ret1 = read_wrapper(fin, buffer, sizeof(buffer))) > 0) {
-		size += ret1;
-		p += 1;
-		if (p == 100) {
-			printf("size: %d\n", size);
-			p = 0;
-		}
-        if ((ret2 = write(fout, buffer, ret1)) != ret1) {
-            return ret2;
-        }
-		if (size == filesize)
-			break;
-    }
-    return size;
-}
-
 /**
- * 4 byte: size
- * size byte: data
+ * vim: foldmethod=marker
  */
-const char *argv[EXEC_MAX_ARG_NUM + 1] = {0};
-int main(int argc, char **argv) {
-	int fin = 0;
-	fin = open("test.txt", O_RDONLY);
-	int fout = open(PROG_FILE_NAME, O_WRONLY);
-	int size = copy(fin, fout);
-	if (fout> 2)
-		close(fout);
-	if (fin > 2)
-		close(fin);
-	printf("size: %d\n", size);
 
-	static char argv0[ARGV0_SIZE_MAX];
-	memcpy(argv0, PROG_FILE_NAME, sizeof(PROG_FILE_NAME));
-	argv[0] = argv0;
-
-	// run program
-	int pid, ret;
-	if ((pid = fork()) == 0) {
-		ret = __exec(NULL, argv);
-		exit(ret);
-	}
-	assert(pid >= 0);
-	if (waitpid(pid, &ret) == 0) {
-		if (ret != 0) {
-			printf("error: %d\n", ret);
-		}
-	}
-	return 0;
-}

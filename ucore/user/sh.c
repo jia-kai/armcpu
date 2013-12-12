@@ -120,7 +120,6 @@ runcmd(char *cmd) {
     char *t;
     int argc, token, ret, p[2];
 again:
-	printf("sh: run cmd `%s'\n", cmd);
     argc = 0;
     while (1) {
         switch (token = gettoken(&cmd, &t)) {

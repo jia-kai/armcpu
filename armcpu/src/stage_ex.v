@@ -1,6 +1,6 @@
 /*
  * $File: stage_ex.v
- * $Date: Thu Dec 12 20:32:30 2013 +0800
+ * $Date: Thu Dec 12 21:30:39 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -26,8 +26,9 @@ module stage_ex(
 	input [31:0] reg1_data,
 	input [31:0] reg2_data,
 
-	output branch_flag,
-	output [31:0] branch_dest,
+	// updated on negedge, regardness of stall
+	output reg branch_flag,
+	output reg [31:0] branch_dest,
 
 	// whether write-back passed to mem is from alu result
 	// used for forwarding
@@ -54,16 +55,21 @@ module stage_ex(
 		.illegal_opt(alu_illegal_opt));
 
 
-	assign
-		branch_flag = (
-			(branch_opt_id2ex == `BRANCH_ON_ALU_EQZ && !result_from_alu) ||
-			(branch_opt_id2ex == `BRANCH_ON_ALU_NEZ && result_from_alu) ||
-			(branch_opt_id2ex == `BRANCH_UNCOND)),
-		branch_dest = branch_dest_id2ex[32] ? reg2_data : branch_dest_id2ex[31:0];
+	assign branch_flag_comb = (
+		(branch_opt_id2ex == `BRANCH_ON_ALU_EQZ && !result_from_alu) ||
+		(branch_opt_id2ex == `BRANCH_ON_ALU_NEZ && result_from_alu) ||
+		(branch_opt_id2ex == `BRANCH_UNCOND));
+	wire [31:0] branch_dest_comb =
+		branch_dest_id2ex[32] ? reg2_data : branch_dest_id2ex;
+
+	always @(negedge clk) begin
+		branch_flag <= branch_flag_comb;
+		branch_dest <= branch_dest_comb;
+	end
 
 	always @(posedge clk) begin
-		mem_opt_ex2mem <= `MEM_OPT_NONE;	// should only be asserted for one cycle
 		if (rst || !stall || clear) begin
+			mem_opt_ex2mem <= `MEM_OPT_NONE;
 			wb_reg_addr_ex2mem <= 0;
 			exc_code_ex2mem <= `EC_NONE;
 			wb_from_alu <= 0;

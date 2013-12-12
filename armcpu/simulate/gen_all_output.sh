@@ -1,9 +1,11 @@
 #!/bin/bash -e
-# $File: runall.sh
-# $Date: Sat Nov 23 19:43:23 2013 +0800
+# $File: gen_all_output.sh
+# $Date: Thu Dec 12 20:38:29 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
-[ -d output ] || mkdir output
+rm -rf output
+mkdir output
+
 for i in prog/*.s
 do
 	./run.sh $i
