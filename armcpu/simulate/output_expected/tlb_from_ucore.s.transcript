@@ -24,18 +24,12 @@
 # run 50ns 
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
-# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
-#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=0 com_read_data=00
-# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
-#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=0 segdisp=xxxxxxxx
 # time=1 cp0_cause: IP=x0000000 ExcCode=xx
 # time=1 cpu entered kernel mode
 # time=1 cp0_cause: IP=x0000000 ExcCode=00
 # time=1 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
-# ** Warning: time=1 TLB read missing, vaddr=xxxxxxxX
-#    Time: 1 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=1 reg1($at)=00000000
 # time=1 reg2($v0)=00000000
 # time=1 reg3($v1)=00000000
@@ -55,10 +49,13 @@
 # [32m < -- id -- > time=17 got instruction: pc=80000004 instr=379c7000 [0m
 # [32m < -- id -- > time=21 got instruction: pc=80000008 instr=83820001 [0m
 # [32m < -- id -- > time=25 got instruction: pc=8000000c instr=1000ffff [0m
-# [32m < -- id -- > time=33 got instruction: pc=80000010 instr=00000000 [0m
-# time=33 reg2($v0)=00000010
-# [32m < -- id -- > time=37 got instruction: pc=8000000c instr=1000ffff [0m
-# [32m < -- id -- > time=41 got instruction: pc=80000010 instr=00000000 [0m
-# [32m < -- id -- > time=45 got instruction: pc=8000000c instr=1000ffff [0m
-# [32m < -- id -- > time=49 got instruction: pc=80000010 instr=00000000 [0m
+# ** Warning: time=27 TLB read missing, vaddr=10007000
+#    Time: 27 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 120
+# time=33 impending exception: ip=10000000 code=02 epc=80000008 badaddr=10007001
+# time=33 cp0_cause: IP=10000000 ExcCode=02
+# time=33 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
+# [32m < -- id -- > time=37 got instruction: pc=8000000c instr=00000000 [0m
+# [32m < -- id -- > time=41 got instruction: pc=80000000 instr=3c1c1000 [0m
+# [32m < -- id -- > time=45 got instruction: pc=80000004 instr=379c7000 [0m
+# [32m < -- id -- > time=49 got instruction: pc=80000008 instr=83820001 [0m
 #  quit 

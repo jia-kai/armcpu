@@ -24,18 +24,12 @@
 # run 500ns 
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
-# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
-#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=0 com_read_data=00
-# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
-#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=0 segdisp=xxxxxxxx
 # time=1 cp0_cause: IP=x0000000 ExcCode=xx
 # time=1 cpu entered kernel mode
 # time=1 cp0_cause: IP=x0000000 ExcCode=00
 # time=1 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
-# ** Warning: time=1 TLB read missing, vaddr=xxxxxxxX
-#    Time: 1 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=1 reg1($at)=00000000
 # time=1 reg2($v0)=00000000
 # time=1 reg3($v1)=00000000
@@ -55,7 +49,7 @@
 # [32m < -- id -- > time=17 got instruction: pc=80000004 instr=0000000c [0m
 # [32m < -- id -- > time=21 got instruction: pc=80000008 instr=0000000c [0m
 # time=21 reg3($v1)=00000001
-# time=25 impending exception: ip=10000000 code=08 epc=80000004
+# time=25 impending exception: ip=10000000 code=08 epc=80000004 badaddr=00000000
 # time=25 cp0_cause: IP=10000000 ExcCode=08
 # time=25 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
 # [32m < -- id -- > time=29 got instruction: pc=80000010 instr=00000000 [0m
@@ -80,7 +74,7 @@
 # time=85 reg26($k0)=00000001
 # [32m < -- id -- > time=89 got instruction: pc=80000008 instr=0000000c [0m
 # time=89 reg3($v1)=00000001
-# time=93 impending exception: ip=10000000 code=08 epc=80000004
+# time=93 impending exception: ip=10000000 code=08 epc=80000004 badaddr=00000000
 # time=93 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
 # [32m < -- id -- > time=97 got instruction: pc=80000010 instr=00000000 [0m
 # [32m < -- id -- > time=101 got instruction: pc=80000180 instr=00431021 [0m
@@ -104,7 +98,7 @@
 # time=153 reg26($k0)=00000002
 # [32m < -- id -- > time=157 got instruction: pc=80000008 instr=0000000c [0m
 # time=157 reg3($v1)=00000001
-# time=161 impending exception: ip=10000000 code=08 epc=80000004
+# time=161 impending exception: ip=10000000 code=08 epc=80000004 badaddr=00000000
 # time=161 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
 # [32m < -- id -- > time=165 got instruction: pc=80000010 instr=00000000 [0m
 # [32m < -- id -- > time=169 got instruction: pc=80000180 instr=00431021 [0m
@@ -128,7 +122,7 @@
 # time=221 reg26($k0)=00000003
 # [32m < -- id -- > time=225 got instruction: pc=80000008 instr=0000000c [0m
 # time=225 reg3($v1)=00000001
-# time=229 impending exception: ip=10000000 code=08 epc=80000004
+# time=229 impending exception: ip=10000000 code=08 epc=80000004 badaddr=00000000
 # time=229 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
 # [32m < -- id -- > time=233 got instruction: pc=80000010 instr=00000000 [0m
 # [32m < -- id -- > time=237 got instruction: pc=80000180 instr=00431021 [0m
@@ -152,7 +146,7 @@
 # time=289 reg26($k0)=00000004
 # [32m < -- id -- > time=293 got instruction: pc=80000008 instr=0000000c [0m
 # time=293 reg3($v1)=00000001
-# time=297 impending exception: ip=10000000 code=08 epc=80000004
+# time=297 impending exception: ip=10000000 code=08 epc=80000004 badaddr=00000000
 # time=297 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
 # [32m < -- id -- > time=301 got instruction: pc=80000010 instr=00000000 [0m
 # [32m < -- id -- > time=305 got instruction: pc=80000180 instr=00431021 [0m
@@ -176,7 +170,7 @@
 # time=357 reg26($k0)=00000005
 # [32m < -- id -- > time=361 got instruction: pc=80000008 instr=0000000c [0m
 # time=361 reg3($v1)=00000001
-# time=365 impending exception: ip=10000000 code=08 epc=80000004
+# time=365 impending exception: ip=10000000 code=08 epc=80000004 badaddr=00000000
 # time=365 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
 # [32m < -- id -- > time=369 got instruction: pc=80000010 instr=00000000 [0m
 # [32m < -- id -- > time=373 got instruction: pc=80000180 instr=00431021 [0m
@@ -200,7 +194,7 @@
 # time=425 reg26($k0)=00000006
 # [32m < -- id -- > time=429 got instruction: pc=80000008 instr=0000000c [0m
 # time=429 reg3($v1)=00000001
-# time=433 impending exception: ip=10000000 code=08 epc=80000004
+# time=433 impending exception: ip=10000000 code=08 epc=80000004 badaddr=00000000
 # time=433 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
 # [32m < -- id -- > time=437 got instruction: pc=80000010 instr=00000000 [0m
 # [32m < -- id -- > time=441 got instruction: pc=80000180 instr=00431021 [0m

@@ -24,18 +24,12 @@
 # run 550ns 
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
-# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
-#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=0 com_read_data=00
-# ** Warning: time=0 TLB read missing, vaddr=xxxxxxxX
-#    Time: 0 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=0 segdisp=xxxxxxxx
 # time=1 cp0_cause: IP=x0000000 ExcCode=xx
 # time=1 cpu entered kernel mode
 # time=1 cp0_cause: IP=x0000000 ExcCode=00
 # time=1 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
-# ** Warning: time=1 TLB read missing, vaddr=xxxxxxxX
-#    Time: 1 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 119
 # time=1 reg1($at)=00000000
 # time=1 reg2($v0)=00000000
 # time=1 reg3($v1)=00000000
@@ -64,7 +58,7 @@
 # time=49 reg4($a0)=0000000a
 # [32m < -- id -- > time=53 got instruction: pc=8000001c instr=24020000 [0m
 # time=53 reg2($v0)=00000001
-# time=57 impending exception: ip=10000000 code=08 epc=80000018
+# time=57 impending exception: ip=10000000 code=08 epc=80000018 badaddr=00000000
 # time=57 cp0_cause: IP=10000000 ExcCode=08
 # time=57 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
 # [32m < -- id -- > time=61 got instruction: pc=80000024 instr=00000000 [0m
@@ -102,7 +96,7 @@
 # time=153 reg2($v0)=00000000
 # [32m < -- id -- > time=157 got instruction: pc=80000020 instr=08000008 [0m
 # time=157 cp0_cause: IP=10000000 ExcCode=08
-# time=161 impending exception: ip=10000000 code=00 epc=80000020
+# time=161 impending exception: ip=10000000 code=00 epc=80000020 badaddr=00000000
 # time=161 cpu entered kernel mode
 # time=161 cp0_cause: IP=10000000 ExcCode=00
 # time=161 cp0_status: IM=10000000 KSU=10 EXL=1 IE=1
@@ -140,7 +134,7 @@
 # [32m < -- id -- > time=273 got instruction: pc=80000020 instr=08000008 [0m
 # [32m < -- id -- > time=277 got instruction: pc=80000024 instr=00000000 [0m
 # time=277 cp0_cause: IP=10000000 ExcCode=00
-# time=281 impending exception: ip=10000000 code=00 epc=80000020
+# time=281 impending exception: ip=10000000 code=00 epc=80000020 badaddr=00000000
 # time=281 cpu entered kernel mode
 # time=281 cp0_status: IM=10000000 KSU=10 EXL=1 IE=1
 # [32m < -- id -- > time=285 got instruction: pc=80000024 instr=00000000 [0m
@@ -176,7 +170,7 @@
 # [32m < -- id -- > time=393 got instruction: pc=80000020 instr=08000008 [0m
 # [32m < -- id -- > time=397 got instruction: pc=80000024 instr=00000000 [0m
 # time=397 cp0_cause: IP=10000000 ExcCode=00
-# time=401 impending exception: ip=10000000 code=00 epc=80000020
+# time=401 impending exception: ip=10000000 code=00 epc=80000020 badaddr=00000000
 # time=401 cpu entered kernel mode
 # time=401 cp0_status: IM=10000000 KSU=10 EXL=1 IE=1
 # [32m < -- id -- > time=405 got instruction: pc=80000024 instr=00000000 [0m
@@ -212,7 +206,7 @@
 # [32m < -- id -- > time=513 got instruction: pc=80000020 instr=08000008 [0m
 # [32m < -- id -- > time=517 got instruction: pc=80000024 instr=00000000 [0m
 # time=517 cp0_cause: IP=10000000 ExcCode=00
-# time=521 impending exception: ip=10000000 code=00 epc=80000020
+# time=521 impending exception: ip=10000000 code=00 epc=80000020 badaddr=00000000
 # time=521 cpu entered kernel mode
 # time=521 cp0_status: IM=10000000 KSU=10 EXL=1 IE=1
 # [32m < -- id -- > time=525 got instruction: pc=80000024 instr=00000000 [0m
