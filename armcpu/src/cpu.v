@@ -1,6 +1,6 @@
 /*
  * $File: cpu.v
- * $Date: Sat Nov 23 19:43:10 2013 +0800
+ * $Date: Thu Dec 12 21:11:24 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -48,12 +48,13 @@ module cpu(
 	wire [`REGADDR_WIDTH-1:0] wb_addr;
 	wire [31:0] wb_data;
 
-	wire [`REGADDR_WIDTH-1:0] id2ex_reg1_addr, id2ex_reg2_addr, ex2mem_wb_reg_addr;
-	wire [`MEM_OPT_WIDTH-1:0] ex2mem_mem_opt;
-	assign ex2mem_wb_from_alu = ex2mem_mem_opt == `MEM_OPT_NONE;
+	wire [`REGADDR_WIDTH-1:0]
+		id2ex_reg1_addr, id2ex_reg2_addr, ex2mem_wb_reg_addr;
 	wire [31:0] id2ex_reg1_data, id2ex_reg1_forward_data,
 		id2ex_reg2_data, id2ex_reg2_forward_data;
-	wire [31:0] ex2mem_alu_result = interstage_ex2mem[31:0];
+
+	wire [31:0] ex2mem_alu_result;
+	wire ex2mem_wb_from_alu;
 
 	wire branch_flag, exc_jmp_flag;
 	reg jmp_flag;
@@ -77,19 +78,12 @@ module cpu(
 		int_req[`INT_COM] = int_com_req;
 	end
 
-	assign {ex2mem_mem_opt, ex2mem_wb_reg_addr} = 
-		interstage_ex2mem[`MEM_OPT_WIDTH+`REGADDR_WIDTH+31:32];
+	assign {ex2mem_wb_reg_addr, ex2mem_alu_result}
+		= interstage_ex2mem[`REGADDR_WIDTH+31:0];
 
 	always @(*) begin
-		jmp_flag = 0;
-		jmp_dest = 0;
-		if (exc_jmp_flag) begin
-			jmp_flag = 1;
-			jmp_dest = exc_jmp_dest;
-		end else if (branch_flag) begin
-			jmp_flag = 1;
-			jmp_dest = branch_dest;
-		end
+		jmp_flag = exc_jmp_flag | branch_flag;
+        jmp_dest = exc_jmp_flag ? exc_jmp_dest : branch_dest;
 	end
 
 	forward ufwd1(
@@ -137,6 +131,7 @@ module cpu(
 		.reg1_data(id2ex_reg1_forward_data),
 		.reg2_data(id2ex_reg2_forward_data),
 		.branch_flag(branch_flag), .branch_dest(branch_dest),
+		.wb_from_alu(ex2mem_wb_from_alu),
 		.mult_opr1(mult_opr1), .mult_opr2(mult_opr2),
 		.interstage_ex2mem(interstage_ex2mem));
 

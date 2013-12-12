@@ -1,6 +1,6 @@
 /*
  * $File: stage_mem.v
- * $Date: Sat Nov 23 20:35:41 2013 +0800
+ * $Date: Thu Dec 12 20:44:38 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -40,10 +40,10 @@ module stage_mem(
 
 	// interface to MMU
 	output [`TLB_WRITE_STRUCT_WIDTH-1:0] mmu_tlb_write_struct,
-	output reg [31:0] mmu_addr,
+	output [31:0] mmu_addr,
 	input [31:0] mmu_data_in,
-	output reg [31:0] mmu_data_out,
-	output reg [`MEM_OPT_WIDTH-1:0] mmu_opt,
+	output [31:0] mmu_data_out,
+	output [`MEM_OPT_WIDTH-1:0] mmu_opt,
 	input [`EXC_CODE_WIDTH-1:0] mmu_exc_code,
 	input mmu_busy);
 
@@ -99,8 +99,29 @@ module stage_mem(
 	reg tlb_write_enable;
 	reg [`TLB_ENTRY_WIDTH-1:0] tlb_entry;
 	reg [`TLB_INDEX_WIDTH-1:0] tlb_index;
-	assign mmu_tlb_write_struct = {tlb_write_enable, tlb_index, tlb_entry};
-	
+	assign
+		mmu_tlb_write_struct = {tlb_write_enable, tlb_index, tlb_entry},
+		mem_opt_is_read = `MEM_OPT_IS_READ(mem_opt_ex2mem),
+		mem_opt_is_mmu = mem_opt_is_read || `MEM_OPT_IS_WRITE(mem_opt_ex2mem),
+		mmu_opt = mem_opt_is_mmu ? mem_opt_ex2mem : `MEM_OPT_NONE,
+		mmu_addr = mem_addr_ex2mem,
+		mmu_data_out = mem_data_ex2mem;
+
+	// read finishes within one cycle, and data_opt is also set for one cycle,
+	// so we need to latch data from mmu
+	reg [31:0] mmu_data_in_latch;
+	always @(posedge clk)
+		mmu_data_in_latch <= mmu_data_in;
+
+    task proc_lo_hi_become_ready; begin
+        state <= READY;
+        wb_reg_addr <= wb_reg_addr_ex2mem;
+        if (mem_opt_ex2mem == `MEM_OPT_MFLO)
+            wb_reg_data <= lohi_value[31:0];
+        else
+            wb_reg_data <= lohi_value[63:32];
+    end endtask
+
 	task proc_mem_opt; 
 		case (mem_opt_ex2mem) 
 			`MEM_OPT_WRITE_CP0: begin
@@ -124,15 +145,8 @@ module stage_mem(
 				if (!lohi_ready) begin
 					state <= WAIT_LOHI;
 					wb_reg_addr <= 0;
-				end
-				else begin
-					state <= READY;
-					wb_reg_addr <= wb_reg_addr_ex2mem;
-					if (mem_opt_ex2mem == `MEM_OPT_MFLO)
-						wb_reg_data <= lohi_value[31:0];
-					else
-						wb_reg_data <= lohi_value[63:32];
-				end
+				end else 
+                    proc_lo_hi_become_ready();
 			`MEM_OPT_MTLO: begin
 				lohi_write_opt <= `LOHI_WRITE_LO;
 				lohi_write_data <= alu_result;
@@ -143,11 +157,8 @@ module stage_mem(
 			end
 
 			// mmu operations
-			default: if (mem_opt_ex2mem != `MEM_OPT_NONE) begin
+			default: if (mem_opt_is_mmu) begin
 				state <= WAIT_MMU;
-				mmu_opt <= mem_opt_ex2mem;
-				mmu_addr <= mem_addr_ex2mem;
-				mmu_data_out <= mem_data_ex2mem;
 				wb_reg_addr <= 0;
 			end
 		endcase
@@ -155,7 +166,6 @@ module stage_mem(
 
 	always @(negedge clk) begin
 		// thoses signals should be asserted for at most 1 cycle
-		mmu_opt <= `MEM_OPT_NONE;
 		cp0_write_addr <= `CP0_REG_NONE;
 		tlb_write_enable <= 0;
 		lohi_write_opt <= `LOHI_WRITE_NONE;
@@ -163,38 +173,41 @@ module stage_mem(
 		if (rst) begin
 			state <= READY;
 			cp0_exc_code <= `EC_NONE;
-		end else case (state)
-			READY: begin
-				cp0_exc_epc <= exc_epc_ex2mem;
-				cp0_exc_badvaddr <= 0;
-				if (exc_code_ex2mem != `EC_NONE) begin
-					cp0_exc_code <= exc_code_ex2mem;
-					cp0_exc_badvaddr <= exc_badvaddr_ex2mem;
-				end else if (has_int_pending)
-					cp0_exc_code <= `EC_INT;
-				else begin
-					cp0_exc_code <= `EC_NONE;
-					wb_reg_addr <= wb_reg_addr_ex2mem;
-					wb_reg_data <= alu_result;
-					proc_mem_opt();
-				end
-			end
-			WAIT_MMU:
-				if (mmu_exc_code != `EC_NONE) begin
-					state <= READY;
-					cp0_exc_code <= mmu_exc_code;
-					cp0_exc_badvaddr <= mmu_addr;
-				end else if (!mmu_busy) begin
-					state <= READY;
-					wb_reg_data <= mmu_data_in;
-					wb_reg_addr <= wb_reg_addr_ex2mem;
-				end
-			WAIT_LOHI:
-				proc_mem_opt();	// stalled, so mem_opt should not change
+        end else begin
+            case (state)
+                READY: begin
+                    cp0_exc_epc <= exc_epc_ex2mem;
+                    cp0_exc_badvaddr <= 0;
+                    if (exc_code_ex2mem != `EC_NONE) begin
+                        cp0_exc_code <= exc_code_ex2mem;
+                        cp0_exc_badvaddr <= exc_badvaddr_ex2mem;
+                    end else if (has_int_pending)
+                        cp0_exc_code <= `EC_INT;
+                    else begin
+                        cp0_exc_code <= `EC_NONE;
+                        wb_reg_addr <= wb_reg_addr_ex2mem;
+                        wb_reg_data <= alu_result;
+                        proc_mem_opt();
+                    end
+                end
+                WAIT_MMU: if (!mmu_busy) begin
+                    state <= READY;
+                    wb_reg_data <= mmu_data_in_latch;
+                    wb_reg_addr <= wb_reg_addr_ex2mem;
+                end
+                WAIT_LOHI:
+                    if (lohi_ready)
+                        proc_lo_hi_become_ready();
 
-			default:
-				state <= READY;
-		endcase
+                default:
+                    state <= READY;
+            endcase
+            if (mmu_exc_code != `EC_NONE) begin
+                state <= READY;
+                cp0_exc_code <= mmu_exc_code;
+                cp0_exc_badvaddr <= mmu_addr;
+            end
+        end
 	end
 
 endmodule
