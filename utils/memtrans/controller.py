@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: controller.py
-# $Date: Thu Nov 28 02:40:38 2013 +0800
+# $Date: Fri Dec 13 18:11:25 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 from ctllib import MemtransController
@@ -64,7 +64,7 @@ if __name__ == '__main__':
                 format(sys.argv[0]) +
                 '  read: <start addr> <length> <output file>\n' +
                 '  write: <start addr> <input file>\n' +
-                '  erase: <start addr> <end addr>\n' +
+                '  erase: <start addr> <length>\n' +
                 ' all addresses and lengths are measured in bytes')
 
     ser = serial.Serial(DEVICE, 115201,
@@ -121,7 +121,8 @@ if __name__ == '__main__':
         print '{} bytes written'.format(cnt)
     elif function == 'erase':
         start = parse_addr(args[0]) / FLASH_BLOCK_SIZE * FLASH_BLOCK_SIZE
-        stop = parse_addr(args[1]) / FLASH_BLOCK_SIZE * FLASH_BLOCK_SIZE
+        stop = start + \
+            parse_addr(args[1]) / FLASH_BLOCK_SIZE * FLASH_BLOCK_SIZE
         for i in range(start, stop + 1, FLASH_BLOCK_SIZE):
             ctl.erase_flash(i)
             print 'erase {} finished'.format(hex(i))

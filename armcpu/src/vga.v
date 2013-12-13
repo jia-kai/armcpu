@@ -1,6 +1,6 @@
 /*
  * $File: vga.v
- * $Date: Fri Nov 29 04:53:45 2013 +0800
+ * $Date: Fri Dec 13 20:30:26 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -82,9 +82,9 @@ module vga(
 			hsync_cnt <= hsync_cnt + 1'b1;
 		end
 		if (should_draw) 
-			color_out <= {blue, green, red};
+			color_out <= {red, green, blue};
 		else
-			color_out <= 0;
+			color_out <= 9'b0;
 	end
 
 
