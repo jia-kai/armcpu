@@ -8,7 +8,7 @@ main(void) {
     int n, pid, k;
     for (n = 0; n < max_child; n ++) {
         if ((pid = fork()) == 0) {
-			for (k = 0; k < 100; k ++)
+			for (k = 0; k < 10; k ++)
 				cprintf("I am child %d: %d\n", n, k);
             exit(0);
         }

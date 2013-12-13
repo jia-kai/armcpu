@@ -6,14 +6,16 @@
 #include <asm/mipsregs.h>
 
 volatile size_t ticks;
+uint32_t next_compare_val;
 
-#define TIMER0_INTERVAL  1000000 
+#define TIMER0_INTERVAL  1250000 
 
 static void reload_timer()
 {
   uint32_t counter = read_c0_count();
   counter += TIMER0_INTERVAL;
   write_c0_compare(counter);
+  next_compare_val = counter;
 }
 
 int clock_int_handler(void * data)

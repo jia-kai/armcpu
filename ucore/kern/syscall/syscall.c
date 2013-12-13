@@ -172,13 +172,10 @@ sys_fetchrun(uint32_t arg[]) {
 
 static int
 sys_redraw_console(uint32_t arg[]) {
+    bool intr_flag;
+    local_intr_save(intr_flag);
 	vga_redraw();
-	return 0;
-}
-
-static int
-sys_set_cons_sync_vga(uint32_t arg[]) {
-	set_cons_sync_vga(arg[0]);
+    local_intr_restore(intr_flag);
 	return 0;
 }
 
@@ -206,7 +203,6 @@ static int (*syscalls[])(uint32_t arg[]) = {
   [SYS_dup]               sys_dup,
   [SYS_fetchrun]          sys_fetchrun,
   [SYS_redraw_console]    sys_redraw_console,
-  [SYS_set_cons_sync_vga] sys_set_cons_sync_vga,
 };
 
 #define NUM_SYSCALLS        ((sizeof(syscalls)) / (sizeof(syscalls[0])))

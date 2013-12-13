@@ -34,8 +34,6 @@
 #define SYS_fetchrun		241	 // a prime number :)
 
 #define SYS_redraw_console		242
-// whether console should be synched with vga
-#define SYS_set_cons_sync_vga	243
 
 /* OLNY FOR LAB6 */
 #define SYS_lab6_set_priority 255

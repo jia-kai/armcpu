@@ -10,7 +10,6 @@
 
 // used to differentiate ordinary console output and a transfer command
 static const uint32_t TERMINAL_OUTPUT_MAGIC = 't';
-static int sync_vga = 1;
 
 /* stupid I/O delay routine necessitated by historical PC design flaws */
 static void
@@ -194,7 +193,6 @@ void
 cons_init(void) {
     serial_init();
 	vga_init();
-	sync_vga = 0;
     //cons.rpos = cons.wpos = 0;
     if (!serial_exists) {
         kprintf("serial port does not exist!!\n");
@@ -208,9 +206,7 @@ cons_putc(int c) {
     local_intr_save(intr_flag);
     {
         serial_putc(c);
-		if (sync_vga) {
-			vga_putch(c);
-		}
+		vga_putch(c);
     }
     local_intr_restore(intr_flag);
 }
@@ -241,9 +237,5 @@ cons_getc(void) {
     local_intr_restore(intr_flag);
     //if (c) kprintf("cons_get(0x%x)\n", c);
     return c;
-}
-
-void set_cons_sync_vga(int flag) {
-	sync_vga = flag;
 }
 

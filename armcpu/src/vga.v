@@ -1,6 +1,6 @@
 /*
  * $File: vga.v
- * $Date: Fri Dec 13 20:30:26 2013 +0800
+ * $Date: Sat Dec 14 02:10:38 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -13,7 +13,7 @@ module vga(
 	input [`VGA_DATA_WIDTH-1:0] write_data,
 	input write_enable,	// data not latched; always sampled on posedge
 
-	output reg [8:0] color_out, // 3 red, 3 green, 3 blue
+	output reg [8:0] color_out, // blue, green, red
 	output hsync,
 	output vsync);
 
@@ -82,9 +82,9 @@ module vga(
 			hsync_cnt <= hsync_cnt + 1'b1;
 		end
 		if (should_draw) 
-			color_out <= {red, green, blue};
+			color_out <= {blue, green, red};
 		else
-			color_out <= 9'b0;
+			color_out <= 0;
 	end
 
 

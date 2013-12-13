@@ -1,14 +1,10 @@
 /*
  * $File: vga.c
- * $Date: Sat Dec 14 01:03:22 2013 +0800
+ * $Date: Sat Dec 14 03:27:17 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 #include "font.h"
-
-#ifdef MACH_FPGA
-#include <intr.h>
-#endif
 
 #define VGA_MEM_NRCOL 512
 #define COLOR 255
@@ -62,20 +58,12 @@ void vga_init() {
 }
 
 void vga_redraw() {
-#ifdef MACH_FPGA
-	bool intr_flag;
-    local_intr_save(intr_flag);
-	intr_enable();
-#endif
 	int i, j;
 	for (i = 0; i < NR_ROW; i ++)
 		for (j = 0; j < NR_COL; j ++) {
 			actual_screen[i][j] = -1;
 			render_char(buf[i][j], i, j);
 		}
-#ifdef MACH_FPGA
-    local_intr_restore(intr_flag);
-#endif
 }
 
 void vga_putch(int ch) {
