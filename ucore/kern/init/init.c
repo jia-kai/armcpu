@@ -65,6 +65,8 @@ kern_init(void) {
     fs_init();
 
     intr_enable();              // enable irq interrupt
+
+	set_cons_sync_vga(1);
     //*(int*)(0x00124) = 0x432;
     //asm volatile("divu $1, $1, $1");
     cpu_idle();

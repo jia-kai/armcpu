@@ -1,6 +1,6 @@
 #!/bin/bash -e
 # $File: compile_userapp.sh
-# $Date: Fri Dec 13 17:09:03 2013 +0800
+# $Date: Fri Dec 13 23:53:54 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 GCCPREFIX=mips-sde-elf-
@@ -20,6 +20,6 @@ then
 	exit
 fi
 
-$CC -c $src -Iuser/libs -Ikern/include $CFLAGS -o $obj
+$CC -c $src -DUSER_PROG -Iuser/libs -Ikern/include $CFLAGS -o $obj
 $LD -S -T user/libs/user.ld $obj obj/user/libuser.a -o $out
 rm -f $obj

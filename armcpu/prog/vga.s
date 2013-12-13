@@ -60,6 +60,7 @@ addiu $row_num, 1
 bne $row_num, $HEIGHT, load_row
 
 xori $out_switch, 1
+sw $zero, 0($VGA_START)
 b start_load
 
 # vim: ft=mips

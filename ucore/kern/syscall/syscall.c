@@ -9,6 +9,7 @@
 #include <dirent.h>
 #include <sysfile.h>
 #include <fetchrun.h>
+#include <console.h>
 
 extern volatile int ticks;
 
@@ -169,6 +170,17 @@ sys_fetchrun(uint32_t arg[]) {
 	fetchrun(fd);
 }
 
+static int
+sys_redraw_console(uint32_t arg[]) {
+	vga_redraw();
+	return 0;
+}
+
+static int
+sys_set_cons_sync_vga(uint32_t arg[]) {
+	set_cons_sync_vga(arg[0]);
+	return 0;
+}
 
 static int (*syscalls[])(uint32_t arg[]) = {
   [SYS_exit]              sys_exit,
@@ -193,6 +205,8 @@ static int (*syscalls[])(uint32_t arg[]) = {
   [SYS_getdirentry]       sys_getdirentry,
   [SYS_dup]               sys_dup,
   [SYS_fetchrun]          sys_fetchrun,
+  [SYS_redraw_console]    sys_redraw_console,
+  [SYS_set_cons_sync_vga] sys_set_cons_sync_vga,
 };
 
 #define NUM_SYSCALLS        ((sizeof(syscalls)) / (sizeof(syscalls[0])))

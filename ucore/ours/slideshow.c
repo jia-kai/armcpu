@@ -1,11 +1,12 @@
 /*
  * $File: slideshow.c
- * $Date: Fri Dec 13 20:33:23 2013 +0800
+ * $Date: Sat Dec 14 00:22:11 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 #include <stdio.h>
 #include <file.h>
+#include <syscall.h>
 
 typedef volatile unsigned* mem_ptr_t;
 
@@ -33,6 +34,7 @@ static void display_image(mem_ptr_t base) {
 }
 
 int main() {
+	sys_set_cons_sync_vga(0);
 	mem_ptr_t addr = flash + IMAGE_FLASH_START;
 	int num = 0;
 	for (; ;) {
@@ -40,8 +42,11 @@ int main() {
 		display_image(addr);
 		char ch;
 		int ret = read(0, &ch, sizeof(char));
-		if (ret != 1 || ch == 'q')
+		if (ret != 1 || ch == 'q') {
+			sys_set_cons_sync_vga(1);
+			sys_redraw_console();
 			return 0;
+		}
 		if (ch == 'n') {
 			addr += IMAGE_FLASH_PER_SIZE;
 			num ++;

@@ -146,3 +146,13 @@ int
 sys_fetchrun(int fd) {
 	return syscall(SYS_fetchrun, fd);
 }
+
+void
+sys_redraw_console() {
+	syscall(SYS_redraw_console);
+}
+
+void
+sys_set_cons_sync_vga(int flag) {
+	syscall(SYS_set_cons_sync_vga, flag);
+}

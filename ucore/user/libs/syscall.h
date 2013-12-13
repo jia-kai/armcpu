@@ -31,6 +31,9 @@ int sys_dup(int fd1, int fd2);
 
 int sys_fetchrun(int fd); // read from serial bus and write to file fd
 
+void sys_redraw_console();	// redraw system console
+void sys_set_cons_sync_vga(int flag);
+
 void sys_lab6_set_priority(uint32_t priority); //only for lab6
 
 
