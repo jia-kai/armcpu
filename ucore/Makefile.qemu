@@ -22,7 +22,7 @@ GDB		:= $(GCCPREFIX)gdb
 THUMIPSCC		:= ./thumips-cc
 CLANG := clang
 CC :=$(GCCPREFIX)gcc
-CFLAGS	:=  -fno-builtin -nostdlib  -nostdinc -g  -EL -G0 -fno-delayed-branch -Wa,-O0
+CFLAGS	:=  -fno-builtin -nostdlib  -nostdinc -g  -EL -G0 -Wformat -O2
 CTYPE	:= c S
 
 LD      := $(GCCPREFIX)ld
@@ -71,7 +71,7 @@ INITRD_BLOCK_CNT:=1100
 FPGA_LD_FLAGS += -S
 MACH_DEF := -DMACH_FPGA
 else
-USER_APPLIST:= pwd cat sh ls fork yield hello faultreadkernel faultread badarg waitkill pgdir exit sleep prime r head
+USER_APPLIST:= pwd cat sh ls fork yield hello faultreadkernel faultread badarg waitkill pgdir exit sleep prime run head
 # 2M
 INITRD_BLOCK_CNT:=4000
 MACH_DEF := -DMACH_QEMU

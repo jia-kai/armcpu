@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Wed Dec 11 23:49:39 2013 +0800
+ * $Date: Fri Dec 13 16:25:39 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -207,6 +207,8 @@ module stage_id(
 				mem_opt(`MEM_OPT_LW);
 			6'h24:	// LBU
 				mem_opt(`MEM_OPT_LBU);
+			6'h25:	// LHU
+				mem_opt(`MEM_OPT_LHU);
 			6'h28:	// SB
 				mem_opt(`MEM_OPT_SB);
 			6'h2b:	// SW

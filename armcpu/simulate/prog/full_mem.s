@@ -13,6 +13,9 @@ lbu $a0, 1($gp)
 lbu $a0, 2($gp)
 lbu $a0, 3($gp)
 
+lhu $a0, 0($gp)
+lhu $a0, 2($gp)
+
 li $v1, 0xffffff01
 sb $v1, 2($gp)
 sb $v1, 0($gp)
@@ -31,6 +34,8 @@ li $v0, 4
 sb $v0, 4($gp)
 li $v0, 5
 sb $v0, 5($gp)
+
+lhu $a0, 1($gp)	# exception
 
 halt: b halt
 

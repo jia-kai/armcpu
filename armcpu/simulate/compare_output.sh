@@ -1,6 +1,6 @@
 #!/bin/bash -e
 # $File: compare_output.sh
-# $Date: Thu Dec 12 20:51:37 2013 +0800
+# $Date: Fri Dec 13 12:23:00 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 tmpdir=/tmp/armcpu_out_compare
@@ -12,12 +12,24 @@ NORMALIZE="sed -e 's/[Tt]ime.[0-9.]*//g' -e 's/[0-9]* ns//g' -e 's/Line: [0-9]*/
 for i in output/*
 do
 	bname=$(basename $i)
-	bash -c "$NORMALIZE $i" > $tmpdir/actual-$bname
-	bash -c "$NORMALIZE output_expected/$bname" > $tmpdir/expected-$bname
+	expected_orig=output_expected/$bname
 
-	diff -bc $tmpdir/{actual,expected}-$bname
+	bash -c "$NORMALIZE $i" > $tmpdir/$bname-actual
+	bash -c "$NORMALIZE $expected_orig" > $tmpdir/$bname-expected
 
-	echo "$i passed"
+	if diff -bc $tmpdir/$bname-{expected,actual}
+	then
+		echo "$i passed"
+	else
+		echo -n "correct? "
+		read r
+		if [ "$r" == "y" ]
+		then
+			cp $i $expected_orig
+		else
+			exit
+		fi
+	fi
 done
 
 rm -rf $tmpdir

@@ -26,6 +26,9 @@ if access of $ra happens in the delay slot of jal, armcpu would use new value
 of $ra
 for interrupts not set in IM but happens, shoud IP be set?
 
+in mmu, ADE exception should take precedence of TLB exception;
+but ucore does not run if implemented so...
+
 
 CP0 registers
 ===============
@@ -109,6 +112,7 @@ lw
 sw
 lb
 lbu
+lhu
 sb
 
 syscall

@@ -1,13 +1,13 @@
 #!/bin/bash -e
 # $File: compile_userapp.sh
-# $Date: Fri Dec 13 16:12:53 2013 +0800
+# $Date: Fri Dec 13 17:09:03 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 GCCPREFIX=mips-sde-elf-
 
 LD=${GCCPREFIX}ld
 CC=${GCCPREFIX}gcc
-CFLAGS="-mips1 -O2 -fno-builtin -nostdlib  -nostdinc -G0 -Wformat -EL"
+CFLAGS="-mips1 -O2 -fno-builtin -nostdlib  -nostdinc -G0 -Wformat -EL -Wall"
 
 src=$1
 out=$2

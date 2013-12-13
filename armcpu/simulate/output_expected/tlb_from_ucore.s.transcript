@@ -50,7 +50,9 @@
 # [32m < -- id -- > time=21 got instruction: pc=80000008 instr=83820001 [0m
 # [32m < -- id -- > time=25 got instruction: pc=8000000c instr=1000ffff [0m
 # ** Warning: time=27 TLB read missing, vaddr=10007000
-#    Time: 27 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 120
+#    Time: 27 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 125
+# ** Warning: time=27 TLB read missing, vaddr=10007000
+#    Time: 27 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 125
 # time=33 impending exception: ip=10000000 code=02 epc=80000008 badaddr=10007001
 # time=33 cp0_cause: IP=10000000 ExcCode=02
 # time=33 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0

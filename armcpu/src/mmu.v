@@ -1,6 +1,6 @@
 /*
  * $File: mmu.v
- * $Date: Thu Dec 12 17:07:33 2013 +0800
+ * $Date: Fri Dec 13 17:18:14 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -91,22 +91,42 @@ module mmu(
 			2: dev_mem_data_in_selected_byte = dev_mem_data_in[23:16];
 			3: dev_mem_data_in_selected_byte = dev_mem_data_in[31:24];
 		endcase
+	wire [15:0] dev_mem_data_in_selected_word = mem_unaligned_addr[1] ?
+		dev_mem_data_in[31:16] : dev_mem_data_in[15:0];
+
+
+	reg [1:0] mem_align_require;
+	always @(*) begin
+		mem_align_require <= 2'b00;
+		case (data_opt)
+			`MEM_OPT_LW, `MEM_OPT_SW:
+				mem_align_require <= 2'b11;
+			`MEM_OPT_LHU:
+				mem_align_require <= 2'b01;
+			`MEM_OPT_NONE:
+				if (state == READ)
+					mem_align_require <= 2'b11;
+		endcase
+	end
 
 
 	// handle exception
 	always @(*) begin
 		// TODO: check user/kernel permission
 		exc_code = `EC_NONE;
-		if (mem_unaligned_addr[1:0]) begin
-			if (state == READ && (data_opt == `MEM_OPT_LW || data_opt == `MEM_OPT_NONE)) begin
-				exc_code = `EC_ADEL;
-				$warning("time=%g unaligned mem_addr read, data_opt=%h: %h", $time,
-					data_opt, mem_unaligned_addr);
-			end
-			if (data_opt == `MEM_OPT_SW) begin
+		if (mem_unaligned_addr[1:0] & mem_align_require) begin
+			if (mem_opt_is_write) begin
 				exc_code = `EC_ADES;
+				/*
 				$warning("time=%g unaligned mem_addr write word: %h", $time,
 					mem_unaligned_addr);
+				*/
+			end else begin
+				exc_code = `EC_ADEL;
+				/*
+				$warning("time=%g unaligned mem_addr read, data_opt=%h: %h", $time,
+					data_opt, mem_unaligned_addr);
+				*/
 			end
 		end
 		if (tlb_missing) begin
@@ -175,6 +195,8 @@ module mmu(
 				data_out = {{24{dev_mem_data_in_selected_byte[7]}}, dev_mem_data_in_selected_byte};
 			`MEM_OPT_LBU:
 				data_out = {{24'b0}, dev_mem_data_in_selected_byte};
+			`MEM_OPT_LHU:
+				data_out = {{16'b0}, dev_mem_data_in_selected_word};
 			default:
 				data_out = 0;
 		endcase

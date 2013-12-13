@@ -179,7 +179,13 @@ sfs_do_mount(struct device *dev, struct fs **fs_store) {
             unused_blocks ++;
         }
     }
-    assert(unused_blocks == sfs->super.unused_blocks);
+    if(unused_blocks != sfs->super.unused_blocks) {
+		kprintf("\n\n !!!sfs_do_mount: unused_blocks=%d super.unused_blocks=%d"
+				" freemap_size_nbits=%d\n\n",
+				unused_blocks, sfs->super.unused_blocks,
+				freemap_size_nbits);
+		// panic("unused_blocks not equal!\n");
+	}
 
     /* and other fields */
     sfs->super_dirty = 0;

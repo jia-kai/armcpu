@@ -66,57 +66,66 @@
 # time=85 reg4($a0)=00000002
 # [32m < -- id -- > time=93 got instruction: pc=8000002c instr=93840003 [0m
 # time=93 reg4($a0)=00000011
-# [32m < -- id -- > time=101 got instruction: pc=80000030 instr=2403ff01 [0m
+# [32m < -- id -- > time=101 got instruction: pc=80000030 instr=97840000 [0m
 # time=101 reg4($a0)=00000093
-# [32m < -- id -- > time=109 got instruction: pc=80000034 instr=a3830002 [0m
+# [32m < -- id -- > time=109 got instruction: pc=80000034 instr=97840002 [0m
 # time=109 reg4($a0)=00000019
-# [32m < -- id -- > time=113 got instruction: pc=80000038 instr=a3830000 [0m
-# time=113 reg3($v1)=ffffff01
-# [31m <-- mem ext --> time=124 write: addr=40000 data=19011102[0m
-# [32m < -- id -- > time=133 got instruction: pc=8000003c instr=a3830001 [0m
-# [31m <-- mem ext --> time=144 write: addr=40000 data=19011101[0m
-# [32m < -- id -- > time=153 got instruction: pc=80000040 instr=a3830003 [0m
-# [31m <-- mem ext --> time=164 write: addr=40000 data=19010101[0m
-# [32m < -- id -- > time=173 got instruction: pc=80000044 instr=24020000 [0m
-# [31m <-- mem ext --> time=184 write: addr=40000 data=01010101[0m
-# [32m < -- id -- > time=193 got instruction: pc=80000048 instr=a3820000 [0m
-# [32m < -- id -- > time=197 got instruction: pc=8000004c instr=24020001 [0m
-# time=197 reg2($v0)=00000000
-# [31m <-- mem ext --> time=208 write: addr=40000 data=01010100[0m
-# [32m < -- id -- > time=217 got instruction: pc=80000050 instr=a3820001 [0m
-# [32m < -- id -- > time=221 got instruction: pc=80000054 instr=24020002 [0m
-# time=221 reg2($v0)=00000001
-# [31m <-- mem ext --> time=232 write: addr=40000 data=01010100[0m
-# [32m < -- id -- > time=241 got instruction: pc=80000058 instr=a3820002 [0m
-# [32m < -- id -- > time=245 got instruction: pc=8000005c instr=24020003 [0m
-# time=245 reg2($v0)=00000002
-# [31m <-- mem ext --> time=256 write: addr=40000 data=01020100[0m
-# [32m < -- id -- > time=265 got instruction: pc=80000060 instr=a3820003 [0m
-# [32m < -- id -- > time=269 got instruction: pc=80000064 instr=24020004 [0m
-# time=269 reg2($v0)=00000003
-# [31m <-- mem ext --> time=280 write: addr=40000 data=03020100[0m
-# [32m < -- id -- > time=289 got instruction: pc=80000068 instr=a3820004 [0m
-# [32m < -- id -- > time=293 got instruction: pc=8000006c instr=24020005 [0m
-# time=293 reg2($v0)=00000004
-# [31m <-- mem ext --> time=304 write: addr=40001 data=xxxxxx04[0m
-# [32m < -- id -- > time=313 got instruction: pc=80000070 instr=a3820005 [0m
-# [32m < -- id -- > time=317 got instruction: pc=80000074 instr=1000ffff [0m
-# time=317 reg2($v0)=00000005
-# [31m <-- mem ext --> time=328 write: addr=40001 data=xxxx0504[0m
-# [32m < -- id -- > time=337 got instruction: pc=80000078 instr=00000000 [0m
-# [32m < -- id -- > time=341 got instruction: pc=80000074 instr=1000ffff [0m
-# [32m < -- id -- > time=345 got instruction: pc=80000078 instr=00000000 [0m
-# [32m < -- id -- > time=349 got instruction: pc=80000074 instr=1000ffff [0m
-# [32m < -- id -- > time=353 got instruction: pc=80000078 instr=00000000 [0m
-# [32m < -- id -- > time=357 got instruction: pc=80000074 instr=1000ffff [0m
-# [32m < -- id -- > time=361 got instruction: pc=80000078 instr=00000000 [0m
-# [32m < -- id -- > time=365 got instruction: pc=80000074 instr=1000ffff [0m
-# [32m < -- id -- > time=369 got instruction: pc=80000078 instr=00000000 [0m
-# [32m < -- id -- > time=373 got instruction: pc=80000074 instr=1000ffff [0m
-# [32m < -- id -- > time=377 got instruction: pc=80000078 instr=00000000 [0m
-# [32m < -- id -- > time=381 got instruction: pc=80000074 instr=1000ffff [0m
-# [32m < -- id -- > time=385 got instruction: pc=80000078 instr=00000000 [0m
-# [32m < -- id -- > time=389 got instruction: pc=80000074 instr=1000ffff [0m
-# [32m < -- id -- > time=393 got instruction: pc=80000078 instr=00000000 [0m
-# [32m < -- id -- > time=397 got instruction: pc=80000074 instr=1000ffff [0m
+# [32m < -- id -- > time=117 got instruction: pc=80000038 instr=2403ff01 [0m
+# time=117 reg4($a0)=00001102
+# [32m < -- id -- > time=125 got instruction: pc=8000003c instr=a3830002 [0m
+# time=125 reg4($a0)=00001993
+# [32m < -- id -- > time=129 got instruction: pc=80000040 instr=a3830000 [0m
+# time=129 reg3($v1)=ffffff01
+# [31m <-- mem ext --> time=140 write: addr=40000 data=19011102[0m
+# [32m < -- id -- > time=149 got instruction: pc=80000044 instr=a3830001 [0m
+# [31m <-- mem ext --> time=160 write: addr=40000 data=19011101[0m
+# [32m < -- id -- > time=169 got instruction: pc=80000048 instr=a3830003 [0m
+# [31m <-- mem ext --> time=180 write: addr=40000 data=19010101[0m
+# [32m < -- id -- > time=189 got instruction: pc=8000004c instr=24020000 [0m
+# [31m <-- mem ext --> time=200 write: addr=40000 data=01010101[0m
+# [32m < -- id -- > time=209 got instruction: pc=80000050 instr=a3820000 [0m
+# [32m < -- id -- > time=213 got instruction: pc=80000054 instr=24020001 [0m
+# time=213 reg2($v0)=00000000
+# [31m <-- mem ext --> time=224 write: addr=40000 data=01010100[0m
+# [32m < -- id -- > time=233 got instruction: pc=80000058 instr=a3820001 [0m
+# [32m < -- id -- > time=237 got instruction: pc=8000005c instr=24020002 [0m
+# time=237 reg2($v0)=00000001
+# [31m <-- mem ext --> time=248 write: addr=40000 data=01010100[0m
+# [32m < -- id -- > time=257 got instruction: pc=80000060 instr=a3820002 [0m
+# [32m < -- id -- > time=261 got instruction: pc=80000064 instr=24020003 [0m
+# time=261 reg2($v0)=00000002
+# [31m <-- mem ext --> time=272 write: addr=40000 data=01020100[0m
+# [32m < -- id -- > time=281 got instruction: pc=80000068 instr=a3820003 [0m
+# [32m < -- id -- > time=285 got instruction: pc=8000006c instr=24020004 [0m
+# time=285 reg2($v0)=00000003
+# [31m <-- mem ext --> time=296 write: addr=40000 data=03020100[0m
+# [32m < -- id -- > time=305 got instruction: pc=80000070 instr=a3820004 [0m
+# [32m < -- id -- > time=309 got instruction: pc=80000074 instr=24020005 [0m
+# time=309 reg2($v0)=00000004
+# [31m <-- mem ext --> time=320 write: addr=40001 data=xxxxxx04[0m
+# [32m < -- id -- > time=329 got instruction: pc=80000078 instr=a3820005 [0m
+# [32m < -- id -- > time=333 got instruction: pc=8000007c instr=97840001 [0m
+# time=333 reg2($v0)=00000005
+# [31m <-- mem ext --> time=344 write: addr=40001 data=xxxx0504[0m
+# [32m < -- id -- > time=353 got instruction: pc=80000080 instr=1000ffff [0m
+# time=361 impending exception: ip=10000000 code=04 epc=8000007c badaddr=80500001
+# time=361 cp0_cause: IP=10000000 ExcCode=04
+# time=361 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
+# [32m < -- id -- > time=365 got instruction: pc=80000080 instr=00000000 [0m
+# ** Warning: invalid instruction: xxxxxxxx
+#    Time: 369 ns  Scope: top.usystem.ucpu.uid.invalid_instruction File: src/stage_id.v Line: 151
+# [32m < -- id -- > time=369 got instruction: pc=80000180 instr=xxxxxxxx [0m
+# ** Warning: invalid instruction: xxxxxxxx
+#    Time: 373 ns  Scope: top.usystem.ucpu.uid.invalid_instruction File: src/stage_id.v Line: 151
+# [32m < -- id -- > time=373 got instruction: pc=80000184 instr=xxxxxxxx [0m
+# time=377 impending exception: ip=10000000 code=0a epc=80000180 badaddr=xxxxxxxx
+# [32m < -- id -- > time=381 got instruction: pc=8000018c instr=00000000 [0m
+# ** Warning: invalid instruction: xxxxxxxx
+#    Time: 385 ns  Scope: top.usystem.ucpu.uid.invalid_instruction File: src/stage_id.v Line: 151
+# [32m < -- id -- > time=385 got instruction: pc=80000180 instr=xxxxxxxx [0m
+# ** Warning: invalid instruction: xxxxxxxx
+#    Time: 389 ns  Scope: top.usystem.ucpu.uid.invalid_instruction File: src/stage_id.v Line: 151
+# [32m < -- id -- > time=389 got instruction: pc=80000184 instr=xxxxxxxx [0m
+# time=393 impending exception: ip=10000000 code=0a epc=80000180 badaddr=xxxxxxxx
+# [32m < -- id -- > time=397 got instruction: pc=8000018c instr=00000000 [0m
 #  quit 
