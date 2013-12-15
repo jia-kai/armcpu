@@ -1,6 +1,6 @@
 #!/bin/bash
 # $File: disassemble_ram.sh
-# $Date: Mon Nov 25 16:59:29 2013 +0800
+# $Date: Sun Dec 15 13:16:58 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 offset=$1
@@ -13,7 +13,7 @@ then
 fi
 
 ftmp=$(mktemp)
-./memtrans/controller.py ram read $offset $size $ftmp
-./disassemble_bin.sh $ftmp
+$(dirname $0)/memtrans/controller.py ram read $offset $size $ftmp
+$(dirname $0)/disassemble_bin.sh $ftmp
 rm -f $ftmp
 
