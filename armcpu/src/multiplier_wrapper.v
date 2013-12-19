@@ -1,15 +1,16 @@
 /*
  * $File: multiplier_wrapper.v
- * $Date: Sun Nov 24 14:02:59 2013 +0800
+ * $Date: Thu Dec 19 20:45:21 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
-`define WAIT_CYCLE	15
+`define WAIT_CYCLE	14
 `include "lohi_def.vh"
 
 // wrap around xilinx multiplier core, and provide hi/lo register
 module multiplier_wrapper(
 	input clk,
+	input start,	// start on posedge
 	input [31:0] opr1,
 	input [31:0] opr2,
 	output reg [63:0] result,
@@ -18,26 +19,24 @@ module multiplier_wrapper(
 	output ready);
 
 	wire [63:0] cur_product;
-	reg [31:0] prev_opr1 = 0, prev_opr2 = 0, cur_opr1 = 0, cur_opr2 = 0;
 
-	multiplier umult(.clk(clk), .a(cur_opr1), .b(cur_opr2), .p(cur_product));
+	multiplier umult(.clk(clk), .a(opr1), .b(opr2), .p(cur_product));
 
-	assign ready = (opr1 == prev_opr1 && opr2 == prev_opr2);
+	reg start_prev;
+	reg [3:0] wait_cnt = 0;
 
-	reg [3:0] wait_cnt;
+	assign start_posedge = ~start_prev & start;
+	assign ready = (wait_cnt == (`WAIT_CYCLE + 1) && !start_posedge);
 
 	always @(posedge clk) begin
-		if (cur_opr1 != opr1 || cur_opr2 != opr2) begin
-			cur_opr1 <= opr1;
-			cur_opr2 <= opr2;
+		start_prev <= start;
+		if (start_posedge)
 			wait_cnt <= 0;
-		end else begin
+		else if (wait_cnt < `WAIT_CYCLE)
 			wait_cnt <= wait_cnt + 1'b1;
-			if (wait_cnt == `WAIT_CYCLE) begin
-				prev_opr1 <= cur_opr1;
-				prev_opr2 <= cur_opr2;
-				result <= cur_product;
-			end
+		else if (wait_cnt == `WAIT_CYCLE) begin
+			result <= cur_product;
+			wait_cnt <= wait_cnt + 1'b1;
 		end
 		case (write_opt)
 			`LOHI_WRITE_LO:

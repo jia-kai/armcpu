@@ -1,6 +1,6 @@
 /*
  * $File: ram_sim.v
- * $Date: Tue Dec 10 20:36:02 2013 +0800
+ * $Date: Thu Dec 19 19:52:21 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -25,12 +25,12 @@ module ram_sim
 		if (!ce && $time > 0) begin
 			storage[addr] <= data;
 			if (!is_valid_data(data) || !oe) begin
-				$warning("time=%g mem %s: write bad data: addr=%h data=%h oe=%b",
-					$time, NAME, addr, data, oe);
+				$warning("time=%g mem %s: write bad data: addr=%h(%h) data=%h oe=%b",
+					$time, NAME, addr * 4, addr, data, oe);
 				#1 $fatal("exit due to previous error");
 			end else
-				$display("\033[31m <-- mem %s --> time=%g write: addr=%h data=%h\033[0m",
-					NAME, $time, addr, data);
+				$display("\033[31m <-- mem %s --> time=%g write: addr=%h(%h) data=%h\033[0m",
+					NAME, $time, addr * 4, addr, data);
 		end
 
 	wire [31:0] data_from_mem;
@@ -38,8 +38,8 @@ module ram_sim
 	assign data = (!ce && !oe ? data_from_mem : {32{1'bz}});
 
 	specify
-		$setup(data, posedge we, 1);
-		$setup(oe, posedge we, 1);
+		$setup(data, posedge we, 0.5);
+		$setup(oe, posedge we, 0.5);
 	endspecify
 
 	/*
@@ -84,7 +84,7 @@ module ram_output_delay(
 	output [31:0] out);
 
 	specify
-		(in => out) = 1.9;
+		(in => out) = 0.9;
 	endspecify
 	assign out = in;
 endmodule

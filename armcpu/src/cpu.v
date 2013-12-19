@@ -1,6 +1,6 @@
 /*
  * $File: cpu.v
- * $Date: Thu Dec 12 21:11:24 2013 +0800
+ * $Date: Thu Dec 19 21:30:17 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -61,6 +61,7 @@ module cpu(
 	wire [31:0] branch_dest, exc_jmp_dest;
 	reg [31:0] jmp_dest;
 
+	wire mult_start;
 	wire [31:0] mult_opr1, mult_opr2, lohi_write_data;
 	wire [63:0] mult_result;
 	wire lohi_ready;
@@ -106,6 +107,7 @@ module cpu(
 		.forward_data(id2ex_reg2_forward_data));
 
 	multiplier_wrapper umult(.clk(clk_fast),
+		.start(mult_start),
 		.opr1(mult_opr1), .opr2(mult_opr2),
 		.result(mult_result),
 		.write_data(lohi_write_data),
@@ -132,6 +134,7 @@ module cpu(
 		.reg2_data(id2ex_reg2_forward_data),
 		.branch_flag(branch_flag), .branch_dest(branch_dest),
 		.wb_from_alu(ex2mem_wb_from_alu),
+		.mult_start(mult_start),
 		.mult_opr1(mult_opr1), .mult_opr2(mult_opr2),
 		.interstage_ex2mem(interstage_ex2mem));
 

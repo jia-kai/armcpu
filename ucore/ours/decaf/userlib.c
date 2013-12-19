@@ -1,6 +1,6 @@
 /*
  * $File: userlib.c
- * $Date: Thu Dec 19 11:19:50 2013 +0800
+ * $Date: Thu Dec 19 11:38:22 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -9,7 +9,7 @@
 #include <readline.h>
 
 #define MEM_BUF_SIZE	1024
-void* _Alloc(int size) {
+void* Alloc(int size) {
 	static char buf[MEM_BUF_SIZE];
 	static int cur_size;
 	char *ret = buf + cur_size;
@@ -22,12 +22,11 @@ void* _Alloc(int size) {
 	return ret;
 }
 
-void _PrintInt(int val) {
+void PrintInt(int val) {
 	fprintf(1, "%d", val);
 }
 
-void _PrintString(const char *str) {
-	fprintf(1, "addr=%p\n", str);
+void PrintString(const char *str) {
 	fprintf(1, "%s", str);
 }
 

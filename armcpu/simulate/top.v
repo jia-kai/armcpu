@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Tue Dec 10 20:11:19 2013 +0800
+ * $Date: Thu Dec 19 18:56:49 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -13,9 +13,16 @@ module top;
 	reg rst = 0;
 
 	always
-		#1 clk <= ~clk;	// 500MB
-	always @(posedge clk)
-		clk_cpu <= ~clk_cpu;
+		#0.5 clk <= ~clk;
+
+	reg [1:0] clk_cnt = 0;
+	always @(posedge clk) begin
+		if (clk_cnt == 1) begin
+			clk_cpu <= ~clk_cpu;
+			clk_cnt <= 0;
+		end else
+			clk_cnt <= clk_cnt + 1;
+	end
 
 	wire [31:0] baseram_data, extram_data;
 	wire [19:0] baseram_addr, extram_addr;
@@ -132,6 +139,9 @@ module top;
 	always @(usystem.ucpu.uid.uregfile.mem[29])
 		$display("time=%g reg29($sp)=%h", $time,
 			usystem.ucpu.uid.uregfile.mem[29]);
+	always @(usystem.ucpu.uid.uregfile.mem[30])
+		$display("time=%g reg30($fp)=%h", $time,
+			usystem.ucpu.uid.uregfile.mem[30]);
 	always @(usystem.ucpu.uid.uregfile.mem[31])
 		$display("time=%g reg31($ra)=%h", $time,
 			usystem.ucpu.uid.uregfile.mem[31]);

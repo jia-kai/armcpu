@@ -16,7 +16,6 @@ class Hanoi {
 }
 class Main {
 	static void main() {
-		Print (123);
 		Print ("number of disks: ");
 		int n;
 		n = ReadInteger();

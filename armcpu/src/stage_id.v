@@ -1,6 +1,6 @@
 /*
  * $File: stage_id.v
- * $Date: Fri Dec 13 16:25:39 2013 +0800
+ * $Date: Thu Dec 19 15:24:18 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -305,13 +305,13 @@ module stage_id(
 	task do_decode; begin
 		case (instr_opcode)
 			6'b000000: case(instr_func)
-				6'h08: proc_instr_jr();
-				6'h09: proc_instr_jalr();
-				6'h0c: proc_instr_syscall();
-				6'h10: proc_instr_mfhi();
-				6'h11: proc_instr_mthi();
-				6'h12: proc_instr_mflo();
-				6'h13: proc_instr_mtlo();
+				6'h08: proc_instr_jr();		// JR
+				6'h09: proc_instr_jalr();	// JALR
+				6'h0c: proc_instr_syscall();	// SYSCALL
+				6'h10: proc_instr_mfhi();	// MFHI
+				6'h11: proc_instr_mthi();	// MTHI
+				6'h12: proc_instr_mflo();	// MFLO
+				6'h13: proc_instr_mtlo();	// MTLO
 				default: proc_rtype();
 			endcase
 			6'b000010:

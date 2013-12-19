@@ -39,4 +39,7 @@ lhu $a0, 1($gp)	# exception
 
 halt: b halt
 
+.org 0x180
+b .
+
 # vim: ft=mips

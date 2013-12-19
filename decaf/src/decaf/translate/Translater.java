@@ -86,7 +86,7 @@ public class Translater {
 	public void createFuncty(Function func) {
 		Functy functy = new Functy();
 		if (func.isMain()) {
-			functy.label = Label.createLabel("main", true);
+			functy.label = Label.createLabel("decaf_main", true);
 		} else {
 			functy.label = Label.createLabel("_"
 					+ ((ClassScope) func.getScope()).getOwner().getName() + "."

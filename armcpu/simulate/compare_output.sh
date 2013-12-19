@@ -1,13 +1,13 @@
 #!/bin/bash -e
 # $File: compare_output.sh
-# $Date: Fri Dec 13 12:23:00 2013 +0800
+# $Date: Thu Dec 19 20:47:49 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 tmpdir=/tmp/armcpu_out_compare
 rm -rf $tmpdir
 mkdir -p $tmpdir
 
-NORMALIZE="sed -e 's/[Tt]ime.[0-9.]*//g' -e 's/[0-9]* ns//g' -e 's/Line: [0-9]*//g'"
+NORMALIZE="sed -e 's/[Tt]ime.[0-9.]*//g' -e 's/[0-9]* [np]s//g' -e 's/Line: [0-9]*//g'"
 
 for i in output/*
 do

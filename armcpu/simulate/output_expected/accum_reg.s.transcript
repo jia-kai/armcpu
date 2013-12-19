@@ -41,9 +41,10 @@
 # time=1 reg26($k0)=00000000
 # time=1 reg26($k1)=00000000
 # time=1 reg29($sp)=00000000
+# time=1 reg30($fp)=00000000
 # time=1 reg31($ra)=00000000
 # time=1 cp0_cause: IP=00000000 ExcCode=00
-# [32m < -- id -- > time=9 got instruction: pc=xxxxxxxx instr=00000000 [0m
+# [32m < -- id -- > time=9 got instruction: pc=7ffffffc instr=00000000 [0m
 # time=9 cp0_cause: IP=10000000 ExcCode=00
 # [32m < -- id -- > time=13 got instruction: pc=80000000 instr=24e70001 [0m
 # [32m < -- id -- > time=17 got instruction: pc=80000004 instr=3c1cbfd0 [0m

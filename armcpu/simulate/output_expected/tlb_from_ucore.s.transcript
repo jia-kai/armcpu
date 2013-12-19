@@ -26,38 +26,39 @@
 # time=0 com_write_busy=0
 # time=0 com_read_data=00
 # time=0 segdisp=xxxxxxxx
-# time=1 cp0_cause: IP=x0000000 ExcCode=xx
-# time=1 cpu entered kernel mode
-# time=1 cp0_cause: IP=x0000000 ExcCode=00
-# time=1 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
-# time=1 reg1($at)=00000000
-# time=1 reg2($v0)=00000000
-# time=1 reg3($v1)=00000000
-# time=1 reg4($a0)=00000000
-# time=1 reg5($a1)=00000000
-# time=1 reg6($a2)=00000000
-# time=1 reg7($a3)=00000000
-# time=1 reg16($s0)=00000000
-# time=1 reg26($k0)=00000000
-# time=1 reg26($k1)=00000000
-# time=1 reg29($sp)=00000000
-# time=1 reg31($ra)=00000000
-# time=1 cp0_cause: IP=00000000 ExcCode=00
-# [32m < -- id -- > time=9 got instruction: pc=xxxxxxxx instr=00000000 [0m
-# time=9 cp0_cause: IP=10000000 ExcCode=00
-# [32m < -- id -- > time=13 got instruction: pc=80000000 instr=3c1c1000 [0m
-# [32m < -- id -- > time=17 got instruction: pc=80000004 instr=379c7000 [0m
-# [32m < -- id -- > time=21 got instruction: pc=80000008 instr=83820001 [0m
-# [32m < -- id -- > time=25 got instruction: pc=8000000c instr=1000ffff [0m
-# ** Warning: time=27 TLB read missing, vaddr=10007000
-#    Time: 27 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 125
-# ** Warning: time=27 TLB read missing, vaddr=10007000
-#    Time: 27 ns  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 125
-# time=33 impending exception: ip=10000000 code=02 epc=80000008 badaddr=10007001
-# time=33 cp0_cause: IP=10000000 ExcCode=02
-# time=33 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
-# [32m < -- id -- > time=37 got instruction: pc=8000000c instr=00000000 [0m
-# [32m < -- id -- > time=41 got instruction: pc=80000000 instr=3c1c1000 [0m
-# [32m < -- id -- > time=45 got instruction: pc=80000004 instr=379c7000 [0m
-# [32m < -- id -- > time=49 got instruction: pc=80000008 instr=83820001 [0m
+# time=2 cp0_cause: IP=x0000000 ExcCode=xx
+# time=2 cpu entered kernel mode
+# time=2 cp0_cause: IP=x0000000 ExcCode=00
+# time=2 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
+# time=2 reg1($at)=00000000
+# time=2 reg2($v0)=00000000
+# time=2 reg3($v1)=00000000
+# time=2 reg4($a0)=00000000
+# time=2 reg5($a1)=00000000
+# time=2 reg6($a2)=00000000
+# time=2 reg7($a3)=00000000
+# time=2 reg16($s0)=00000000
+# time=2 reg26($k0)=00000000
+# time=2 reg26($k1)=00000000
+# time=2 reg29($sp)=00000000
+# time=2 reg30($fp)=00000000
+# time=2 reg31($ra)=00000000
+# time=2 cp0_cause: IP=00000000 ExcCode=00
+# [32m < -- id -- > time=10 got instruction: pc=7ffffffc instr=00000000 [0m
+# time=10 cp0_cause: IP=10000000 ExcCode=00
+# [32m < -- id -- > time=14 got instruction: pc=80000000 instr=3c1c1000 [0m
+# [32m < -- id -- > time=18 got instruction: pc=80000004 instr=379c7000 [0m
+# [32m < -- id -- > time=22 got instruction: pc=80000008 instr=83820001 [0m
+# [32m < -- id -- > time=26 got instruction: pc=8000000c instr=1000ffff [0m
+# ** Warning: time=28 TLB read missing, vaddr=10007000
+#    Time: 27500 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 140
+# ** Warning: time=28 TLB read missing, vaddr=10007000
+#    Time: 27500 ps  Scope: top.usystem.ucpu.ummu File: src/mmu.v Line: 140
+# time=34 impending exception: ip=10000000 code=02 epc=80000008 badaddr=10007001
+# time=34 cp0_cause: IP=10000000 ExcCode=02
+# time=34 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
+# [32m < -- id -- > time=38 got instruction: pc=8000000c instr=00000000 [0m
+# [32m < -- id -- > time=42 got instruction: pc=80000000 instr=3c1c1000 [0m
+# [32m < -- id -- > time=46 got instruction: pc=80000004 instr=379c7000 [0m
+# [32m < -- id -- > time=50 got instruction: pc=80000008 instr=83820001 [0m
 #  quit 

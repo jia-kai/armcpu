@@ -26,40 +26,43 @@
 # time=0 com_write_busy=0
 # time=0 com_read_data=00
 # time=0 segdisp=xxxxxxxx
-# time=1 cp0_cause: IP=x0000000 ExcCode=xx
-# time=1 cpu entered kernel mode
-# time=1 cp0_cause: IP=x0000000 ExcCode=00
-# time=1 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
-# time=1 reg1($at)=00000000
-# time=1 reg2($v0)=00000000
-# time=1 reg3($v1)=00000000
-# time=1 reg4($a0)=00000000
-# time=1 reg5($a1)=00000000
-# time=1 reg6($a2)=00000000
-# time=1 reg7($a3)=00000000
-# time=1 reg16($s0)=00000000
-# time=1 reg26($k0)=00000000
-# time=1 reg26($k1)=00000000
-# time=1 reg29($sp)=00000000
-# time=1 reg31($ra)=00000000
-# time=1 cp0_cause: IP=00000000 ExcCode=00
-# [32m < -- id -- > time=9 got instruction: pc=xxxxxxxx instr=00000000 [0m
-# time=9 cp0_cause: IP=10000000 ExcCode=00
-# [32m < -- id -- > time=13 got instruction: pc=80000000 instr=3c048050 [0m
-# [32m < -- id -- > time=17 got instruction: pc=80000004 instr=ac800000 [0m
-# [32m < -- id -- > time=21 got instruction: pc=80000008 instr=8c9a0000 [0m
-# time=21 reg4($a0)=80500000
-# [31m <-- mem ext --> time=28 write: addr=40000 data=00000000[0m
-# [32m < -- id -- > time=37 got instruction: pc=8000000c instr=275a0001 [0m
-# [32m < -- id -- > time=45 got instruction: pc=80000010 instr=1000fffd [0m
-# [32m < -- id -- > time=49 got instruction: pc=80000014 instr=ac9a0000 [0m
-# time=49 reg26($k0)=00000001
-# [32m < -- id -- > time=53 got instruction: pc=80000008 instr=8c9a0000 [0m
-# [31m <-- mem ext --> time=60 write: addr=40000 data=00000001[0m
-# [32m < -- id -- > time=69 got instruction: pc=8000000c instr=275a0001 [0m
-# [32m < -- id -- > time=77 got instruction: pc=80000010 instr=1000fffd [0m
-# [32m < -- id -- > time=81 got instruction: pc=80000014 instr=ac9a0000 [0m
-# time=81 reg26($k0)=00000002
-# [32m < -- id -- > time=85 got instruction: pc=80000008 instr=8c9a0000 [0m
-# [31m <-- mem ext --> time=92 write: addr=40000 data=00000002[0m
+# time=2 cp0_cause: IP=x0000000 ExcCode=xx
+# time=2 cpu entered kernel mode
+# time=2 cp0_cause: IP=x0000000 ExcCode=00
+# time=2 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
+# time=2 reg1($at)=00000000
+# time=2 reg2($v0)=00000000
+# time=2 reg3($v1)=00000000
+# time=2 reg4($a0)=00000000
+# time=2 reg5($a1)=00000000
+# time=2 reg6($a2)=00000000
+# time=2 reg7($a3)=00000000
+# time=2 reg16($s0)=00000000
+# time=2 reg26($k0)=00000000
+# time=2 reg26($k1)=00000000
+# time=2 reg29($sp)=00000000
+# time=2 reg30($fp)=00000000
+# time=2 reg31($ra)=00000000
+# time=2 cp0_cause: IP=00000000 ExcCode=00
+# [32m < -- id -- > time=10 got instruction: pc=7ffffffc instr=00000000 [0m
+# time=10 cp0_cause: IP=10000000 ExcCode=00
+# [32m < -- id -- > time=14 got instruction: pc=80000000 instr=3c048050 [0m
+# [32m < -- id -- > time=18 got instruction: pc=80000004 instr=ac800000 [0m
+# [32m < -- id -- > time=22 got instruction: pc=80000008 instr=8c9a0000 [0m
+# time=22 reg4($a0)=80500000
+# [31m <-- mem ext --> time=27 write: addr=00100000(40000) data=00000000[0m
+# [32m < -- id -- > time=34 got instruction: pc=8000000c instr=275a0001 [0m
+# [32m < -- id -- > time=42 got instruction: pc=80000010 instr=1000fffd [0m
+# [32m < -- id -- > time=46 got instruction: pc=80000014 instr=ac9a0000 [0m
+# time=46 reg26($k0)=00000001
+# [32m < -- id -- > time=50 got instruction: pc=80000008 instr=8c9a0000 [0m
+# [31m <-- mem ext --> time=55 write: addr=00100000(40000) data=00000001[0m
+# [32m < -- id -- > time=62 got instruction: pc=8000000c instr=275a0001 [0m
+# [32m < -- id -- > time=70 got instruction: pc=80000010 instr=1000fffd [0m
+# [32m < -- id -- > time=74 got instruction: pc=80000014 instr=ac9a0000 [0m
+# time=74 reg26($k0)=00000002
+# [32m < -- id -- > time=78 got instruction: pc=80000008 instr=8c9a0000 [0m
+# [31m <-- mem ext --> time=83 write: addr=00100000(40000) data=00000002[0m
+# [32m < -- id -- > time=90 got instruction: pc=8000000c instr=275a0001 [0m
+# [32m < -- id -- > time=98 got instruction: pc=80000010 instr=1000fffd [0m
 #  quit 

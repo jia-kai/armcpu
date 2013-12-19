@@ -1,6 +1,6 @@
 /*
  * $File: stage_ex.v
- * $Date: Thu Dec 12 21:30:39 2013 +0800
+ * $Date: Thu Dec 19 20:31:06 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -26,14 +26,14 @@ module stage_ex(
 	input [31:0] reg1_data,
 	input [31:0] reg2_data,
 
-	// updated on negedge, regardness of stall
-	output reg branch_flag,
-	output reg [31:0] branch_dest,
+	output branch_flag,
+	output [31:0] branch_dest,
 
 	// whether write-back passed to mem is from alu result
 	// used for forwarding
 	output reg wb_from_alu,
 
+	output reg mult_start,
 	output reg [31:0] mult_opr1,
 	output reg [31:0] mult_opr2,
 	
@@ -55,19 +55,16 @@ module stage_ex(
 		.illegal_opt(alu_illegal_opt));
 
 
-	assign branch_flag_comb = (
+	assign branch_flag = (
 		(branch_opt_id2ex == `BRANCH_ON_ALU_EQZ && !result_from_alu) ||
 		(branch_opt_id2ex == `BRANCH_ON_ALU_NEZ && result_from_alu) ||
 		(branch_opt_id2ex == `BRANCH_UNCOND));
-	wire [31:0] branch_dest_comb =
-		branch_dest_id2ex[32] ? reg2_data : branch_dest_id2ex;
+	assign branch_dest =
+		branch_dest_id2ex[32] ? reg2_data : branch_dest_id2ex[31:0];
 
-	always @(negedge clk) begin
-		branch_flag <= branch_flag_comb;
-		branch_dest <= branch_dest_comb;
-	end
 
 	always @(posedge clk) begin
+		mult_start <= 1'b0;	// assert for one cycle
 		if (rst || !stall || clear) begin
 			mem_opt_ex2mem <= `MEM_OPT_NONE;
 			wb_reg_addr_ex2mem <= 0;
@@ -87,6 +84,7 @@ module stage_ex(
 			end
 			else begin
 				if (alu_opt == `ALU_OPT_MULT) begin
+					mult_start <= 1'b1;
 					mult_opr1 <= reg1_data;
 					mult_opr2 <= reg2_data;
 				end
