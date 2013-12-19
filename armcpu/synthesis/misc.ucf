@@ -39,7 +39,8 @@ NET "params[31]" LOC = L3;
 
 
 
-TIMESPEC TS_clk50M = PERIOD "clk50M" 20 ns HIGH 50%;
-#Created by Constraints Editor (xc6slx100-fgg676-3) - 2013/11/17
-NET "clk_cpu" TNM_NET = clk_cpu;
-TIMESPEC TS_clk_cpu = PERIOD "clk_cpu" 40 ns HIGH 50%;
+# TIMESPEC TS_clk50M = PERIOD "clk50M" 20 ns HIGH 50%;
+# NET "clk_cpu" TNM_NET = clk_cpu;
+# TIMESPEC TS_clk_cpu = PERIOD "clk_cpu" 40 ns HIGH 50%;
+#
+# vim: ft=conf

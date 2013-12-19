@@ -1,12 +1,13 @@
 /*
  * $File: userlib.c
- * $Date: Thu Dec 19 11:38:22 2013 +0800
+ * $Date: Thu Dec 19 22:52:08 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 #include <stdio.h>
 #include <ulib.h>
 #include <readline.h>
+#include <thumips.h>
 
 #define MEM_BUF_SIZE	1024
 void* Alloc(int size) {
@@ -22,12 +23,27 @@ void* Alloc(int size) {
 	return ret;
 }
 
-void PrintInt(int val) {
-	fprintf(1, "%d", val);
+void PrintString(const char *str) {
+	while (*str)
+		sys_putc(*(str ++));
 }
 
-void PrintString(const char *str) {
-	fprintf(1, "%s", str);
+void PrintInt(int val) {
+	if (!val)
+		sys_putc('0');
+	else if (val < 0) {
+		sys_putc('-');
+		val = -val;
+	}
+	static char buf[20];
+	char *ptr = buf + 19;
+	while (val) {
+      int div = __divu10(val),
+		  mod = val - __mulu10(div);
+	  *(-- ptr) = mod + '0';
+	  val = div;
+	}
+	PrintString(ptr);
 }
 
 int _ReadInteger() {

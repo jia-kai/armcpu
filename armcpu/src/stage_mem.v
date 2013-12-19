@@ -1,6 +1,6 @@
 /*
  * $File: stage_mem.v
- * $Date: Sat Nov 23 20:35:41 2013 +0800
+ * $Date: Thu Dec 19 21:44:31 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -13,6 +13,7 @@
 
 // memory read/write
 module stage_mem(
+	input clk_fast,
 	input clk,
 	input rst,
 
@@ -100,6 +101,50 @@ module stage_mem(
 	reg [`TLB_ENTRY_WIDTH-1:0] tlb_entry;
 	reg [`TLB_INDEX_WIDTH-1:0] tlb_index;
 	assign mmu_tlb_write_struct = {tlb_write_enable, tlb_index, tlb_entry};
+
+	assign mem_opt_is_read = `MEM_OPT_IS_READ(mem_opt_ex2mem),
+		mem_opt_is_write = `MEM_OPT_IS_WRITE(mem_opt_ex2mem);
+
+	// wb reg data and addr updated on negedge
+	reg [`REGADDR_WIDTH-1:0] ne_wb_reg_addr;
+	reg [31:0] ne_wb_reg_data;
+
+	// wb on posedge for mmu and lohi
+	reg wb_pe_mmu, wb_pe_lohi;
+
+	wire [31:0] lohi_value_selected = mem_opt_ex2mem == `MEM_OPT_MFLO ?
+		lohi_value[31:0] : lohi_value[63:32];
+
+
+	// assign wb_reg_addr and wb_reg_data
+	// use latch to improve timing ...
+	always @(negedge clk_fast) begin
+		wb_reg_addr <= wb_reg_addr_ex2mem;
+		if (mem_opt_ex2mem == `MEM_OPT_READ_CP0)
+			wb_reg_data <= cp0_reg_unwind[mem_addr_ex2mem];
+		else begin
+			wb_reg_data <= ne_wb_reg_data;
+			if (state != READY) begin
+				case ({wb_pe_mmu, wb_pe_lohi})
+					2'b10:
+						wb_reg_data <= mmu_data_in;
+					2'b01:
+						wb_reg_data <= lohi_value_selected;
+					default:
+						wb_reg_addr <= ne_wb_reg_addr;
+				endcase
+			end else
+				wb_reg_addr <= ne_wb_reg_addr;
+		end
+	end
+
+	reg mmu_busy_poslatch, lohi_ready_poslatch;
+	always @(posedge clk) begin
+		mmu_busy_poslatch <= mmu_busy;
+		lohi_ready_poslatch <= lohi_ready;
+		wb_pe_mmu <= (state == WAIT_MMU && !mmu_busy);
+		wb_pe_lohi <= (state == WAIT_LOHI && lohi_ready);
+	end
 	
 	task proc_mem_opt; 
 		case (mem_opt_ex2mem) 
@@ -108,8 +153,6 @@ module stage_mem(
 				cp0_write_addr <= mem_addr_ex2mem[`CP0_REG_ADDR_WIDTH-1:0];
 				cp0_write_data <= mem_data_ex2mem;
 			end
-			`MEM_OPT_READ_CP0:
-				wb_reg_data <= cp0_reg_unwind[mem_addr_ex2mem];
 			`MEM_OPT_WRITE_TLB_IDX: begin
 				state <= WAIT_MMU;
 				tlb_write_enable <= 1;
@@ -120,35 +163,27 @@ module stage_mem(
 					cp0_reg_unwind[`CP0_ENTRY_LO0][25:6],
 					cp0_reg_unwind[`CP0_ENTRY_LO0][2:1]};
 			end
-			`MEM_OPT_MFLO, `MEM_OPT_MFHI:
-				if (!lohi_ready) begin
-					state <= WAIT_LOHI;
-					wb_reg_addr <= 0;
-				end
-				else begin
-					state <= READY;
-					wb_reg_addr <= wb_reg_addr_ex2mem;
-					if (mem_opt_ex2mem == `MEM_OPT_MFLO)
-						wb_reg_data <= lohi_value[31:0];
-					else
-						wb_reg_data <= lohi_value[63:32];
-				end
+			`MEM_OPT_MFLO, `MEM_OPT_MFHI: begin
+				ne_wb_reg_addr <= 0;
+				state <= WAIT_LOHI;
+			end
 			`MEM_OPT_MTLO: begin
+				state <= WAIT_LOHI;
 				lohi_write_opt <= `LOHI_WRITE_LO;
 				lohi_write_data <= alu_result;
 			end
 			`MEM_OPT_MTHI: begin
+				state <= WAIT_LOHI;
 				lohi_write_opt <= `LOHI_WRITE_HI;
 				lohi_write_data <= alu_result;
 			end
-
 			// mmu operations
-			default: if (mem_opt_ex2mem != `MEM_OPT_NONE) begin
+			default: if (mem_opt_is_read || mem_opt_is_write) begin
 				state <= WAIT_MMU;
 				mmu_opt <= mem_opt_ex2mem;
 				mmu_addr <= mem_addr_ex2mem;
 				mmu_data_out <= mem_data_ex2mem;
-				wb_reg_addr <= 0;
+				ne_wb_reg_addr <= 0;
 			end
 		endcase
 	endtask
@@ -174,8 +209,8 @@ module stage_mem(
 					cp0_exc_code <= `EC_INT;
 				else begin
 					cp0_exc_code <= `EC_NONE;
-					wb_reg_addr <= wb_reg_addr_ex2mem;
-					wb_reg_data <= alu_result;
+					ne_wb_reg_addr <= wb_reg_addr_ex2mem;
+					ne_wb_reg_data <= alu_result;
 					proc_mem_opt();
 				end
 			end
@@ -184,18 +219,25 @@ module stage_mem(
 					state <= READY;
 					cp0_exc_code <= mmu_exc_code;
 					cp0_exc_badvaddr <= mmu_addr;
-				end else if (!mmu_busy) begin
+				end else if (!mmu_busy_poslatch ||
+						(!mmu_busy && mem_opt_is_write)) begin
 					state <= READY;
-					wb_reg_data <= mmu_data_in;
-					wb_reg_addr <= wb_reg_addr_ex2mem;
+					ne_wb_reg_data <= mmu_data_in;
+					ne_wb_reg_addr <= wb_reg_addr_ex2mem;
 				end
 			WAIT_LOHI:
-				proc_mem_opt();	// stalled, so mem_opt should not change
+				if (lohi_ready_poslatch) begin
+					state <= READY;
+					ne_wb_reg_addr <= wb_reg_addr_ex2mem;
+					ne_wb_reg_data <= lohi_value_selected;
+				end
 
 			default:
 				state <= READY;
 		endcase
 	end
+
+
 
 endmodule
 

@@ -1,6 +1,6 @@
 #!/bin/bash -e
 # $File: compile_userapp.sh
-# $Date: Thu Dec 19 11:12:53 2013 +0800
+# $Date: Thu Dec 19 22:24:57 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 GCCPREFIX=mips-sde-elf-

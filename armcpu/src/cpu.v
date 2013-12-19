@@ -1,6 +1,6 @@
 /*
  * $File: cpu.v
- * $Date: Thu Dec 19 21:30:17 2013 +0800
+ * $Date: Thu Dec 19 21:46:18 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -20,7 +20,7 @@
 
 module cpu(
 	input clk,
-	input clk_fast,	// for multiplier
+	input clk_fast,	// clk must change at posedge of clk_fast
 	input rst,
 
 	input int_com_req,
@@ -138,7 +138,7 @@ module cpu(
 		.mult_opr1(mult_opr1), .mult_opr2(mult_opr2),
 		.interstage_ex2mem(interstage_ex2mem));
 
-	stage_mem umem(.clk(clk), .rst(rst),
+	stage_mem umem(.clk_fast(clk_fast), .clk(clk), .rst(rst),
 		.interstage_ex2mem(interstage_ex2mem),
 		.wb_reg_addr(wb_addr), .wb_reg_data(wb_data),
 		.set_stall(stall), .set_clear(clear),
