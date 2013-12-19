@@ -13,8 +13,6 @@ int getchar(void);
 void printhex(unsigned int x);
 void printbase10(int x);
 
-/* kern/libs/readline.c */
-char *readline(const char *prompt);
 
 // add by Xinyu Zhou
 /**

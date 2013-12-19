@@ -1,0 +1,6 @@
+tools/
+result/
+decaf.jar
+TestCases/*/output/
+TestCases/*/spim/
+test/
