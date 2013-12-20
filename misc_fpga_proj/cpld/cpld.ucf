@@ -1,7 +1,21 @@
-NET "com_TxD"	LOC = "P6";		# InterConn0
-NET "com_RxD"	LOC = "P7";		# InterConn1
+NET "clk50M"	LOC = "P1";
+#NET "clk11M"	LOC = "P2";
+
+NET "pass_TxD"	LOC = "P6";		# InterConn0
+NET "pass_RxD"	LOC = "P7";		# InterConn1
+
+NET "kbd_enb_hi"  LOC = "P8";	# InterConn2
+NET "kbd_enb_lo"  LOC = "P9";
+NET "kbd_data[0]" LOC = "P10";
+NET "kbd_data[1]" LOC = "P11";
+NET "kbd_data[2]" LOC = "P12";
+NET "kbd_data[3]" LOC = "P13";	# InterConn7
+
 
 NET "TxD"  LOC = "P54"; # TXD1
 NET "RxD"  LOC = "P58"; # RXD1
+
+NET "ps2_clk" LOC = "P71";	# PS2KB_CLOCK	
+NET "ps2_data" LOC = "P70"; # PS2KB_DATA	
 
 # vim: ft=conf

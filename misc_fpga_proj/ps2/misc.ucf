@@ -1,0 +1,8 @@
+NET "clk" LOC = U26;
+NET "rst_key" LOC = T1;
+NET "int_ack_key" LOC = Y1;
+NET "int_req" LOC = N26;	# LED[0]
+
+
+# vim: ft=conf
+
