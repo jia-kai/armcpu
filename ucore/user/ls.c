@@ -34,11 +34,11 @@ getstat(const char *name, struct stat *stat) {
 
 void
 lsstat(struct stat *stat, const char *filename) {
-    printf("   [%c]", getmode(stat->st_mode));
-    printf(" %3d(h)", stat->st_nlinks);
-    printf(" %8d(b)", stat->st_blocks);
-    printf(" %8d(s)", stat->st_size);
-    printf("   %s\n", filename);
+    printf(" [%c]", getmode(stat->st_mode));
+    printf(" %2d(h)", stat->st_nlinks);
+    printf(" %3d(b)", stat->st_blocks);
+    printf(" %6d(s)", stat->st_size);
+    printf(" %s\n", filename);
 }
 
 int
@@ -90,10 +90,10 @@ ls(const char *path) {
     default:  type = 5; break;
     }
 
-    printf(" @ is %s", filetype[type]);
+    printf(" `%s' is %s", path, filetype[type]);
     printf(" %d(hlinks)", stat->st_nlinks);
     printf(" %d(blocks)", stat->st_blocks);
-    printf(" %d(bytes) : @'%s'\n", stat->st_size, path);
+    printf(" %d(bytes)\n", stat->st_size);
     if (S_ISDIR(stat->st_mode)) {
         return lsdir(path);
     }

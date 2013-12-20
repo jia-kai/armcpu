@@ -1,6 +1,6 @@
 /*
  * $File: run.c
- * $Date: Fri Dec 20 17:06:41 2013 +0800
+ * $Date: Fri Dec 20 20:05:32 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -39,8 +39,9 @@ int run_prog(const char *fname, int argc, char *_argv[]) {
 		argv[0] = argv0;
 	}
 	int i;
-	for (i = 1; i < argc; i ++)
-		argv[i] = _argv[i];
+	for (i = 2; i < argc; i ++)
+		argv[i - 1] = _argv[i];
+	argc --;
 	argv[argc] = NULL;
 	for (i = 0; i < argc; i ++)
 		dprintf("argv[%d]: %s\n", i, argv[i]);
@@ -50,8 +51,8 @@ int run_prog(const char *fname, int argc, char *_argv[]) {
 }
 
 int main(int argc, char *argv[]) {
-	if (argc != 2) {
-		cprintf("usage: %s <file path>\n", argv[0]);
+	if (argc < 2) {
+		cprintf("usage: %s <file path> [args to prog ...]\n", argv[0]);
 		return 0;
 	}
 	int fd;
