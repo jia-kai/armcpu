@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: terminal.py
-# $Date: Thu Dec 12 22:40:38 2013 +0800
+# $Date: Fri Dec 20 16:52:13 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 #          Xinyu Zhou <zxytim@gmail.com>
 
@@ -32,15 +32,12 @@ def do_print(s):
     print s.replace('\n', '\r\n') + '\r'
 
 running = True
-read_local_input = False
-cond_local_input = threading.Condition()
-local_input = None
 
 def tfmt(msg):
     return "[local terminal] " + msg
 
 def com_reader():
-    global running, read_local_input, DEVICE, local_input
+    global running, DEVICE
     mode = 'normal' # or 'panic'
     while running:
         if mode == 'normal':
@@ -57,16 +54,15 @@ def com_reader():
                 sys.stdout.write(console_output)
                 sys.stdout.flush()
             elif data[0] == FETCH_MAGIC:
-                with cond_local_input:
-                    read_local_input = True
-                    while not local_input:
-                        cond_local_input.wait()
-                    if send_file.send_file(ser, local_input):
-                        do_print(tfmt('transfer succeed.'))
-                    else:
-                        do_print(tfmt('transfer failed.'))
-                    read_local_input = False
-                    local_input = None
+                fpath = data[1]
+                while fpath[-1] != '\0':
+                    fpath += ser.read(1)
+                fpath = fpath[:-1]
+                do_print(tfmt('requested file path: ' + fpath))
+                if send_file.send_file(ser, fpath):
+                    do_print(tfmt('transfer succeed.'))
+                else:
+                    do_print(tfmt('transfer failed.'))
             else:
                 do_print(tfmt("unknown magic: {} {}" . format(
                     hex(ord(data[0])), data[0])))
@@ -78,25 +74,13 @@ def com_reader():
                 sys.stdout.write(data)
 
 def com_writer():
-    global running, read_local_input, local_input
+    global running
     while running:
         #try:
         #    data = raw_input() + '\n'
         #except EOFError:
         #    data = '\x03\n'
         data = getch()
-
-        with cond_local_input:
-            if read_local_input:
-                do_print('')
-                while True:
-                    local_input = raw_input(tfmt("file to transfer: "))
-                    if not os.path.isfile(local_input):
-                        do_print(tfmt("file `{}' not exist".format(local_input)))
-                    else:
-                        break
-                cond_local_input.notify()
-                continue
 
         if data.startswith(WRITER_MUTE_STR):
             do_print(tfmt('press ctrl+\\'))

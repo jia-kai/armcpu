@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 # $File: send_file.py
-# $Date: Thu Dec 12 22:38:08 2013 +0800
+# $Date: Fri Dec 20 17:24:54 2013 +0800
 # $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
 
 DEVICE = '/dev/ttyUSB0'
@@ -74,25 +74,27 @@ class WriteChecksumSerial(object):
         self.read_buf = data
         return data
 
+
+def int2data(int32):
+    return chr(int32 & 0xFF) + chr((int32 >> 8) & 0xFF) + \
+            chr((int32 >> 16) & 0xFF) + chr((int32 >> 24) & 0xFF)
+
+def data2int(data):
+    assert len(data) == 4, repr(data)
+    return ord(data[0]) + (ord(data[1]) << 8) \
+            + (ord(data[2]) << 16) + (ord(data[3]) << 24)
+
 # param: ser, a Serial object
 def send_file(ser, fpath):
     ser = WriteChecksumSerial(ser)
 
     try:
         fsize = os.stat(fpath).st_size
-    except OSError as e:
-        do_print(e)
+    except Exception as e:
+        ser.write(int2data(0))
+        do_print('failed to get size: {}'.format(e))
         return False
     speed = SpeedCalc(fsize)
-
-    def int2data(int32):
-        return chr(int32 & 0xFF) + chr((int32 >> 8) & 0xFF) + \
-                chr((int32 >> 16) & 0xFF) + chr((int32 >> 24) & 0xFF)
-
-    def data2int(data):
-        assert len(data) == 4, repr(data)
-        return ord(data[0]) + (ord(data[1]) << 8) \
-                + (ord(data[2]) << 16) + (ord(data[3]) << 24)
 
     cnt = 0
 

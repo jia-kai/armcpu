@@ -1,6 +1,6 @@
 /*
  * $File: run.c
- * $Date: Thu Dec 12 22:30:42 2013 +0800
+ * $Date: Fri Dec 20 17:06:41 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -31,47 +31,51 @@ int run_prog(const char *fname, int argc, char *_argv[]) {
 	static char argv0[BUFSIZE];
 	const char *argv[EXEC_MAX_ARG_NUM + 1];
 	int ret;
-	dprintf("fname: %s\n", fname);
 	if ((ret = testfile(fname)) != 0) {
 		if (ret < 0) {
 			return ret;
 		}
 		snprintf(argv0, sizeof(argv0), "/%s", fname);
-		dprintf("argv0: %s\n", argv0);
 		argv[0] = argv0;
-		dprintf("argv[0]: %s\n", argv[0]);
 	}
 	int i;
 	for (i = 1; i < argc; i ++)
 		argv[i] = _argv[i];
 	argv[argc] = NULL;
 	for (i = 0; i < argc; i ++)
-		dprintf("%d: %s\n", i, argv[i]);
+		dprintf("argv[%d]: %s\n", i, argv[i]);
 
+	dprintf("== exec now ==\n");
 	return __exec(NULL, argv);
 }
 
 int main(int argc, char *argv[]) {
+	if (argc != 2) {
+		cprintf("usage: %s <file path>\n", argv[0]);
+		return 0;
+	}
 	int fd;
-	dprintf("opening file `%s' ...\n", PROG_FILE_NAME);
 	fd = open(PROG_FILE_NAME, O_WRONLY);
-	dprintf("invoking sys_fetchrun(%d)", fd);
-	sys_fetchrun(fd);
-	dprintf("closing file ...\n");
+	int size = sys_fetchrun(fd, argv[1]);
+	if (size <= 0) {
+		if (size == -1)
+			cprintf("failed to fetch: bad fpath ?WTF\n");
+		else if (size == -2)
+			cprintf("failed to fetch: remote error\n");
+		else
+			cprintf("failed to fetch: %d\n", size);
+		return -1;
+	} else
+		cprintf("fetch: size=%d\n", size);
 	close(fd);
-	dprintf("executing program ...\n");
 	int pid, ret, i;
-	for (i = 0; i < argc; i ++)
-		dprintf("%d: %s\n", i, argv[i]);
 	if ((pid = fork()) == 0) {
-		dprintf("forked program here ...\n");
 		ret = run_prog(PROG_FILE_NAME, argc, argv);
 		exit(ret);
 	}
-	dprintf("master program here ...\n");
 	if (waitpid(pid, &ret) == 0) {
 		if (ret != 0) {
-			dprintf("error: %d - %e\n", ret, ret);
+			cprintf("error: %d - %e\n", ret, ret);
 		}
 	}
 	return ret;

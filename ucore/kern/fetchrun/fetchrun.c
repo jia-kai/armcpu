@@ -1,6 +1,6 @@
 /*
  * $File: fetchrun.c
- * $Date: Thu Nov 28 04:28:59 2013 +0800
+ * $Date: Fri Dec 20 17:03:38 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -39,18 +39,23 @@ static void wait_until_write_ready() {
 	}
 }
 
-static uint32_t write_byte(uint32_t data) {
+static void write_byte(uint32_t data) {
 	wait_until_write_ready();
 	data &= 0xFF;
 	outw(COM_DATA, data);
 }
 
-static uint32_t write_word(uint32_t data) {
+static void write_word(uint32_t data) {
 	int i;
 	for (i = 0; i < 4; i ++)
 		write_byte((data >> (i * 8)) & 0xFF);
 }
 
+static void write_str(const char *ptr) {
+	while (*ptr)
+		write_byte(*(ptr ++));
+	write_byte(0);
+}
 
 static uint32_t read_byte() {
 	wait_until_read_ready();
@@ -68,7 +73,6 @@ static uint32_t read_word() {
 	return ret;
 }
 
-
 /**
  * fetch a program from serial buf and write to file fd
  * protocol:
@@ -79,21 +83,30 @@ static uint32_t read_word() {
  *	c -> s 1 byte: checksum
  *	c -> s 4 byte: retval of file_write
  *
- * return: size
+ * return: size, or -1 for bad fpath, -2 for failure to fetch
  *
  * WARNING: DO NOT use something like printf here because the string printed
  *		to stdout will be redirect to serial bus
  */
-int fetchrun(int fd) {
+int fetchrun(int fd, const char *fpath_user, size_t fpath_len) {
 
 	bool intr_flag;
+	uint32_t size;
 	local_intr_save(intr_flag);
 	{
+		static char fpath[1024];
+		if (fpath_len >= sizeof(fpath) ||
+				!copy_from_user(current->mm, fpath, fpath_user, fpath_len, 0))
+			return -1;
+		fpath[fpath_len] = 0;
+
 		write_byte(FETCH_MAGIC);
-		write_byte(0);
+		write_str(fpath);
 		// read size
 		reset_checksum();
-		uint32_t size = read_word();
+		size = read_word();
+		if (!size)
+			return -2;
 		char *buf = kmalloc(size);
 		write_byte(checksum); // act as synchronizer(barrier) to make time for kmalloc
 		reset_checksum();
@@ -109,6 +122,7 @@ int fetchrun(int fd) {
 		kfree(buf);
 	}
 	local_intr_restore(intr_flag);
+	return size;
 }
 
 

@@ -143,8 +143,12 @@ sys_dup(int fd1, int fd2) {
 }
 
 int
-sys_fetchrun(int fd) {
-	return syscall(SYS_fetchrun, fd);
+sys_fetchrun(int fd, const char *fpath) {
+	size_t len = 0;
+	const char *ptr = fpath;
+	while (*ptr)
+		len ++, ptr ++;
+	return syscall(SYS_fetchrun, fd, fpath, len);
 }
 
 void

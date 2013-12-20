@@ -75,5 +75,7 @@ casex ({shift_pressed, cur_pressed})
 9'b100111110: cur_pressed_ascii = 8'h2a;
 9'b001000110: cur_pressed_ascii = 8'h39;
 9'b101000110: cur_pressed_ascii = 8'h28;
+9'b001001010: cur_pressed_ascii = 8'h2f;
+9'b101001010: cur_pressed_ascii = 8'h3f;
 default: cur_pressed_ascii = 8'b0;
 endcase

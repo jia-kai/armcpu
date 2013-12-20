@@ -167,7 +167,9 @@ sys_dup(uint32_t arg[]) {
 static int
 sys_fetchrun(uint32_t arg[]) {
 	int fd = (int)arg[0];
-	fetchrun(fd);
+	const char *fpath = (const char*)arg[1];
+	size_t fpath_len = (size_t)arg[2];
+	fetchrun(fd, fpath, fpath_len);
 }
 
 static int

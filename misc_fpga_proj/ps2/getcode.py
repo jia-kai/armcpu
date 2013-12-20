@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: getcode.py
-# $Date: Fri Dec 20 09:40:31 2013 +0800
+# $Date: Fri Dec 20 16:58:43 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 
@@ -20,6 +20,10 @@ def get_shift_charmap():
     num_upper = ')!@#$%^&*('
     for i in range(10):
         rst[str(i)] = num_upper[i]
+    misc_upper = r'~_+|}{:"?><'
+    misc_lower = r"`-=\][;'/.,"
+    assert len(misc_lower) == len(misc_upper)
+    rst.update({misc_lower[i]: misc_upper[i] for i in range(len(misc_lower))})
     return rst
 
 
