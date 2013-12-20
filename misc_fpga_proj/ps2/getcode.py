@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # $File: getcode.py
-# $Date: Fri Dec 20 16:58:43 2013 +0800
+# $Date: Fri Dec 20 17:42:30 2013 +0800
 # $Author: jiakai <jia.kai66@gmail.com>
 
 
@@ -26,19 +26,9 @@ def get_shift_charmap():
     rst.update({misc_lower[i]: misc_upper[i] for i in range(len(misc_lower))})
     return rst
 
-
-def main(fout):
-
-    def gen_state(shift, code, char):
-        code = bin(code)[2:]
-        code = '0' * (8 - len(code)) + code
-        print >>fout, "9'b{}{}: cur_pressed_ascii = 8'h{};".format(
-            shift, code, hex(ord(char))[2:])
-
+def gen_all(gen_state):
     noshift_code_map = get_noshift_code_map()
     shift_ch_map = get_shift_charmap()
-    print >>fout, 'always @(*)'
-    print >>fout, 'casex ({shift_pressed, cur_pressed})'
     for code, ch in noshift_code_map:
         ch_shift = shift_ch_map.get(ch)
         if not ch_shift:
@@ -47,11 +37,43 @@ def main(fout):
             gen_state(0, code, ch)
             gen_state(1, code, ch_shift)
 
+
+def main_verilog(fout):
+    def gen_state(shift, code, char):
+        code = bin(code)[2:]
+        code = '0' * (8 - len(code)) + code
+        print >>fout, "9'b{}{}: cur_pressed_ascii = 8'h{};".format(
+            shift, code, hex(ord(char))[2:])
+
+    print >>fout, 'always @(*)'
+    print >>fout, 'casex ({shift_pressed, cur_pressed})'
+    gen_all(gen_state)
     print >>fout, "default: cur_pressed_ascii = 8'b0;"
     print >>fout, 'endcase'
+
+def main_c(fout):
+    state_map = dict()
+    def gen_state(shift, code, char):
+        if shift == 'x':
+            gen_state(0, code, char)
+            gen_state(1, code, char)
+            return
+        assert code > 0 and code < 127
+        code = (shift << 7) | code
+        state_map[code] = ord(char)
+
+    gen_all(gen_state)
+    print 'number of encodings:', len(state_map)
+
+    state_map = [state_map.get(i, 0) for i in range(256)]
+    print >>fout, 'static const char KEYCODE_MAP[256] = {', \
+        ','.join(map(str, state_map)), \
+        '};'
 
 
 if __name__ == '__main__':
     with open('ps2_code.vh', 'w') as fout:
-        main(fout)
+        main_verilog(fout)
+    with open('ps2_code.h', 'w') as fout:
+        main_c(fout)
 

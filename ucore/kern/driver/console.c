@@ -7,6 +7,7 @@
 #include <memlayout.h>
 #include <sync.h>
 #include <vga.h>
+#include <ps2_code.h>
 
 // used to differentiate ordinary console output and a transfer command
 static const uint32_t TERMINAL_OUTPUT_MAGIC = 't';
@@ -144,6 +145,9 @@ void serial_int_handler(void *opaque)
 void keyboard_int_handler()
 {
   int c = *((int*)KEYBOARD);
+  if (c < 0 || c > 256)
+	  return;
+  c = KEYCODE_MAP[c];
   if (c == 0) return;
   extern void dev_stdin_write(char c);
   dev_stdin_write(c);

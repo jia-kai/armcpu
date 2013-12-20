@@ -1,6 +1,6 @@
 /*
  * $File: ps2_drv.v
- * $Date: Fri Dec 20 16:00:27 2013 +0800
+ * $Date: Fri Dec 20 17:47:32 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -21,13 +21,11 @@ module ps2_drv(
 
 	reg [3:0] recv_data_lo;
 	wire [7:0] recv_data = {kbd_data, recv_data_lo};
-	reg [7:0] cur_pressed, cur_pressed_ascii, recv_data_prev;
+	reg [7:0] cur_pressed, recv_data_prev;
 	reg shift_pressed;
 
 	assign is_shift = (recv_data == 8'h12 || recv_data == 8'h59),
 		is_break = (recv_data_prev == 8'hF0);
-
-	`include "ps2_code.vh"
 
 	// maintain int
 	always @(posedge clk) begin
@@ -36,9 +34,9 @@ module ps2_drv(
 		if (rst) begin
 			kbd_ascii <= 0;
 			int_req <= 0;
-		end else if (!int_req && cur_pressed_ascii) begin
+		end else if (!int_req && cur_pressed && !cur_pressed[7]) begin
 			int_req <= 1'b1;
-			kbd_ascii <= cur_pressed_ascii;
+			kbd_ascii <= {shift_pressed, cur_pressed[6:0]};
 		end
 	end
 

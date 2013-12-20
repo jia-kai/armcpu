@@ -486,7 +486,6 @@
     <file xil_pn:name="src/gencode/id2ex_extract_store.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/if2id_extract_store.v" xil_pn:type="FILE_VERILOG"/>
     <file xil_pn:name="src/gencode/ex2mem_extract_load.v" xil_pn:type="FILE_VERILOG"/>
-    <file xil_pn:name="synthesis/ps2_code.vh" xil_pn:type="FILE_VERILOG"/>
   </autoManagedFiles>
 
 </project>

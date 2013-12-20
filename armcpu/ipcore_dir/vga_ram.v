@@ -92,7 +92,7 @@ output [7 : 0] doutb;
     .C_LOAD_INIT_FILE(0),
     .C_MEM_TYPE(1),
     .C_MUX_PIPELINE_STAGES(0),
-    .C_PRIM_TYPE(1),
+    .C_PRIM_TYPE(0),
     .C_READ_DEPTH_A(160000),
     .C_READ_DEPTH_B(160000),
     .C_READ_WIDTH_A(8),
