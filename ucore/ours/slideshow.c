@@ -1,6 +1,6 @@
 /*
  * $File: slideshow.c
- * $Date: Sat Dec 14 03:25:46 2013 +0800
+ * $Date: Fri Dec 20 20:19:10 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -14,6 +14,7 @@ typedef volatile unsigned* mem_ptr_t;
 #define VGA_MEM_NRCOL 512
 #define IMAGE_FLASH_PER_SIZE	(IMAGE_WIDTH * IMAGE_HEIGHT / 2)
 #define IMAGE_FLASH_START	(1024 * 1024 / 2)
+#define ANIMATION_SPEED 50
 
 static mem_ptr_t const flash = (mem_ptr_t)0xBE000000;
 static mem_ptr_t const vga = (mem_ptr_t)0xBA000000;
@@ -43,12 +44,19 @@ int main() {
 			sys_redraw_console();
 			return 0;
 		}
+		int i;
 		if (ch == 'n') {
-			addr += IMAGE_FLASH_PER_SIZE;
+			for (i = 0; i < IMAGE_HEIGHT / ANIMATION_SPEED; i ++) {
+				addr += IMAGE_WIDTH / 2 * ANIMATION_SPEED;
+				display_image(addr);
+			}
 			num ++;
 		}
 		if (ch == 'N') {
-			addr -= IMAGE_FLASH_PER_SIZE;
+			for (i = 0; i < IMAGE_HEIGHT / ANIMATION_SPEED; i ++) {
+				addr -= IMAGE_WIDTH / 2 * ANIMATION_SPEED;
+				display_image(addr);
+			}
 			num --;
 		}
 	}
