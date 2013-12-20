@@ -1,6 +1,6 @@
 /*
  * $File: ram_sim.v
- * $Date: Thu Dec 19 19:52:21 2013 +0800
+ * $Date: Fri Dec 20 13:50:34 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -67,9 +67,6 @@ module ram_sim
 			tmp = storage[i];
 			storage[i] = {tmp[7:0], tmp[15:8], tmp[23:16], tmp[31:24]};
 		end
-
-		for (i = nr_read; i < nr_read + 4; i = i + 1)
-			storage[i] = 0;
 
 		/*
 		for (i = 0; i < nr_read; i = i + 1)

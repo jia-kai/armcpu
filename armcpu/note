@@ -140,6 +140,8 @@ physical address mapping
 0x1FD003FC					com stat
 0x1FD00400					segment display monitor
 
+0x0F000000					keyboard ascii
+
 
 
 interrupt

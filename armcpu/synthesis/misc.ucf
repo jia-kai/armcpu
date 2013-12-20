@@ -1,5 +1,5 @@
 NET "clk50M" LOC = U26;
-NET "rst" LOC = T1;
+NET "rst_key" LOC = T1;
 NET "clk_manual" LOC = T3;
 
 NET "clk50M" TNM_NET = clk50M;

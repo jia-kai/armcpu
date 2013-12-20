@@ -1,12 +1,12 @@
 /*
  * $File: armcpu.v
- * $Date: Fri Nov 29 00:40:56 2013 +0800
+ * $Date: Fri Dec 20 15:23:08 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 module armcpu(
 	input clk50M,
-	input rst,
+	input rst_key,
 	input clk_manual,
 	output [0:6] segdisp0,
 	output [0:6] segdisp1,
@@ -38,7 +38,15 @@ module armcpu(
 	// VGA interface
 	output [8:0] vga_color_out,
 	output vga_hsync,
-	output vga_vsync);
+	output vga_vsync,
+
+	input kbd_enb_hi,
+	input kbd_enb_lo,
+	input [3:0] kbd_data);
+
+	// ------------------------------------------------------------------
+
+	assign rst = ~rst_key;
 
 
 	reg clk_cpu;
@@ -48,6 +56,9 @@ module armcpu(
 	assign rom_selector = params[31];
 	reg rom_selector_prev, set_rst_by_rom_selector;
 	reg [24:0] clk50M_cnt;
+
+	wire kbd_int_ack, kbd_int_req;
+	wire [7:0] kbd_ascii;
 
 	reg clk_manual_prev;
 	assign clk_manual_posedge = !clk_manual_prev && clk_manual;
@@ -75,7 +86,7 @@ module armcpu(
 	assign baseram_we = baseram_we_set | write_protect;
 
 	system usys(.clk_cpu(clk_cpu), .clk50M(clk50M),
-		.rst(!rst || set_rst_by_rom_selector),
+		.rst(rst || set_rst_by_rom_selector),
 
 		.segdisp(segdisp_data),
 
@@ -101,18 +112,33 @@ module armcpu(
 	
 		.vga_color_out(vga_color_out),
 		.vga_hsync(vga_hsync),
-		.vga_vsync(vga_vsync));
+		.vga_vsync(vga_vsync),
+	
+		.kbd_int(kbd_int_req),
+		.kbd_int_ack(kbd_int_ack),
+		.kbd_data(kbd_ascii));
 
 	always @(posedge clk_cpu)
-		led[7:0] <= {led[6:0], !led[6:0]};
+		led[7:0] <= {cpu_speed[3:0], led[2:0], !led[2:0]};
 
 	always @(posedge clk50M) begin
-		led[15:8] <= segdisp_data[7:0];
+		// led[15:8] <= segdisp_data[7:0];
 		monitor_data <= segdisp_data >> monitor_data_shift;
 	end
 
+	always @(*)
+		led[15:8] <= {kbd_int_req, kbd_ascii[6:0]};
+
 	digseg_driver useg0(.data(monitor_data[3:0]), .seg(segdisp0));
 	digseg_driver useg1(.data(monitor_data[7:4]), .seg(segdisp1));
+
+	ps2_drv ups2drv(.clk(clk50M), .rst(rst),
+		.int_ack(kbd_int_ack),
+		.int_req(kbd_int_req),
+		.kbd_ascii(kbd_ascii),
+		.kbd_enb_hi(kbd_enb_hi),
+		.kbd_enb_lo(kbd_enb_lo),
+		.kbd_data(kbd_data));
 
 endmodule
 

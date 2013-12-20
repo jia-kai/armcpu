@@ -1,0 +1,170 @@
+# vsim -do {run 350ns; quit} -c top 
+# Loading work.top
+# Loading work.ram_sim
+# Loading work.ram_output_delay
+# Loading work.system
+# Loading work.cpu
+# Loading work.forward
+# Loading work.multiplier_wrapper
+# Loading work.multiplier
+# Loading work.stage_if
+# Loading work.stage_id
+# Loading work.register_file
+# Loading work.stage_ex
+# Loading work.alu
+# Loading work.stage_mem
+# Loading work.cp0
+# Loading work.mmu
+# Loading work.phy_mem_ctrl
+# Loading work.serial_port
+# Loading work.uart_async_transmitter
+# Loading work.uart_async_receiver
+# Loading work.vga
+# Loading work.vga_ram
+# run 350ns 
+# time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
+# time=0 com_write_busy=0
+# time=0 com_read_data=00
+# time=0 cp0_cause: IP=x00x0000 ExcCode=xx
+# time=0 segdisp=xxxxxxxx
+# time=2 cp0_cause: IP=x0000000 ExcCode=xx
+# time=2 cpu entered kernel mode
+# time=2 cp0_cause: IP=x0000000 ExcCode=00
+# time=2 cp0_status: IM=00000000 KSU=00 EXL=0 IE=0
+# time=2 reg1($at)=00000000
+# time=2 reg2($v0)=00000000
+# time=2 reg3($v1)=00000000
+# time=2 reg4($a0)=00000000
+# time=2 reg5($a1)=00000000
+# time=2 reg6($a2)=00000000
+# time=2 reg7($a3)=00000000
+# time=2 reg16($s0)=00000000
+# time=2 reg26($k0)=00000000
+# time=2 reg26($k1)=00000000
+# time=2 reg29($sp)=00000000
+# time=2 reg30($fp)=00000000
+# time=2 reg31($ra)=00000000
+# time=2 cp0_cause: IP=00000000 ExcCode=00
+# [32m < -- id -- > time=10 got instruction: pc=7ffffffc instr=00000000 [0m
+# time=10 cp0_cause: IP=10000000 ExcCode=00
+# [32m < -- id -- > time=14 got instruction: pc=80000000 instr=3c1abfd0 [0m
+# [32m < -- id -- > time=18 got instruction: pc=80000004 instr=375a0400 [0m
+# [32m < -- id -- > time=22 got instruction: pc=80000008 instr=3c1caf00 [0m
+# time=22 reg26($k0)=bfd00000
+# [32m < -- id -- > time=26 got instruction: pc=8000000c instr=24020001 [0m
+# time=26 reg26($k0)=bfd00400
+# [32m < -- id -- > time=30 got instruction: pc=80000010 instr=0000000c [0m
+# [32m < -- id -- > time=34 got instruction: pc=80000014 instr=24020000 [0m
+# time=34 reg2($v0)=00000001
+# time=38 impending exception: ip=10000000 code=08 epc=80000010 badaddr=00000000
+# time=38 cp0_cause: IP=10000000 ExcCode=08
+# time=38 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
+# [32m < -- id -- > time=42 got instruction: pc=80000018 instr=00000000 [0m
+# [32m < -- id -- > time=46 got instruction: pc=80000180 instr=24010001 [0m
+# [32m < -- id -- > time=50 got instruction: pc=80000184 instr=10410004 [0m
+# time=50 cp0_cause: IP=11000000 ExcCode=08
+# [32m < -- id -- > time=54 got instruction: pc=80000188 instr=00000000 [0m
+# time=54 reg1($at)=00000001
+# [32m < -- id -- > time=58 got instruction: pc=80000198 instr=241b7f13 [0m
+# [32m < -- id -- > time=62 got instruction: pc=8000019c instr=409b6000 [0m
+# [32m < -- id -- > time=66 got instruction: pc=800001a0 instr=401b7000 [0m
+# time=66 reg26($k1)=00007f13
+# time=70 cp0_status: IM=01111111 KSU=10 EXL=1 IE=1
+# [32m < -- id -- > time=74 got instruction: pc=800001a4 instr=277b0004 [0m
+# [32m < -- id -- > time=78 got instruction: pc=800001a8 instr=409b7000 [0m
+# time=78 reg26($k1)=80000010
+# [32m < -- id -- > time=82 got instruction: pc=800001ac instr=42000018 [0m
+# time=82 reg26($k1)=80000014
+# ** Warning: invalid instruction: xxxxxxxx
+#    Time: 89500 ps  Scope: top.usystem.ucpu.uid.invalid_instruction File: src/stage_id.v Line: 151
+# [32m < -- id -- > time=90 got instruction: pc=800001b0 instr=xxxxxxxx [0m
+# time=94 eret: 80000014
+# time=94 cpu entered user mode
+# time=94 cp0_status: IM=01111111 KSU=10 EXL=0 IE=1
+# [32m < -- id -- > time=98 got instruction: pc=800001b4 instr=00000000 [0m
+# time=100 cp0_cause: IP=10000000 ExcCode=08
+# [32m < -- id -- > time=106 got instruction: pc=80000018 instr=24030023 [0m
+# time=110 impending exception: ip=10000000 code=00 epc=80000014 badaddr=80000014
+# time=110 cpu entered kernel mode
+# time=110 cp0_cause: IP=10000000 ExcCode=00
+# time=110 cp0_status: IM=01111111 KSU=10 EXL=1 IE=1
+# [32m < -- id -- > time=114 got instruction: pc=8000001c instr=00000000 [0m
+# [32m < -- id -- > time=118 got instruction: pc=80000180 instr=24010001 [0m
+# [32m < -- id -- > time=122 got instruction: pc=80000184 instr=10410004 [0m
+# [32m < -- id -- > time=126 got instruction: pc=80000188 instr=00000000 [0m
+# [32m < -- id -- > time=130 got instruction: pc=80000198 instr=241b7f13 [0m
+# [32m < -- id -- > time=134 got instruction: pc=8000019c instr=409b6000 [0m
+# [32m < -- id -- > time=138 got instruction: pc=800001a0 instr=401b7000 [0m
+# time=138 reg26($k1)=00007f13
+# [32m < -- id -- > time=146 got instruction: pc=800001a4 instr=277b0004 [0m
+# [32m < -- id -- > time=150 got instruction: pc=800001a8 instr=409b7000 [0m
+# time=150 reg26($k1)=80000014
+# time=150 cp0_cause: IP=11000000 ExcCode=00
+# [32m < -- id -- > time=154 got instruction: pc=800001ac instr=42000018 [0m
+# time=154 reg26($k1)=80000018
+# ** Warning: invalid instruction: xxxxxxxx
+#    Time: 161500 ps  Scope: top.usystem.ucpu.uid.invalid_instruction File: src/stage_id.v Line: 151
+# [32m < -- id -- > time=162 got instruction: pc=800001b0 instr=xxxxxxxx [0m
+# time=166 eret: 80000018
+# time=166 cpu entered user mode
+# time=166 cp0_status: IM=01111111 KSU=10 EXL=0 IE=1
+# [32m < -- id -- > time=170 got instruction: pc=800001b4 instr=00000000 [0m
+# time=182 impending exception: ip=11000000 code=00 epc=80000018 badaddr=80000018
+# time=182 cpu entered kernel mode
+# time=182 cp0_status: IM=01111111 KSU=10 EXL=1 IE=1
+# [32m < -- id -- > time=186 got instruction: pc=80000020 instr=00000000 [0m
+# [32m < -- id -- > time=190 got instruction: pc=80000180 instr=24010001 [0m
+# [32m < -- id -- > time=194 got instruction: pc=80000184 instr=10410004 [0m
+# [32m < -- id -- > time=198 got instruction: pc=80000188 instr=00000000 [0m
+# time=200 cp0_cause: IP=10000000 ExcCode=00
+# [32m < -- id -- > time=202 got instruction: pc=80000198 instr=241b7f13 [0m
+# [32m < -- id -- > time=206 got instruction: pc=8000019c instr=409b6000 [0m
+# [32m < -- id -- > time=210 got instruction: pc=800001a0 instr=401b7000 [0m
+# time=210 reg26($k1)=00007f13
+# [32m < -- id -- > time=218 got instruction: pc=800001a4 instr=277b0004 [0m
+# [32m < -- id -- > time=222 got instruction: pc=800001a8 instr=409b7000 [0m
+# time=222 reg26($k1)=80000018
+# [32m < -- id -- > time=226 got instruction: pc=800001ac instr=42000018 [0m
+# time=226 reg26($k1)=8000001c
+# ** Warning: invalid instruction: xxxxxxxx
+#    Time: 233500 ps  Scope: top.usystem.ucpu.uid.invalid_instruction File: src/stage_id.v Line: 151
+# [32m < -- id -- > time=234 got instruction: pc=800001b0 instr=xxxxxxxx [0m
+# time=238 eret: 8000001c
+# time=238 cpu entered user mode
+# time=238 cp0_status: IM=01111111 KSU=10 EXL=0 IE=1
+# [32m < -- id -- > time=242 got instruction: pc=800001b4 instr=00000000 [0m
+# [32m < -- id -- > time=246 got instruction: pc=8000001c instr=1000fffe [0m
+# [32m < -- id -- > time=250 got instruction: pc=80000020 instr=af430000 [0m
+# time=250 cp0_cause: IP=11000000 ExcCode=00
+# [32m < -- id -- > time=254 got instruction: pc=80000018 instr=24030023 [0m
+# time=258 segdisp=00000000
+# time=270 reg3($v1)=00000023
+# time=274 impending exception: ip=11000000 code=00 epc=8000001c badaddr=8000001c
+# time=274 cpu entered kernel mode
+# time=274 cp0_status: IM=01111111 KSU=10 EXL=1 IE=1
+# [32m < -- id -- > time=278 got instruction: pc=80000024 instr=00000000 [0m
+# [32m < -- id -- > time=282 got instruction: pc=80000180 instr=24010001 [0m
+# [32m < -- id -- > time=286 got instruction: pc=80000184 instr=10410004 [0m
+# [32m < -- id -- > time=290 got instruction: pc=80000188 instr=00000000 [0m
+# [32m < -- id -- > time=294 got instruction: pc=80000198 instr=241b7f13 [0m
+# [32m < -- id -- > time=298 got instruction: pc=8000019c instr=409b6000 [0m
+# time=300 cp0_cause: IP=10000000 ExcCode=00
+# [32m < -- id -- > time=302 got instruction: pc=800001a0 instr=401b7000 [0m
+# time=302 reg26($k1)=00007f13
+# [32m < -- id -- > time=310 got instruction: pc=800001a4 instr=277b0004 [0m
+# [32m < -- id -- > time=314 got instruction: pc=800001a8 instr=409b7000 [0m
+# time=314 reg26($k1)=8000001c
+# [32m < -- id -- > time=318 got instruction: pc=800001ac instr=42000018 [0m
+# time=318 reg26($k1)=80000020
+# ** Warning: invalid instruction: xxxxxxxx
+#    Time: 325500 ps  Scope: top.usystem.ucpu.uid.invalid_instruction File: src/stage_id.v Line: 151
+# [32m < -- id -- > time=326 got instruction: pc=800001b0 instr=xxxxxxxx [0m
+# time=330 eret: 80000020
+# time=330 cpu entered user mode
+# time=330 cp0_status: IM=01111111 KSU=10 EXL=0 IE=1
+# [32m < -- id -- > time=334 got instruction: pc=800001b4 instr=00000000 [0m
+# [32m < -- id -- > time=338 got instruction: pc=80000020 instr=af430000 [0m
+# [32m < -- id -- > time=342 got instruction: pc=80000024 instr=00000000 [0m
+# time=346 segdisp=00000023
+# time=350 cp0_cause: IP=11000000 ExcCode=00
+#  quit 

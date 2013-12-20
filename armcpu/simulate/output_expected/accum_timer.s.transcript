@@ -25,6 +25,7 @@
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
 # time=0 com_read_data=00
+# time=0 cp0_cause: IP=x00x0000 ExcCode=xx
 # time=0 segdisp=xxxxxxxx
 # time=2 cp0_cause: IP=x0000000 ExcCode=xx
 # time=2 cpu entered kernel mode
@@ -62,7 +63,7 @@
 # time=54 impending exception: ip=10000000 code=08 epc=80000018 badaddr=00000000
 # time=54 cp0_cause: IP=10000000 ExcCode=08
 # time=54 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
-# [32m < -- id -- > time=58 got instruction: pc=80000024 instr=00000000 [0m
+# [32m < -- id -- > time=58 got instruction: pc=80000020 instr=00000000 [0m
 # [32m < -- id -- > time=62 got instruction: pc=80000180 instr=24010001 [0m
 # [32m < -- id -- > time=66 got instruction: pc=80000184 instr=10410008 [0m
 # [32m < -- id -- > time=70 got instruction: pc=80000188 instr=00000000 [0m
@@ -90,135 +91,125 @@
 # time=134 eret: 8000001c
 # time=134 cpu entered user mode
 # time=134 cp0_status: IM=10000000 KSU=10 EXL=0 IE=1
-# [32m < -- id -- > time=138 got instruction: pc=800001cc instr=00000000 [0m
+# [32m < -- id -- > time=138 got instruction: pc=800001c8 instr=00000000 [0m
 # [32m < -- id -- > time=142 got instruction: pc=8000001c instr=24020000 [0m
 # [32m < -- id -- > time=146 got instruction: pc=80000020 instr=08000008 [0m
 # [32m < -- id -- > time=150 got instruction: pc=80000024 instr=00000000 [0m
 # time=150 reg2($v0)=00000000
 # [32m < -- id -- > time=154 got instruction: pc=80000020 instr=08000008 [0m
 # time=154 cp0_cause: IP=10000000 ExcCode=08
-# time=158 impending exception: ip=10000000 code=00 epc=80000020 badaddr=00000000
-# time=158 cpu entered kernel mode
-# time=158 cp0_cause: IP=10000000 ExcCode=00
-# time=158 cp0_status: IM=10000000 KSU=10 EXL=1 IE=1
-# [32m < -- id -- > time=162 got instruction: pc=80000020 instr=00000000 [0m
-# [32m < -- id -- > time=166 got instruction: pc=80000180 instr=24010001 [0m
-# [32m < -- id -- > time=170 got instruction: pc=80000184 instr=10410008 [0m
-# [32m < -- id -- > time=174 got instruction: pc=80000188 instr=00000000 [0m
-# [32m < -- id -- > time=178 got instruction: pc=8000018c instr=8f9b0000 [0m
-# [32m < -- id -- > time=182 got instruction: pc=80000190 instr=277b0001 [0m
-# [32m < -- id -- > time=190 got instruction: pc=80000194 instr=af9b0000 [0m
-# time=190 reg26($k1)=00000000
-# [32m < -- id -- > time=194 got instruction: pc=80000198 instr=afbb0000 [0m
-# time=194 reg26($k1)=00000001
-# [31m <-- mem base --> time=199 write: addr=00010000(04000) data=00000001[0m
-# [32m < -- id -- > time=206 got instruction: pc=8000019c instr=0c000071 [0m
-# time=210 segdisp=00000001
-# [32m < -- id -- > time=218 got instruction: pc=800001a0 instr=241b0000 [0m
-# [32m < -- id -- > time=222 got instruction: pc=800001c4 instr=401b4800 [0m
-# time=222 reg31($ra)=800001a4
-# [32m < -- id -- > time=226 got instruction: pc=800001c8 instr=0364d821 [0m
-# time=226 reg26($k1)=00000000
-# [32m < -- id -- > time=230 got instruction: pc=800001cc instr=03e00008 [0m
-# time=230 reg26($k1)=00000037
-# [32m < -- id -- > time=234 got instruction: pc=800001d0 instr=409b5800 [0m
-# time=234 reg26($k1)=00000041
-# [32m < -- id -- > time=238 got instruction: pc=800001a4 instr=42000018 [0m
-# time=242 cp0_cause: IP=00000000 ExcCode=00
-# [32m < -- id -- > time=246 got instruction: pc=800001a8 instr=341b8013 [0m
-# time=250 eret: 80000020
-# time=250 cpu entered user mode
-# time=250 cp0_status: IM=10000000 KSU=10 EXL=0 IE=1
-# [32m < -- id -- > time=254 got instruction: pc=800001b0 instr=00000000 [0m
-# [32m < -- id -- > time=258 got instruction: pc=80000020 instr=08000008 [0m
-# [32m < -- id -- > time=262 got instruction: pc=80000024 instr=00000000 [0m
-# [32m < -- id -- > time=266 got instruction: pc=80000020 instr=08000008 [0m
-# [32m < -- id -- > time=270 got instruction: pc=80000024 instr=00000000 [0m
-# time=270 cp0_cause: IP=10000000 ExcCode=00
-# time=274 impending exception: ip=10000000 code=00 epc=80000020 badaddr=00000000
-# time=274 cpu entered kernel mode
-# time=274 cp0_status: IM=10000000 KSU=10 EXL=1 IE=1
-# [32m < -- id -- > time=278 got instruction: pc=80000024 instr=00000000 [0m
-# [32m < -- id -- > time=282 got instruction: pc=80000180 instr=24010001 [0m
-# [32m < -- id -- > time=286 got instruction: pc=80000184 instr=10410008 [0m
-# [32m < -- id -- > time=290 got instruction: pc=80000188 instr=00000000 [0m
-# [32m < -- id -- > time=294 got instruction: pc=8000018c instr=8f9b0000 [0m
-# [32m < -- id -- > time=298 got instruction: pc=80000190 instr=277b0001 [0m
-# [32m < -- id -- > time=306 got instruction: pc=80000194 instr=af9b0000 [0m
-# time=306 reg26($k1)=00000001
-# [32m < -- id -- > time=310 got instruction: pc=80000198 instr=afbb0000 [0m
-# time=310 reg26($k1)=00000002
-# [31m <-- mem base --> time=315 write: addr=00010000(04000) data=00000002[0m
-# [32m < -- id -- > time=322 got instruction: pc=8000019c instr=0c000071 [0m
-# time=326 segdisp=00000002
-# [32m < -- id -- > time=334 got instruction: pc=800001a0 instr=241b0000 [0m
-# [32m < -- id -- > time=338 got instruction: pc=800001c4 instr=401b4800 [0m
-# [32m < -- id -- > time=342 got instruction: pc=800001c8 instr=0364d821 [0m
-# time=342 reg26($k1)=00000000
-# [32m < -- id -- > time=346 got instruction: pc=800001cc instr=03e00008 [0m
-# time=346 reg26($k1)=00000054
-# [32m < -- id -- > time=350 got instruction: pc=800001d0 instr=409b5800 [0m
-# time=350 reg26($k1)=0000005e
-# [32m < -- id -- > time=354 got instruction: pc=800001a4 instr=42000018 [0m
-# time=358 cp0_cause: IP=00000000 ExcCode=00
-# [32m < -- id -- > time=362 got instruction: pc=800001a8 instr=341b8013 [0m
-# time=366 eret: 80000020
-# time=366 cpu entered user mode
-# time=366 cp0_status: IM=10000000 KSU=10 EXL=0 IE=1
-# [32m < -- id -- > time=370 got instruction: pc=800001b0 instr=00000000 [0m
-# [32m < -- id -- > time=374 got instruction: pc=80000020 instr=08000008 [0m
-# [32m < -- id -- > time=378 got instruction: pc=80000024 instr=00000000 [0m
-# [32m < -- id -- > time=382 got instruction: pc=80000020 instr=08000008 [0m
-# [32m < -- id -- > time=386 got instruction: pc=80000024 instr=00000000 [0m
-# time=386 cp0_cause: IP=10000000 ExcCode=00
-# time=390 impending exception: ip=10000000 code=00 epc=80000020 badaddr=00000000
-# time=390 cpu entered kernel mode
-# time=390 cp0_status: IM=10000000 KSU=10 EXL=1 IE=1
-# [32m < -- id -- > time=394 got instruction: pc=80000024 instr=00000000 [0m
-# [32m < -- id -- > time=398 got instruction: pc=80000180 instr=24010001 [0m
-# [32m < -- id -- > time=402 got instruction: pc=80000184 instr=10410008 [0m
-# [32m < -- id -- > time=406 got instruction: pc=80000188 instr=00000000 [0m
-# [32m < -- id -- > time=410 got instruction: pc=8000018c instr=8f9b0000 [0m
-# [32m < -- id -- > time=414 got instruction: pc=80000190 instr=277b0001 [0m
-# [32m < -- id -- > time=422 got instruction: pc=80000194 instr=af9b0000 [0m
-# time=422 reg26($k1)=00000002
-# [32m < -- id -- > time=426 got instruction: pc=80000198 instr=afbb0000 [0m
-# time=426 reg26($k1)=00000003
-# [31m <-- mem base --> time=431 write: addr=00010000(04000) data=00000003[0m
-# [32m < -- id -- > time=438 got instruction: pc=8000019c instr=0c000071 [0m
-# time=442 segdisp=00000003
-# [32m < -- id -- > time=450 got instruction: pc=800001a0 instr=241b0000 [0m
-# [32m < -- id -- > time=454 got instruction: pc=800001c4 instr=401b4800 [0m
-# [32m < -- id -- > time=458 got instruction: pc=800001c8 instr=0364d821 [0m
-# time=458 reg26($k1)=00000000
-# [32m < -- id -- > time=462 got instruction: pc=800001cc instr=03e00008 [0m
-# time=462 reg26($k1)=00000071
-# [32m < -- id -- > time=466 got instruction: pc=800001d0 instr=409b5800 [0m
-# time=466 reg26($k1)=0000007b
-# [32m < -- id -- > time=470 got instruction: pc=800001a4 instr=42000018 [0m
-# time=474 cp0_cause: IP=00000000 ExcCode=00
-# [32m < -- id -- > time=478 got instruction: pc=800001a8 instr=341b8013 [0m
-# time=482 eret: 80000020
-# time=482 cpu entered user mode
-# time=482 cp0_status: IM=10000000 KSU=10 EXL=0 IE=1
-# [32m < -- id -- > time=486 got instruction: pc=800001b0 instr=00000000 [0m
-# [32m < -- id -- > time=490 got instruction: pc=80000020 instr=08000008 [0m
-# [32m < -- id -- > time=494 got instruction: pc=80000024 instr=00000000 [0m
-# [32m < -- id -- > time=498 got instruction: pc=80000020 instr=08000008 [0m
-# [32m < -- id -- > time=502 got instruction: pc=80000024 instr=00000000 [0m
-# time=502 cp0_cause: IP=10000000 ExcCode=00
-# time=506 impending exception: ip=10000000 code=00 epc=80000020 badaddr=00000000
-# time=506 cpu entered kernel mode
-# time=506 cp0_status: IM=10000000 KSU=10 EXL=1 IE=1
-# [32m < -- id -- > time=510 got instruction: pc=80000024 instr=00000000 [0m
-# [32m < -- id -- > time=514 got instruction: pc=80000180 instr=24010001 [0m
-# [32m < -- id -- > time=518 got instruction: pc=80000184 instr=10410008 [0m
-# [32m < -- id -- > time=522 got instruction: pc=80000188 instr=00000000 [0m
-# [32m < -- id -- > time=526 got instruction: pc=8000018c instr=8f9b0000 [0m
-# [32m < -- id -- > time=530 got instruction: pc=80000190 instr=277b0001 [0m
-# [32m < -- id -- > time=538 got instruction: pc=80000194 instr=af9b0000 [0m
-# time=538 reg26($k1)=00000003
-# [32m < -- id -- > time=542 got instruction: pc=80000198 instr=afbb0000 [0m
-# time=542 reg26($k1)=00000004
-# [31m <-- mem base --> time=547 write: addr=00010000(04000) data=00000004[0m
+# [32m < -- id -- > time=158 got instruction: pc=80000024 instr=00000000 [0m
+# time=170 impending exception: ip=10000000 code=00 epc=80000020 badaddr=80000020
+# time=170 cpu entered kernel mode
+# time=170 cp0_cause: IP=10000000 ExcCode=00
+# time=170 cp0_status: IM=10000000 KSU=10 EXL=1 IE=1
+# [32m < -- id -- > time=174 got instruction: pc=80000028 instr=00000000 [0m
+# [32m < -- id -- > time=178 got instruction: pc=80000180 instr=24010001 [0m
+# [32m < -- id -- > time=182 got instruction: pc=80000184 instr=10410008 [0m
+# [32m < -- id -- > time=186 got instruction: pc=80000188 instr=00000000 [0m
+# [32m < -- id -- > time=190 got instruction: pc=8000018c instr=8f9b0000 [0m
+# [32m < -- id -- > time=194 got instruction: pc=80000190 instr=277b0001 [0m
+# [32m < -- id -- > time=202 got instruction: pc=80000194 instr=af9b0000 [0m
+# time=202 reg26($k1)=00000000
+# [32m < -- id -- > time=206 got instruction: pc=80000198 instr=afbb0000 [0m
+# time=206 reg26($k1)=00000001
+# [31m <-- mem base --> time=211 write: addr=00010000(04000) data=00000001[0m
+# [32m < -- id -- > time=218 got instruction: pc=8000019c instr=0c000071 [0m
+# time=222 segdisp=00000001
+# [32m < -- id -- > time=230 got instruction: pc=800001a0 instr=241b0000 [0m
+# [32m < -- id -- > time=234 got instruction: pc=800001c4 instr=401b4800 [0m
+# time=234 reg31($ra)=800001a4
+# [32m < -- id -- > time=238 got instruction: pc=800001c8 instr=0364d821 [0m
+# time=238 reg26($k1)=00000000
+# [32m < -- id -- > time=242 got instruction: pc=800001cc instr=03e00008 [0m
+# time=242 reg26($k1)=0000003a
+# [32m < -- id -- > time=246 got instruction: pc=800001d0 instr=409b5800 [0m
+# time=246 reg26($k1)=00000044
+# [32m < -- id -- > time=250 got instruction: pc=800001a4 instr=42000018 [0m
+# time=254 cp0_cause: IP=00000000 ExcCode=00
+# [32m < -- id -- > time=258 got instruction: pc=800001a8 instr=341b8013 [0m
+# time=262 eret: 80000020
+# time=262 cpu entered user mode
+# time=262 cp0_status: IM=10000000 KSU=10 EXL=0 IE=1
+# [32m < -- id -- > time=266 got instruction: pc=800001ac instr=00000000 [0m
+# [32m < -- id -- > time=270 got instruction: pc=80000020 instr=08000008 [0m
+# [32m < -- id -- > time=274 got instruction: pc=80000024 instr=00000000 [0m
+# [32m < -- id -- > time=278 got instruction: pc=80000020 instr=08000008 [0m
+# [32m < -- id -- > time=282 got instruction: pc=80000024 instr=00000000 [0m
+# time=282 cp0_cause: IP=10000000 ExcCode=00
+# [32m < -- id -- > time=286 got instruction: pc=80000020 instr=08000008 [0m
+# time=298 impending exception: ip=10000000 code=00 epc=80000024 badaddr=80000024
+# time=298 cpu entered kernel mode
+# time=298 cp0_status: IM=10000000 KSU=10 EXL=1 IE=1
+# [32m < -- id -- > time=302 got instruction: pc=80000024 instr=00000000 [0m
+# [32m < -- id -- > time=306 got instruction: pc=80000180 instr=24010001 [0m
+# [32m < -- id -- > time=310 got instruction: pc=80000184 instr=10410008 [0m
+# [32m < -- id -- > time=314 got instruction: pc=80000188 instr=00000000 [0m
+# [32m < -- id -- > time=318 got instruction: pc=8000018c instr=8f9b0000 [0m
+# [32m < -- id -- > time=322 got instruction: pc=80000190 instr=277b0001 [0m
+# [32m < -- id -- > time=330 got instruction: pc=80000194 instr=af9b0000 [0m
+# time=330 reg26($k1)=00000001
+# [32m < -- id -- > time=334 got instruction: pc=80000198 instr=afbb0000 [0m
+# time=334 reg26($k1)=00000002
+# [31m <-- mem base --> time=339 write: addr=00010000(04000) data=00000002[0m
+# [32m < -- id -- > time=346 got instruction: pc=8000019c instr=0c000071 [0m
+# time=350 segdisp=00000002
+# [32m < -- id -- > time=358 got instruction: pc=800001a0 instr=241b0000 [0m
+# [32m < -- id -- > time=362 got instruction: pc=800001c4 instr=401b4800 [0m
+# [32m < -- id -- > time=366 got instruction: pc=800001c8 instr=0364d821 [0m
+# time=366 reg26($k1)=00000000
+# [32m < -- id -- > time=370 got instruction: pc=800001cc instr=03e00008 [0m
+# time=370 reg26($k1)=0000005a
+# [32m < -- id -- > time=374 got instruction: pc=800001d0 instr=409b5800 [0m
+# time=374 reg26($k1)=00000064
+# [32m < -- id -- > time=378 got instruction: pc=800001a4 instr=42000018 [0m
+# time=382 cp0_cause: IP=00000000 ExcCode=00
+# [32m < -- id -- > time=386 got instruction: pc=800001a8 instr=341b8013 [0m
+# time=390 eret: 80000024
+# time=390 cpu entered user mode
+# time=390 cp0_status: IM=10000000 KSU=10 EXL=0 IE=1
+# [32m < -- id -- > time=394 got instruction: pc=800001ac instr=00000000 [0m
+# [32m < -- id -- > time=398 got instruction: pc=80000024 instr=00000000 [0m
+# [32m < -- id -- > time=402 got instruction: pc=80000028 instr=00000000 [0m
+# [32m < -- id -- > time=406 got instruction: pc=8000002c instr=00000000 [0m
+# [32m < -- id -- > time=410 got instruction: pc=80000030 instr=00000000 [0m
+# time=410 cp0_cause: IP=10000000 ExcCode=00
+# [32m < -- id -- > time=414 got instruction: pc=80000034 instr=00000000 [0m
+# time=426 impending exception: ip=10000000 code=00 epc=80000038 badaddr=80000038
+# time=426 cpu entered kernel mode
+# time=426 cp0_status: IM=10000000 KSU=10 EXL=1 IE=1
+# [32m < -- id -- > time=430 got instruction: pc=80000040 instr=00000000 [0m
+# [32m < -- id -- > time=434 got instruction: pc=80000180 instr=24010001 [0m
+# [32m < -- id -- > time=438 got instruction: pc=80000184 instr=10410008 [0m
+# [32m < -- id -- > time=442 got instruction: pc=80000188 instr=00000000 [0m
+# [32m < -- id -- > time=446 got instruction: pc=8000018c instr=8f9b0000 [0m
+# [32m < -- id -- > time=450 got instruction: pc=80000190 instr=277b0001 [0m
+# [32m < -- id -- > time=458 got instruction: pc=80000194 instr=af9b0000 [0m
+# time=458 reg26($k1)=00000002
+# [32m < -- id -- > time=462 got instruction: pc=80000198 instr=afbb0000 [0m
+# time=462 reg26($k1)=00000003
+# [31m <-- mem base --> time=467 write: addr=00010000(04000) data=00000003[0m
+# [32m < -- id -- > time=474 got instruction: pc=8000019c instr=0c000071 [0m
+# time=478 segdisp=00000003
+# [32m < -- id -- > time=486 got instruction: pc=800001a0 instr=241b0000 [0m
+# [32m < -- id -- > time=490 got instruction: pc=800001c4 instr=401b4800 [0m
+# [32m < -- id -- > time=494 got instruction: pc=800001c8 instr=0364d821 [0m
+# time=494 reg26($k1)=00000000
+# [32m < -- id -- > time=498 got instruction: pc=800001cc instr=03e00008 [0m
+# time=498 reg26($k1)=0000007a
+# [32m < -- id -- > time=502 got instruction: pc=800001d0 instr=409b5800 [0m
+# time=502 reg26($k1)=00000084
+# [32m < -- id -- > time=506 got instruction: pc=800001a4 instr=42000018 [0m
+# time=510 cp0_cause: IP=00000000 ExcCode=00
+# [32m < -- id -- > time=514 got instruction: pc=800001a8 instr=341b8013 [0m
+# time=518 eret: 80000038
+# time=518 cpu entered user mode
+# time=518 cp0_status: IM=10000000 KSU=10 EXL=0 IE=1
+# [32m < -- id -- > time=522 got instruction: pc=800001ac instr=00000000 [0m
+# [32m < -- id -- > time=526 got instruction: pc=80000038 instr=00000000 [0m
+# [32m < -- id -- > time=530 got instruction: pc=8000003c instr=00000000 [0m
+# [32m < -- id -- > time=534 got instruction: pc=80000040 instr=00000000 [0m
+# [32m < -- id -- > time=538 got instruction: pc=80000044 instr=00000000 [0m
+# time=538 cp0_cause: IP=10000000 ExcCode=00
+# [32m < -- id -- > time=542 got instruction: pc=80000048 instr=00000000 [0m
 #  quit 

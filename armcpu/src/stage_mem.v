@@ -1,6 +1,6 @@
 /*
  * $File: stage_mem.v
- * $Date: Thu Dec 19 21:44:31 2013 +0800
+ * $Date: Fri Dec 20 14:55:37 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -38,6 +38,7 @@ module stage_mem(
 
 	// handle interrupt; interface to misc divices
 	input [`INT_MASK_WIDTH-1:0] int_req,
+	output has_int_pending,
 
 	// interface to MMU
 	output [`TLB_WRITE_STRUCT_WIDTH-1:0] mmu_tlb_write_struct,
@@ -201,13 +202,9 @@ module stage_mem(
 		end else case (state)
 			READY: begin
 				cp0_exc_epc <= exc_epc_ex2mem;
-				cp0_exc_badvaddr <= 0;
-				if (exc_code_ex2mem != `EC_NONE) begin
-					cp0_exc_code <= exc_code_ex2mem;
-					cp0_exc_badvaddr <= exc_badvaddr_ex2mem;
-				end else if (has_int_pending)
-					cp0_exc_code <= `EC_INT;
-				else begin
+				cp0_exc_badvaddr <= exc_badvaddr_ex2mem;
+				cp0_exc_code <= exc_code_ex2mem;
+				if (exc_code_ex2mem == `EC_NONE) begin
 					cp0_exc_code <= `EC_NONE;
 					ne_wb_reg_addr <= wb_reg_addr_ex2mem;
 					ne_wb_reg_data <= alu_result;

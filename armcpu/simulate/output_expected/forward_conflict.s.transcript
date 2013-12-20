@@ -25,6 +25,7 @@
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
 # time=0 com_read_data=00
+# time=0 cp0_cause: IP=x00x0000 ExcCode=xx
 # time=0 segdisp=xxxxxxxx
 # time=2 cp0_cause: IP=x0000000 ExcCode=xx
 # time=2 cpu entered kernel mode

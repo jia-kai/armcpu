@@ -1,6 +1,6 @@
 /*
  * $File: system.v
- * $Date: Fri Nov 29 00:40:46 2013 +0800
+ * $Date: Fri Dec 20 11:35:34 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -41,7 +41,12 @@ module system
 	// VGA interface
 	output [8:0] vga_color_out, // 3 red, 3 green, 3 blue
 	output vga_hsync,
-	output vga_vsync);
+	output vga_vsync,
+
+	// ascii keyboard interface
+	input kbd_int,
+	output kbd_int_ack,
+	input [7:0] kbd_data);
 
 	// ------------------------------------------------------------------
 
@@ -56,7 +61,10 @@ module system
 	wire vga_write_enable;
 
 	cpu ucpu(.clk(clk_cpu), .clk_fast(clk50M), .rst(rst),
+
 		.int_com_req(int_com_req),
+		.int_kbd_req(kbd_int),
+
 		.dev_mem_addr(mem_addr),
 		.dev_mem_data_in(data_from_mem),
 		.dev_mem_data_out(data_to_mem),
@@ -90,7 +98,10 @@ module system
 	
 		.vga_write_addr(vga_write_addr),
 		.vga_write_data(vga_write_data),
-		.vga_write_enable(vga_write_enable));
+		.vga_write_enable(vga_write_enable),
+	
+		.kbd_data(kbd_data),
+		.kbd_int_ack(kbd_int_ack));
 
 
 	serial_port #(.CLK_FREQ(50000000)) ucom(

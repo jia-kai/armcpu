@@ -1,6 +1,6 @@
 /*
  * $File: ps2_drv.v
- * $Date: Fri Dec 20 11:19:35 2013 +0800
+ * $Date: Fri Dec 20 16:00:27 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -31,7 +31,9 @@ module ps2_drv(
 
 	// maintain int
 	always @(posedge clk) begin
-		if (rst || (int_req && int_ack)) begin
+		if (int_req && int_ack)
+			int_req <= 0;
+		if (rst) begin
 			kbd_ascii <= 0;
 			int_req <= 0;
 		end else if (!int_req && cur_pressed_ascii) begin
@@ -42,6 +44,24 @@ module ps2_drv(
 
 
 	// maintain cur_pressed
+	always @(posedge clk) begin
+		cur_pressed <= 0;
+		if (rst) 
+			shift_pressed <= 0;
+		else begin
+			if (kbd_enb_lo)
+				recv_data_lo <= kbd_data;
+			else if (kbd_enb_hi) begin
+				recv_data_prev <= recv_data;
+				if (is_shift)
+					shift_pressed <= !is_break;
+				else if (!is_break)
+					cur_pressed <= recv_data;
+			end
+		end
+	end
+	/*
+	* due to unknow reason, do not handle continuous press
 	always @(posedge clk) begin
 		if (rst)
 			shift_pressed <= 0;
@@ -60,6 +80,7 @@ module ps2_drv(
 			end
 		end
 	end
+	*/
 
 endmodule
 

@@ -1,6 +1,6 @@
 /*
  * $File: cp0.v
- * $Date: Wed Dec 11 23:09:41 2013 +0800
+ * $Date: Fri Dec 20 15:17:45 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -99,7 +99,7 @@ module cp0(
 	end endtask
 
 	always @(posedge clk) begin
-		// only assert exc_jmp_flag and int_timer_ack for 1 cycle
+		// only assert exc_jmp_flag for 1 cycle
 		exc_jmp_flag <= 0;
 
 		if (rst) begin: RESET_CP0

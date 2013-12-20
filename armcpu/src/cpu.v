@@ -1,6 +1,6 @@
 /*
  * $File: cpu.v
- * $Date: Thu Dec 19 21:46:18 2013 +0800
+ * $Date: Fri Dec 20 14:56:16 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -24,6 +24,7 @@ module cpu(
 	input rst,
 
 	input int_com_req,
+	input int_kbd_req,
 
 	// connected to physical memory controller
 	output [31:0] dev_mem_addr,
@@ -71,12 +72,14 @@ module cpu(
 	wire stall, clear;
 
 	reg [7:0] int_req;
+	wire has_int_pending;
 
 	wire is_user_mode;
 			
 	always @(*) begin
 		int_req = 0;
 		int_req[`INT_COM] = int_com_req;
+		int_req[`INT_KBD] = int_kbd_req;
 	end
 
 	assign {ex2mem_wb_reg_addr, ex2mem_alu_result}
@@ -115,6 +118,7 @@ module cpu(
 		.ready(lohi_ready));
 
 	stage_if uif(.clk(clk), .rst(rst), .stall(stall), .clear(clear),
+		.has_int_pending(has_int_pending),
 		.jmp_flag(jmp_flag), .jmp_dest(jmp_dest),
 		.interstage_if2id(interstage_if2id), 
 		.mem_addr(mmu_instr_addr), .mem_data(mmu_instr_data),
@@ -152,6 +156,7 @@ module cpu(
 		.lohi_write_data(lohi_write_data),
 
 		.int_req(int_req), 
+		.has_int_pending(has_int_pending),
 
 		.mmu_tlb_write_struct(mmu_tlb_write_struct),
 		.mmu_addr(mmu_data_addr),

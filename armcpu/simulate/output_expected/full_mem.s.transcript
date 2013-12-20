@@ -25,6 +25,7 @@
 # time=0 cp0_cause: IP=xxxxxxxx ExcCode=xx
 # time=0 com_write_busy=0
 # time=0 com_read_data=00
+# time=0 cp0_cause: IP=x00x0000 ExcCode=xx
 # time=0 segdisp=xxxxxxxx
 # time=2 cp0_cause: IP=x0000000 ExcCode=xx
 # time=2 cpu entered kernel mode
@@ -112,7 +113,7 @@
 # time=318 impending exception: ip=10000000 code=04 epc=8000007c badaddr=80500001
 # time=318 cp0_cause: IP=10000000 ExcCode=04
 # time=318 cp0_status: IM=00000000 KSU=00 EXL=1 IE=0
-# [32m < -- id -- > time=322 got instruction: pc=80000080 instr=00000000 [0m
+# [32m < -- id -- > time=322 got instruction: pc=80000084 instr=00000000 [0m
 # [32m < -- id -- > time=326 got instruction: pc=80000180 instr=1000ffff [0m
 # [32m < -- id -- > time=330 got instruction: pc=80000184 instr=00000000 [0m
 # [32m < -- id -- > time=334 got instruction: pc=80000180 instr=1000ffff [0m

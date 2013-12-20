@@ -1,6 +1,6 @@
 /*
  * $File: stage_if.v
- * $Date: Thu Dec 19 20:14:55 2013 +0800
+ * $Date: Fri Dec 20 15:17:31 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -13,6 +13,8 @@ module stage_if(
 	input rst,
 	input stall,
 	input clear,
+
+	input has_int_pending,
 
 	input jmp_flag,
 	input [31:0] jmp_dest,
@@ -39,16 +41,18 @@ module stage_if(
 			next_pc <= `SYSTEM_STARTUP_ADDR;
 			exc_code_if2id <= `EC_NONE;
 		end else if (!stall) begin
-			next_pc <= mem_addr_plus_4;
 			exc_code_if2id <= `EC_NONE;
-			if (clear)
-				instr <= 0;
-			else if (mem_exc_code != `EC_NONE) begin
-				exc_code_if2id <= mem_exc_code;
-				exc_addr_if2id <= mem_addr;
-				instr <= 0;
-			end else
-				instr <= mem_data;
+			exc_addr_if2id <= mem_addr;
+			instr <= 0;
+			if (!clear) begin
+				next_pc <= mem_addr_plus_4;
+				if (mem_exc_code != `EC_NONE)
+					exc_code_if2id <= mem_exc_code;
+				else if (has_int_pending)
+					exc_code_if2id <= `EC_INT;
+				else
+					instr <= mem_data;
+			end
 		end
 	end
 

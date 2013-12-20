@@ -1,6 +1,6 @@
 /*
  * $File: top.v
- * $Date: Thu Dec 19 18:56:49 2013 +0800
+ * $Date: Fri Dec 20 13:38:09 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -52,6 +52,10 @@ module top;
 	wire [8:0] vga_color_out;
 	wire vga_hsync, vga_vsync;
 
+	reg kbd_int = 0;
+	reg [7:0] kbd_data;
+	wire kbd_int_ack;
+
 	system usystem(.clk_cpu(clk_cpu), .clk50M(clk), .rst(rst),
 		.segdisp(segdisp),
 		.rom_selector(1'b0),
@@ -74,7 +78,11 @@ module top;
 	
 		.vga_color_out(vga_color_out),
 		.vga_hsync(vga_hsync),
-		.vga_vsync(vga_vsync));
+		.vga_vsync(vga_vsync),
+	
+		.kbd_int(kbd_int),
+		.kbd_int_ack(kbd_int_ack),
+		.kbd_data(kbd_data));
 
 	initial begin
 		$dumpfile("dump.vcd");
@@ -84,6 +92,18 @@ module top;
 
 		#1 rst = 1;
 		#6 rst = 0;
+
+		kbd_data <= 8'h61;	// 'A'
+	end
+
+	`ifdef KEYBOARD_INTER
+		always # `KEYBOARD_INTER
+			kbd_int <= ~kbd_int;
+	`endif
+
+	always @(posedge kbd_int_ack) begin
+		$display("time=%g keyboard int ack", $time);
+		kbd_int <= 0;
 	end
 
 	reg write_com = 0;

@@ -1,6 +1,6 @@
 /*
  * $File: phy_mem_ctrl.v
- * $Date: Fri Nov 29 01:01:58 2013 +0800
+ * $Date: Fri Dec 20 15:10:20 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -15,6 +15,8 @@
 
 `define VGA_ADDR_START	32'h1A000000
 `define VGA_ADDR_END	32'h1A096000
+
+`define KEYBOARD_ADDR	32'h0F000000
 
 `define ADDR_IS_RAM(addr) ((addr & 32'h007FFFFF) == addr)
 `define ADDR_IS_FLASH(addr) (addr[31:24] == 8'h1E)
@@ -75,7 +77,11 @@ module phy_mem_ctrl(
 	// VGA interface
 	output reg [`VGA_ADDR_WIDTH-1:0] vga_write_addr,
 	output reg [`VGA_DATA_WIDTH-1:0] vga_write_data,
-	output reg vga_write_enable);
+	output reg vga_write_enable,
+
+	// ascii keyboard interface
+	input [7:0] kbd_data,
+	output reg kbd_int_ack);
 
 	// ------------------------------------------------------------------
 
@@ -100,7 +106,8 @@ module phy_mem_ctrl(
 			addr_is_flash = `ADDR_IS_FLASH(addr),
 			addr_is_segdisp = (addr == `SEGDISP_ADDR),
 			addr_is_rom = `ADDR_IS_ROM(addr),
-			addr_is_vga = `ADDR_IS_VGA(addr);
+			addr_is_vga = `ADDR_IS_VGA(addr),
+			addr_is_keyboard = (addr == `KEYBOARD_ADDR);
 
 	wire [31:0] addr_vga_offset = addr - `VGA_ADDR_START;
 
@@ -162,20 +169,26 @@ module phy_mem_ctrl(
 	always @(*) begin
 		data_out = 0;
 		case ({addr_is_ram, addr_is_com_data, addr_is_com_stat,
-				addr_is_flash, addr_is_rom})
-			5'b10000: data_out = ram_selector ? extram_data : baseram_data;
-			5'b01000: data_out = {25'b0, com_data_in};
-			5'b00100: data_out = {30'b0, com_read_ready, com_write_ready};
-			5'b00010: data_out = {16'b0, flash_data};
-			5'b00001: data_out = rom_data;
+				addr_is_flash, addr_is_rom, addr_is_keyboard})
+			6'b100000: data_out = ram_selector ? extram_data : baseram_data;
+			6'b010000: data_out = {24'b0, com_data_in};
+			6'b001000: data_out = {30'b0, com_read_ready, com_write_ready};
+			6'b000100: data_out = {16'b0, flash_data};
+			6'b000010: data_out = rom_data;
+			6'b000001: data_out = {24'b0, kbd_data};
 		endcase
 	end
 
-	always @(negedge clk50M)
+	// assign int ack
+	always @(negedge clk50M) begin
 		int_com_ack <= addr_is_com_data && !is_write;
+		kbd_int_ack <= addr_is_keyboard && !is_write;
+	end
 	
 	reg is_write_prev;
 	assign is_write_posedge = !is_write_prev && is_write;
+
+	// main FSM
 	always @(negedge clk50M) begin
 		enable_com_write <= 0;
 		is_write_prev <= is_write;
