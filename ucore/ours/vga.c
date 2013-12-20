@@ -1,6 +1,6 @@
 /*
  * $File: vga.c
- * $Date: Sun Dec 15 13:05:23 2013 +0800
+ * $Date: Fri Dec 20 19:08:32 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -41,7 +41,11 @@ static void render_char(int ch, int row, int col) {
 				pos = 0;
 				cur_bitmap = *(++ bitmap);
 			}
-			*(dest ++) = cur_bitmap & 1 ? COLOR : 0;
+			if (cur_bitmap & 1)
+				*dest = COLOR;
+			else
+				*dest = 0;
+			dest ++;
 			cur_bitmap >>= 1;
 		}
 		dest += VGA_MEM_NRCOL - CHAR_WIDTH;

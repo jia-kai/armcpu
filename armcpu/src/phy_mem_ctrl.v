@@ -1,6 +1,6 @@
 /*
  * $File: phy_mem_ctrl.v
- * $Date: Fri Dec 20 15:10:20 2013 +0800
+ * $Date: Fri Dec 20 19:11:35 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -211,6 +211,7 @@ module phy_mem_ctrl(
 						vga_write_addr <= addr_vga_offset[`VGA_ADDR_WIDTH+1:2];
 						vga_write_data <= data_in[7:0];
 						vga_write_enable <= 1;
+						state <= RECOVERY_READ;
 					end
 				endcase
 			end
