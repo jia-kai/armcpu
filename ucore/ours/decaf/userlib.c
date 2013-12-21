@@ -1,6 +1,6 @@
 /*
  * $File: userlib.c
- * $Date: Thu Dec 19 22:52:08 2013 +0800
+ * $Date: Sat Dec 21 21:44:37 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -29,9 +29,11 @@ void PrintString(const char *str) {
 }
 
 void PrintInt(int val) {
-	if (!val)
+	if (!val) {
 		sys_putc('0');
-	else if (val < 0) {
+		return;
+	}
+	if (val < 0) {
 		sys_putc('-');
 		val = -val;
 	}

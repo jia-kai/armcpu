@@ -4,30 +4,30 @@ branch flag and set_stall should be set by combinational logic
 stall: the state of whole system should be identical to that where time during
 stall set is "removed"; change at negedge
 
-regfile is written by stage_mem at negedge
+regfile is written by stage_mem at negedge,
+but for memory reading, it must be available at posedge during stall, for branch
+to work (branch dest may be new reg)
 
 branch: branch_dest_id2ex: highest bit indicate whether to jump to this
 address(0), or reg2_data(1)
 
-access to cp0 registers and interrupt handling occur at mem stage
+access to cp0 and LO/HI registers occur at MEM stage
+interrupt handled in IF stage
 
 exc_epc_id2ex is always set regardless of whether exception actually happens;
 so in later stages corrent epc could be retrieved
 
-int_req updated on posedge, and int_ack on negedge
-
-in stage ex, mem_addr and alu_result all come from alu_result
-mem_data come from alu opr2
+to help debugging, for invalid instruction exception, badvaddr would be the
+instruction, or 0xF...alu_opt for illegal alu opt
 
 
 POSSIBLE BUG
 ================
 if access of $ra happens in the delay slot of jal, armcpu would use new value
 of $ra
-for interrupts not set in IM but happens, shoud IP be set?
 
-in mmu, ADE exception should take precedence of TLB exception;
-but ucore does not run if implemented so...
+in mmu, ADE exceptions should take precedence of TLB exception;
+but ucore seems not to run run if implemented so...
 
 
 CP0 registers
@@ -162,5 +162,3 @@ D0		[1]
 V0		[0]
 
 
-for invalid instruction exception, badvaddr would be the instruction,
-or 0xF...alu_opt for illegal alu opt
