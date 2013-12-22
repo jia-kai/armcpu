@@ -1,7 +1,7 @@
-snake: snake.c *.h ../*.h
+slideshow: slideshow.c ../*.h
 	CFLAGS=-I.. ../../compile_userapp_raw.sh $< $@
 
 clean:
-	rm -f snake
+	rm -f slideshow
 
 .PHONY: clean

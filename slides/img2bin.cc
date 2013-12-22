@@ -1,6 +1,6 @@
 /*
  * $File: img2bin.cc
- * $Date: Fri Dec 20 18:58:06 2013 +0800
+ * $Date: Sun Dec 22 11:51:20 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -13,9 +13,9 @@
 static const int HEIGHT = 300, WIDTH = 400;
 
 static int rgb_to_8bit(int r, int g, int b) {
-	r = round(r * 8 / 256.0);
-	g = round(g * 8 / 256.0);
-	b = round(b * 4 / 256.0);
+	r = round(r * 7 / 255.0);
+	g = round(g * 7 / 255.0);
+	b = round(b * 3 / 255.0);
 	return (r << 5) | (g << 2) | b;
 }
 
@@ -46,9 +46,9 @@ int main(int argc, char **argv) {
 		for (int j = 0; j < WIDTH; j ++) {
 			int v = result[i * WIDTH + j];
 			float r = v >> 5, g = (v >> 2) & 7, b = v & 3;
-			r /= 8.0;
-			g /= 8.0;
-			b /= 4.0;
+			r /= 7.0;
+			g /= 7.0;
+			b /= 3.0;
 			row[j] = cv::Vec3f(b, g, r);
 		}
 	}

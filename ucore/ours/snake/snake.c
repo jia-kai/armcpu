@@ -1,13 +1,12 @@
 /*
  * $File: snake.c
- * $Date: Sat Dec 21 23:07:01 2013 +0800
+ * $Date: Sun Dec 22 12:10:59 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 #include "apple.h"
 #include "snake.h"
 #include "empty.h"
-#include "ps2_code.h"
 #include "system.h"
 
 // all images are of the same size
@@ -18,8 +17,6 @@
 #define SCREEN_HEIGHT	20
 #define SCREEN_HEIGHT_POW2	32
 
-#define VGA_ROW_SIZE	512
-
 #define COLOR_DEATH		0b11100000
 
 #define SNAKE_NR_CELL	(SCREEN_WIDTH * SCREEN_HEIGHT + 1)
@@ -28,16 +25,9 @@
 
 #define RAND_MAX		0xFFFFFFFFu
 
-
-typedef volatile unsigned* memio_ptr_t;
-typedef const unsigned char* img_ptr_t;
 static memio_ptr_t const
-	vga_buffer_true = (memio_ptr_t)0xBA000000,
-	vga_buffer = ((memio_ptr_t)0xBA000000) +
-		(400 - (SCREEN_WIDTH * IMAGE_SIZE)) / 2,
-	com_data = (memio_ptr_t)0xBFD003F8,
-	com_stat = (memio_ptr_t)0xBFD003FC,
-	keyboard_data = (memio_ptr_t)0xAF000000;
+	vga_buffer_game = ((memio_ptr_t)0xBA000000) +
+		(400 - (SCREEN_WIDTH * IMAGE_SIZE)) / 2;
 
 typedef enum {DIR_NONE, DIR_UP, DIR_DOWN, DIR_LEFT, DIR_RIGHT} dir_t;
 typedef enum {MAP_SNAKE, MAP_APPLE, MAP_EMPTY} map_t;
@@ -60,7 +50,6 @@ static void draw_death_line(int x0, int y0, int dx, int dy);
 static void update_snake(dir_t new_dir);
 static void game_over(int x, int y) __attribute__((noreturn));
 static void apply_dir_to_coord(coord_t *coord, dir_t dir);
-static inline int get_key();
 static inline coord_t* forward_cirqueue_ptr(int *ptr); 
 static void exit() __attribute__((noreturn));
 static uint32_t rand();
@@ -77,7 +66,7 @@ static inline uint32_t rand_in_range(uint32_t range);
 void draw_image(img_ptr_t img, int row, int col) {
 	row *= IMAGE_SIZE;
 	col *= IMAGE_SIZE;
-	memio_ptr_t ptr = vga_buffer + row * VGA_ROW_SIZE + col;
+	memio_ptr_t ptr = vga_buffer_game + row * VGA_ROW_SIZE + col;
 	int i, j;
 	for (i = 0; i < IMAGE_SIZE; i ++) {
 		for (j = 0; j < IMAGE_SIZE; j ++)
@@ -159,9 +148,9 @@ void exit() {
 }
 
 void init_snake() {
-	memio_ptr_t buf = vga_buffer_true;
+	memio_ptr_t buf = vga_buffer;
 	int i, j;
-	int d0 = vga_buffer - vga_buffer_true,
+	int d0 = vga_buffer_game - vga_buffer,
 		d1 = d0 + SCREEN_WIDTH * IMAGE_SIZE;
 	d0 --;
 
@@ -187,19 +176,6 @@ void init_snake() {
 	}
 	snake.head_dir = DIR_RIGHT;
 	cur_nr_apple = 0;
-}
-
-int get_key() {
-	if (*com_stat & 2)
-		return *com_data;
-	if (!(read_c0_cause() & 0x00004000)) // ps2 int
-		return 0;
-	int c = *keyboard_data;
-	if (c >= 0 && c < 256)
-		c = KEYCODE_MAP[c];
-	else
-		c = 0;
-	return c;
 }
 
 void write_debug_char(int ch) {
@@ -232,7 +208,7 @@ void game_over(int x, int y) {
 
 void draw_death_line(int x, int y, int dx, int dy) {
 	int i;
-	memio_ptr_t ptr = vga_buffer + y * VGA_ROW_SIZE;
+	memio_ptr_t ptr = vga_buffer_game + y * VGA_ROW_SIZE;
 	for (i = 0; i < 10; i ++) {
 		ptr[x] = COLOR_DEATH;
 		ptr += dy * VGA_ROW_SIZE;

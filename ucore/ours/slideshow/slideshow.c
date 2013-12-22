@@ -1,27 +1,22 @@
 /*
  * $File: slideshow.c
- * $Date: Fri Dec 20 20:19:10 2013 +0800
+ * $Date: Sun Dec 22 12:17:31 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
-#include <file.h>
-#include <syscall.h>
-
-typedef volatile unsigned* mem_ptr_t;
+#include "system.h"
 
 #define IMAGE_WIDTH 400
 #define IMAGE_HEIGHT 300
-#define VGA_MEM_NRCOL 512
 #define IMAGE_FLASH_PER_SIZE	(IMAGE_WIDTH * IMAGE_HEIGHT / 2)
 #define IMAGE_FLASH_START	(1024 * 1024 / 2)
 #define ANIMATION_SPEED 50
 
-static mem_ptr_t const flash = (mem_ptr_t)0xBE000000;
-static mem_ptr_t const vga = (mem_ptr_t)0xBA000000;
+static uint32_t saved_cp0_satus;
 
-static void display_image(mem_ptr_t base) {
+static void display_image(memio_ptr_t base) {
 	int i, j;
-	mem_ptr_t dest = vga;
+	memio_ptr_t dest = vga_buffer;
 	for (i = 0; i < IMAGE_HEIGHT; i ++) {
 		for (j = 0; j < IMAGE_WIDTH; j += 2) {
 			unsigned v = *base;
@@ -29,20 +24,23 @@ static void display_image(mem_ptr_t base) {
 			*(dest ++) = v >> 8;
 			base ++;
 		}
-		dest += VGA_MEM_NRCOL - IMAGE_WIDTH;
+		dest += VGA_ROW_SIZE - IMAGE_WIDTH;
 	}
 }
 
-int main() {
-	mem_ptr_t addr = flash + IMAGE_FLASH_START;
+void _start() {
+	disable_interrupt(&saved_cp0_satus);
+	memio_ptr_t addr = flash + IMAGE_FLASH_START;
 	int num = 0;
 	for (; ;) {
 		display_image(addr);
-		char ch;
-		int ret = read(0, &ch, sizeof(char));
-		if (ret != 1 || ch == 'q') {
+		char ch = 0;
+		while (!ch)
+			ch = get_key();
+		if (ch == 'q') {
+			enable_interrupt(saved_cp0_satus);
 			sys_redraw_console();
-			return 0;
+			sys_exit(0);
 		}
 		int i;
 		if (ch == 'n') {

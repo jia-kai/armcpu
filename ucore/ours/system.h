@@ -1,15 +1,27 @@
 /*
  * $File: system.h
- * $Date: Sat Dec 21 23:03:51 2013 +0800
+ * $Date: Sun Dec 22 12:11:05 2013 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
 #ifndef __HEADER_SYSTEM__
 #define __HEADER_SYSTEM__
 
+#include "ps2_code.h"
 #define CPU_FREQUENCY	12500000
 
 typedef unsigned uint32_t;
+
+typedef volatile unsigned* memio_ptr_t;
+typedef const unsigned char* img_ptr_t;
+static memio_ptr_t const
+	vga_buffer = (memio_ptr_t)0xBA000000,
+	com_data = (memio_ptr_t)0xBFD003F8,
+	com_stat = (memio_ptr_t)0xBFD003FC,
+	keyboard_data = (memio_ptr_t)0xAF000000,
+	flash = (memio_ptr_t)0xBE000000;
+
+#define VGA_ROW_SIZE	512
 
 // some functions copy from ucore
 
@@ -116,6 +128,19 @@ void sys_exit(int error_code) {
 
 static inline void sys_redraw_console() {
 	syscall(SYS_redraw_console);
+}
+
+static inline int get_key() {
+	if (*com_stat & 2)
+		return *com_data;
+	if (!(read_c0_cause() & 0x00004000)) // ps2 int
+		return 0;
+	int c = *keyboard_data;
+	if (c >= 0 && c < 256)
+		c = KEYCODE_MAP[c];
+	else
+		c = 0;
+	return c;
 }
 
 #endif // __HEADER_SYSTEM__
