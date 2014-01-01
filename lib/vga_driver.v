@@ -1,13 +1,13 @@
 /*
  * $File: vga_driver.v
- * $Date: Fri Nov 29 02:07:38 2013 +0800
+ * $Date: Mon Dec 30 20:56:56 2013 +0800
  * $Author: Xinyu Zhou <zxytim@gmail.com>
  *          jiakai <jia.kai66@gmail.com>
  */
 
 
 // specification reference:
-// http://tinyvga.com/vga-timing/640x480@60Hz
+// http://tinyvga.com/vga-timing/800x600@72Hz
 module vga_driver(
 	input clk50M,
 //    input [20:0] ram_start_addr, // display data is from ram_start_addr
