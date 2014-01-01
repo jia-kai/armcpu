@@ -1,6 +1,6 @@
 /*
  * $File: system.h
- * $Date: Sun Dec 22 12:11:05 2013 +0800
+ * $Date: Wed Jan 01 23:20:31 2014 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -117,6 +117,7 @@ static inline int syscall(int num, ...) {
 }
 
 #define SYS_exit            1
+#define SYS_putc            30
 #define SYS_redraw_console		242
 
 static inline void sys_exit(int error_code) __attribute__((noreturn));
@@ -126,8 +127,63 @@ void sys_exit(int error_code) {
 	for (; ;);	// should never get here
 }
 
+static inline int sys_putc(int c) {
+    return syscall(SYS_putc, c);
+}
+
 static inline void sys_redraw_console() {
 	syscall(SYS_redraw_console);
+}
+
+static inline void puts(const char *str) {
+	while (*str)
+		sys_putc(*(str ++));
+}
+
+static inline unsigned int mulu10(unsigned int n)
+{
+  return (n<<3)+(n<<1);
+}
+
+/* __divu* routines are from the book, Hacker's Delight */
+
+static inline unsigned int divu10(unsigned int n) {
+  unsigned int q, r;
+  q = (n >> 1) + (n >> 2);
+  q = q + (q >> 4);
+  q = q + (q >> 8);
+  q = q + (q >> 16);
+  q = q >> 3;
+  r = n - mulu10(q);
+  return q + ((r + 6) >> 4);
+}
+
+static inline void print_dec(int v) {
+	if (!v) {
+		sys_putc('0');
+		return;
+	}
+	static char buf[20];
+	char *ptr = buf + 19;
+	*ptr = 0;
+	if (v < 0) {
+		sys_putc('-');
+		v = -v;
+	}
+	while (v) {
+		unsigned q = divu10(v),
+				 m = v - mulu10(q);
+		*(-- ptr) = '0' + m;
+		v = q;
+	}
+	puts(ptr);
+}
+
+static inline int atoi(const char *str) {
+	int val = 0;
+	while (*str)
+		val = mulu10(val) + *(str ++) - '0';
+	return val;
 }
 
 static inline int get_key() {

@@ -1,6 +1,6 @@
 /*
  * $File: snake.c
- * $Date: Sun Dec 22 12:10:59 2013 +0800
+ * $Date: Wed Jan 01 23:14:50 2014 +0800
  * $Author: jiakai <jia.kai66@gmail.com>
  */
 
@@ -43,7 +43,7 @@ typedef struct {
 
 static snake_t snake;
 static map_t map[SCREEN_HEIGHT_POW2][SCREEN_WIDTH];
-static uint32_t saved_c0_status, cur_nr_apple;
+static uint32_t saved_c0_status, cur_nr_apple, score;
 
 static void draw_image(img_ptr_t img, int row, int col);
 static void draw_death_line(int x0, int y0, int dx, int dy);
@@ -100,8 +100,10 @@ void update_snake(dir_t new_dir) {
 		forward_cirqueue_ptr(&snake.tail);
 		draw_image(IMG_EMPTY, old_tail.y, old_tail.x);
 		map[old_tail.y][old_tail.x] = MAP_EMPTY;
-	} else
+	} else {
 		cur_nr_apple --;
+		score ++;
+	}
 
 	*mnew = MAP_SNAKE;
 
@@ -144,10 +146,14 @@ void apply_dir_to_coord(coord_t *coord, dir_t dir) {
 void exit() {
 	enable_interrupt(saved_c0_status);
 	sys_redraw_console();
+	puts("score: ");
+	print_dec(score);
+	sys_putc('\n');
 	sys_exit(0);
 }
 
 void init_snake() {
+	score = 0;
 	memio_ptr_t buf = vga_buffer;
 	int i, j;
 	int d0 = vga_buffer_game - vga_buffer,
@@ -316,19 +322,19 @@ void _start() {
 		dir_t move = DIR_NONE;
 		while (read_c0_count() < next_move_time) {
 			int c = get_key();
-			if (c == 'h') {
+			if (c == 'h' || c == 'a') {
 				move = DIR_LEFT;
 				break;
 			}
-			if (c == 'j') {
+			if (c == 'j' || c == 's') {
 				move = DIR_DOWN;
 				break;
 			}
-			if (c == 'k') {
+			if (c == 'k' || c == 'w') {
 				move = DIR_UP;
 				break;
 			}
-			if (c == 'l') {
+			if (c == 'l' || c == 'd') {
 				move = DIR_RIGHT;
 				break;
 			}
