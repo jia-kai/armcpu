@@ -1,0 +1,38 @@
+---------------------- decaf/src/decaf/backend/Mips.java ----------------------
+index 11741e0..9aad563 100644
+@@ -128,11 +128,11 @@ public class Mips implements MachineDescription {
+ 		for (Tac tac = bb.tacList; tac != null; tac = tac.next) {
+ 			switch (tac.opc) {
+ 			case ADD:
+-				bb.appendAsm(new MipsAsm(MipsAsm.FORMAT3, "add", tac.op0.reg,
++				bb.appendAsm(new MipsAsm(MipsAsm.FORMAT3, "addu", tac.op0.reg,
+ 						tac.op1.reg, tac.op2.reg));
+ 				break;
+ 			case SUB:
+-				bb.appendAsm(new MipsAsm(MipsAsm.FORMAT3, "sub", tac.op0.reg,
++				bb.appendAsm(new MipsAsm(MipsAsm.FORMAT3, "subu", tac.op0.reg,
+ 						tac.op1.reg, tac.op2.reg));
+ 				break;
+ 			case MUL:
+@@ -338,7 +338,7 @@ public class Mips implements MachineDescription {
+ 	@Override
+ 	public void emitVTable(List<VTable> vtables) {
+ 		emit(null, ".text", null);
+-		emit(null, ".globl main", null);
++		emit(null, ".globl decaf_main", null);
+ 
+ 		for (VTable vt : vtables) {
+ 			emit(null, null, null);
+
+------------------ decaf/src/decaf/translate/Translater.java ------------------
+index f4a5357..6d053a1 100644
+@@ -86,7 +86,7 @@ public class Translater {
+ 	public void createFuncty(Function func) {
+ 		Functy functy = new Functy();
+ 		if (func.isMain()) {
+-			functy.label = Label.createLabel("main", true);
++			functy.label = Label.createLabel("decaf_main", true);
+ 		} else {
+ 			functy.label = Label.createLabel("_"
+ 					+ ((ClassScope) func.getScope()).getOwner().getName() + "."
+

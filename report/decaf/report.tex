@@ -1,0 +1,108 @@
+% $File: report.tex
+% $Date: Tue Jan 07 22:32:45 2014 +0800
+% $Author: jiakai <jia.kai66@gmail.com>
+
+\documentclass[a4paper]{article}
+\usepackage{amsmath,amssymb,amsthm,fontspec,zhspacing,verbatim,graphicx,minted}
+\usepackage[hyperfootnotes=false,colorlinks,linkcolor=black,anchorcolor=black,citecolor=black]{hyperref}
+\usepackage[top=2in, bottom=1.5in, left=1in, right=1in]{geometry}
+
+\newcommand{\addplot}[1]{\begin{center}
+	\includegraphics[width=0.6\paperwidth]{#1}
+\end{center}}
+
+% \textref{marker}{text}
+\newcommand{\textref}[2]{\hyperref[#1]{#2}}
+\newcommand{\figref}[1]{\hyperref[fig:#1]{Figure~\ref*{fig:#1}}}
+\newcommand{\eqnref}[1]{\hyperref[eqn:#1]{(\ref*{eqn:#1})}}
+\newcommand{\lemref}[1]{\hyperref[lemma:#1]{Lemma~\ref*{lemma:#1}}}
+
+
+\zhspacing
+
+\title{编译原理拓展实验报告}
+\author{清华大学\\贾开~周昕宇~李铁铮}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\section{实验目的}
+修改decaf java实现，使得它能编译出可在计算机组成原理课上设计的CPU以及ucore操作系
+统环境下运行的代码。
+
+\section{实验环境}
+\begin{enumerate}
+	\item 目标CPU是自行设计的流水CPU，采用简化的MIPS32指令集，
+		支持基本算术、流程控制指令，有TLB及异常和中断的处理。
+	\item 目标操作系统是ucore，是一个简单的类unix操作系统，
+		实现了简单的I/O及进程调度的系统调用，可以在上述CPU上运行。
+	\item decaf编译器使用java实现，其完整实现已由老师给出，
+		可以把decaf源程序编译成MIPS32汇编代码。
+\end{enumerate}
+
+
+\section{实验方案}
+\subsection{汇编指令生成}
+由于简化的CPU中并未实现add、sub指令，需要把decaf的MIPS后端里生成add、sub指令的部
+分改成addu、subu，区别仅在于溢出时后者不会产生异常。
+
+另外，CPU中也未实现除法指令，不过由于所用测试程序中没有除法运算，因此也未进行
+相关修改；如果需要除法，可以用其它指令手动实现除法函数，并把除法翻译成函数调用。
+
+当然，一个更好的方法应该是修改ucore系统，在异常处理中捕捉非法指令异常，并软件模
+拟未实现的指令。这样，对于编译器而言，目标机器就是一个标准的MIPS32 CPU了。
+
+\subsection{库函数调用及calling convention}
+标准MIPS32使用O32 ABI，函数调用的前四个参数通过\$a0-\$a3四个寄存器传输；
+但decaf编译出的程序的参数全都在栈上传递。当然，无论什么calling convention，
+只要能自恰，程序本身就应该能正常运行，所以需要解决的问题只有用户程序与
+C实现的库函数及操作系统交互的部分。
+
+一种常规解决方案是修改decaf编译器，使得其遵循O32 ABI，直接调用相应的函数。
+但这需要对后端进行较大的改动，也会造成与现有decaf编译出的二进制代码的不兼容。
+
+在这里，如果把我们的MIPS系统看作一个要移植到的目标平台，
+并追求对decaf尽量少的改动，可以采用一种逆向的思路：在decaf和库函数之间增加一个
+适配器层，将decaf的调用约定翻译成O32 ABI再调用库函数。
+我们的实验中采取了这种方案，用汇编实现了这样的中间层，转发对库函数的调用。
+
+\subsection{程序入口及退出}
+我们直接使用了ucore里的linker script(\verb|user.ld|)以及用户静态函数库
+\verb|libuser.a|，在该环境下系统会设置好一些全局变量，然后跳转到main执行。
+我们修改了decaf编译器，将其输出的\verb|main|重命名为\verb|decaf_main|，
+然后汇编实现了一个新的main函数。由于decaf的main是void类型，
+我们便默认其都执行成功返回0，于是在\verb|decaf_main|返回后直接调用exit(0)。
+
+
+\section{实现细节}
+
+\subsection{对decaf编译器的修改}
+对decaf编译器的修改以diff形式显示如下，注意其中将add、sub改成了addu、subu，
+以及\verb|main|被重命名为\verb|decaf_main|。
+\inputminted[linenos,fontsize=\small,tabsize=4]{diff}{../decaf.diff}
+
+
+\subsection{库函数调用转发及程序入口}
+我们实现了以下的汇编程序，用于对库函数调用的转发，
+同时注意其中main是程序的入口点。
+\inputminted[linenos,fontsize=\small,tabsize=4]{nasm}{../entry.s}
+
+\subsection{库调用的实现}
+decaf中有Alloc, ReadInteger, PrintString等函数调用作为语言的内建函数，
+可以以保留字的形式直接调用。对此，我们在c中实现了用到的几个函数，具体如下：
+\inputminted[linenos,fontsize=\small,tabsize=4]{c}{../userlib.c}
+
+
+\section{实验效果}
+我们成功编译并运行了以下程序，它读入一个整数$N$，
+输出$N$个盘子的汉诺塔移动方案。该程序说明了库函数调用、程序入口及退出以及基于
+decaf本身calling convention的递归调用的实现的正确性。
+\inputminted[linenos,fontsize=\small,tabsize=4]{java}{../hanoi.decaf}
+
+\end{document}
+
+% vim: filetype=tex foldmethod=marker foldmarker=f{{{,f}}}
+
