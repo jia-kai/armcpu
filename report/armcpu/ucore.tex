@@ -1,0 +1,52 @@
+% $File: ucore.tex
+% $Date: Fri Jan 31 21:02:49 2014 +0800
+% $Author: jiakai <jia.kai66@gmail.com>
+
+\section{ucore}
+\subsection{编译}
+如果使用较新的gcc(4.7.3)编译，ucore中的一个bug会暴露出来：
+编译\verb|kern/trap/vector.S|时，编译器会自动在跳转语句后插入NOP，
+导致所有的偏移量出错，解决方法是在文件头部加入\verb|.set noreorder|。
+然而，即使修复了这个bug，编译出的代码仍然不能在我们的CPU上正常运行。
+最终我们使用了与最初移植ucore到mips的学长所用的相同的版本的gcc\footnote{%
+\url{https://sourcery.mentor.com/GNUToolchain/release2189}}，
+编译出的代码可正常运行。
+
+另外，我们尝试了打开gcc的-O2优化，发现系统运行速度明显提高，
+但系统引导时会触发\verb|fs/sfs/sfs_fs.c|中的
+\verb|panic("unused_blocks not equal!\n")|。我们未能找到其原因，
+后来注释掉这条panic发现系统可以正常工作，于是均使用-O2优化了。
+
+
+\subsection{使用qemu模拟}
+修改ucore时，如果能在真实硬件上运行前先用模拟器模拟，将能极大提高开发效率。
+好在移植ucore的学长已经修改了qemu模拟器，可于\url{%
+https://github.com/chyh1990/qemu-thumips}下载，并使用
+\verb|./configure --target-list=mipsel-softmmu|编译；根据系统的不同，
+可能需要手动修复一些链接错误。
+
+
+\subsection{抓取远程文件}
+为了实现从PC上抓取文件并在本地执行，需要实现一个抓取远程文件的系统调用。
+为此，首先修改了控制台驱动，当输出一个字符时，会先往串口写入一个MAGIC0字符，
+再写入实际输出的字符；另外增加了抓取文件的系统调用，
+它被调用时会先向串口写入MAGIC1字符，接下来进入抓取文件相关的通信协议。
+同时需要修改PC上的终端程序，让它遇到MAGIC0时就显示接下来的字符，
+遇到MAGIC1时就进入文件传输模式。另外由于ucore的VFS不支持新建文件，
+因此只能先在ramdisk中预留好一个足够大的空文件，把抓取到的文件内容写入这个其中。
+
+
+\subsection{VGA输出}
+为了实现控制台内容同步输出到VGA，首先需要字体文件。
+我们通过一个脚本渲染了某字体的可见ascii字符，并将得到的位图写入了一个C数组中。
+在ucore中加入了简单的字体渲染模块，需要处理换行、滚屏等，同时修改控制台驱动，
+每输出一个字符，在向串口输出的同时，也需要将该字符传递给字体渲染模块。
+
+另外，为了能让用户程序进行VGA绘图后正常返回控制台，
+还提供了重绘全屏幕的系统调用。由于ucore没有提供物理内存映射的相关调用，
+同时也为了简化设计，CPU中没有处理访问特权内存的异常，
+这样用户程序可以通过直接访问VGA缓存来操作屏幕内容。
+
+
+% vim: filetype=tex foldmethod=marker foldmarker=f{{{,f}}}
+

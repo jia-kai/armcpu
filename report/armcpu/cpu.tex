@@ -1,0 +1,126 @@
+% $File: cpu.tex
+% $Date: Fri Mar 14 21:33:03 2014 +0800
+% $Author: jiakai <jia.kai66@gmail.com>
+
+\section{CPU核心}
+\subsection{整体设计}
+CPU的整体设计如\figref{cpuarch}所示。其核心部分有instruction fetch(IF),
+instruction decoding(ID), execution(EX), memory access(MEM)四个stage，
+并有独立的multiplication(MULT), forwarding(FWD), memory management unit(MMU)
+三个额外的辅助单元。
+
+CPU的总体设计参考了\cite{bryant2008computer}和\cite{patterson2008computer}
+中的相关章节。其基本思路是在不同的stage间插入锁存器，
+其中有后续stage所需的全部信息，stage内部是组合逻辑，这样每经过一个时钟周期，
+所以指令便会向后``移动''一个stage，从而增加throughput实现流水CPU。
+
+寄存器堆(register file)直接放在了ID中，
+这样便于在指令译码时访问寄存器得到相应的寄存器值。
+对CP0和乘法器的直接读写都放在了MEM中进行，
+这样可以在每个周期中向访问内存一样对其进行访问，使得整体设计更为统一。
+另外，将CP0放在MEM中也有利于对异常和中断的处理。
+
+\begin{figure}[!ht]
+	\addplot{../cpuarch.png}
+	\caption{\label{fig:cpuarch}CPU总体构架}
+\end{figure}
+
+
+\subsection{冲突处理}
+流水线主要有结构冲突、数据冲突、控制冲突三种冲突类型。
+
+由于指令和数据共用内存，而且没有实现cache，
+结构冲突是不可避免的，目前我们采取了最简单的处理方式，
+即访存时就设置stall标志位，暂停除MEM外所有stage的活动。
+
+对于数据冲突，通过精心设计的forwarding单元已可完全解决，
+无论前后指令间的数据依赖如何(甚至包括lw+jr等组合)，均不需要暂停处理器。
+其具体实现需要所有stage的共同协作和全局的设计考虑，不便于文字描述，
+详见代码；需要注意的是，要充分利用时钟的正负边沿。
+
+对于控制冲突，通过MIPS中的延迟槽即可解决，也无需暂停处理器，
+但编译器可能需要插入不必要的NOP。
+
+\subsection{异常处理}
+MIPS要求精确异常处理(precise exception handling)，
+即要求流水CPU处理异常时对外所表现出的行为与单周期、多周期CPU一样。
+为此，在相邻stage间加入\verb|exc_code|, \verb|exc_epc|,
+\verb|exc_badvaddr|这三个锁存器，同时把CP0放在最后一个stage(即MEM)中。
+在某个stage中检查到异常时，只将其到下一个stage的异常相关锁存器赋值，
+而最后在MEM中才真正执行异常操作，即设置一些标志变量使得下一次IF
+从异常处理或中断返回的位置取代码。这样一来，
+异常发生前的所有指令都会被执行，而异常之后的指令都不会被执行，
+从而实现了精确异常处理。
+
+对于中断，MEM中的CP0判断中断条件是否成立，如果成立的话就设置相应标志变量，
+使得下个周期中IF产生一个虚拟的中断异常，
+待该异常传递到MEM后才进行实际的中断处理。
+
+\subsection{内存管理}
+虚拟内存方面，MMU单元负责进行指令和数据访存的切换，
+TLB的维护及查找，以及产生内存相关异常。
+MMU接收指令地址和数据地址两个输入，如果没有数据操作，则表现得像组合逻辑，
+在半周期内向IF返回指令地址对应的内容或者访问其造成的异常；否则进行数据读写，
+并在操作过程中设置输出的busy标志位，
+待busy重新被置零后MEM就可以处理异常及数据。
+另外也可以向MMU发送一个TLB写入指令，使得其写入一个TLB条目。
+
+我们将CPU的边界定义在MMU。也就是说，对外而言，
+CPU在每个周期内只会做以下几件事之一： 
+\begin{itemize}
+	\item CPU给出物理内存地址，要求在半个周期内得到相应数据。
+	\item CPU给出物理内存地址及数据，启动物理内存写操作。
+	\item CPU等待物理内存写操作的完成。
+\end{itemize}
+
+对于所有外设，均通过物理内存映射进行I/O。具体映射方案如\figref{iomap}所示。
+\begin{figure}[!ht]
+	\begin{center}\begin{tabular}{cll}
+		\hline
+		物理地址 & 对应设备 & 附加说明 \\ \hline
+		\verb|[0x00000000, 0x007FFFFF]| & RAM & 共8MB \\ 
+		\verb|[0x10000000, 0x10000FFF]| & 引导ROM & 共4KB \\
+		\verb|[0x1E000000, 0x1EFFFFFF]| & flash & 
+			地址空间共16MB，但对于每个32位的字，只有低16位可用 \\
+		\verb|[0x1A000000, 0x1A096000]| & VGA & 详见\secref{vga} \\
+		\verb|0x1FD003F8|	& 串口数据	& 可读写，读入则清除中断 \\
+		\verb|0x1FD003FC|	& 串口状态	& 第0位为是否可写，第1位为是否可读 \\
+		\verb|0x1FD00400|	& 数码管	&
+			在2位数码管上显示所写入数据的最低有效字节 \\
+		\verb|0x0F000000|	& 键盘码	& 读入则清除中断，详见\secref{ps2} \\
+		\hline
+	\end{tabular}\end{center}
+	\caption{\label{fig:iomap}物理内存映射}
+\end{figure}
+如果访问到了未映射的物理地址，对于读操作始终返回0，对所有写操作忽略。
+
+\subsection{实现及开发技巧}
+\begin{itemize}
+	\item {\bf 开发语言}  \\
+		使用verilog而非VHDL作为开发语言，相比而言前者语法更为紧凑简洁，
+		更具表达力，最后CPU的核心代码不过一千多行，而且也更贴近C的习惯，
+		极大地减少了开发和维护的工作量。
+	\item {\bf 元编程} \\
+		由于xilinx相关工具不支持SystemVerilog，
+		而后者具有结构体等很有用的语言特性，
+		因此部分verilog代码使用python脚本生成以模拟类似C的struct结构；
+		这部分代码主要用于跨stage的锁存器。
+		另外，使用xilinx ipcore生成ROM的流程较为复杂也不易维护，
+		而且实际ROM中的数据很少，因此ROM也采取python脚本生成，
+		直接作为一个case语句放在verilog源代码里。
+	\item {\bf 逻辑仿真} \\
+		在CPU源代码中，使用verilog的\verb|$display|，\verb|$monitor|等system
+		task输出了大量调试信息，再加上对串口、RAM、flash等设备的HDL模拟，
+		并使用bash脚本作为入口点，最终实现了自动化的仿真工具链，
+		只需给出汇编代码，就可以自动编译并将二进制载入模拟的RAM执行，
+		同时dump出所有信号的波形文件，
+		极大地方便了开发和调试。\figref{simulate}展示了仿真及波形显示的界面，
+		其中波形显示使用了gtkwave。
+		\begin{figure}[!ht]
+			\addplot{../simulate.png}
+			\caption{\label{fig:simulate}逻辑仿真的相关界面}
+		\end{figure}
+\end{itemize}
+
+% vim: filetype=tex foldmethod=marker foldmarker=f{{{,f}}}
+

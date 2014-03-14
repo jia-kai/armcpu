@@ -1,0 +1,51 @@
+% $File: report.tex
+% $Date: Fri Jan 31 21:30:50 2014 +0800
+% $Author: jiakai <jia.kai66@gmail.com>
+
+\documentclass[a4paper]{article}
+\usepackage{amsmath,amssymb,amsthm,fontspec,zhspacing,verbatim,graphicx}
+\usepackage[hyperfootnotes=false,colorlinks,linkcolor=black,anchorcolor=black,citecolor=black]{hyperref}
+\usepackage[top=2in, bottom=1.5in, left=1in, right=1in]{geometry}
+\usepackage{dirtree}
+
+\usepackage{biblatex}
+\bibliography{refs.bib}
+\defbibheading{bibliography}{\section{参考文献}}
+
+\renewcommand{\figurename}{图}
+
+\newcommand{\addplot}[1]{\begin{center}
+	\includegraphics[width=0.6\paperwidth]{#1}
+\end{center}}
+
+% \textref{marker}{text}
+\newcommand{\figref}[1]{\hyperref[fig:#1]{图~\ref*{fig:#1}}}
+\newcommand{\secref}[1]{\hyperref[sec:#1]{\ref*{sec:#1}节}}
+
+
+\zhspacing
+
+\title{计算机组成原理综合实验实验报告}
+\author{清华大学\\
+计14~贾开~2011011275\\
+计13~周昕宇~2011011252\\
+计14~李铁峥~2011011268}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\input{intro}
+\input{cpu}
+\input{peripheral}
+\input{ucore}
+\input{decaf}
+\input{result}
+\input{problem}
+
+\printbibliography
+\end{document}
+
+% vim: filetype=tex foldmethod=marker foldmarker=f{{{,f}}}
+

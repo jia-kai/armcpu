@@ -1,5 +1,5 @@
 % $File: report.tex
-% $Date: Tue Jan 07 22:42:32 2014 +0800
+% $Date: Fri Jan 31 21:26:14 2014 +0800
 % $Author: jiakai <jia.kai66@gmail.com>
 
 \documentclass[a4paper]{article}
@@ -45,36 +45,7 @@
 
 
 \section{实验方案}
-\subsection{汇编指令生成}
-由于简化的CPU中并未实现add、sub指令，需要把decaf的MIPS后端里生成add、sub指令的部
-分改成addu、subu，区别仅在于溢出时后者不会产生异常。
-
-另外，CPU中也未实现除法指令，不过由于所用测试程序中没有除法运算，因此也未进行
-相关修改；如果需要除法，可以用其它指令手动实现除法函数，并把除法翻译成函数调用。
-
-当然，一个更好的方法应该是修改ucore系统，在异常处理中捕捉非法指令异常，并软件模
-拟未实现的指令。这样，对于编译器而言，目标机器就是一个标准的MIPS32 CPU了。
-
-\subsection{库函数调用及calling convention}
-标准MIPS32使用O32 ABI，函数调用的前四个参数通过\$a0-\$a3四个寄存器传输；
-但decaf编译出的程序的参数全都在栈上传递。当然，无论什么calling convention，
-只要能自恰，程序本身就应该能正常运行，所以需要解决的问题只有用户程序与
-C实现的库函数及操作系统交互的部分。
-
-一种常规解决方案是修改decaf编译器，使得其遵循O32 ABI，直接调用相应的函数。
-但这需要对后端进行较大的改动，也会造成与现有decaf编译出的二进制代码的不兼容。
-
-在这里，如果把我们的MIPS系统看作一个要移植到的目标平台，
-并追求对decaf尽量少的改动，可以采用一种逆向的思路：在decaf和库函数之间增加一个
-适配器层，将decaf的调用约定翻译成O32 ABI再调用库函数。
-我们的实验中采取了这种方案，用汇编实现了这样的中间层，转发对库函数的调用。
-
-\subsection{程序入口及退出}
-我们直接使用了ucore里的linker script(\verb|user.ld|)以及用户静态函数库
-\verb|libuser.a|，在该环境下系统会设置好一些全局变量，然后跳转到main执行。
-我们修改了decaf编译器，将其输出的\verb|main|重命名为\verb|decaf_main|，
-然后汇编实现了一个新的main函数。由于decaf的main是void类型，
-我们便默认其都执行成功返回0，于是在\verb|decaf_main|返回后直接调用exit(0)。
+\input{method.tex}
 
 
 \section{实现细节}

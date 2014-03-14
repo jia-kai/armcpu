@@ -1,0 +1,63 @@
+% $File: result.tex
+% $Date: Fri Mar 14 21:41:00 2014 +0800
+% $Author: jiakai <jia.kai66@gmail.com>
+
+\section{实验成果}
+
+\subsection{展示效果}
+除了基本实验要求外，还实现了两个用户态的程序：贪吃蛇和幻灯片放映。运行效果如
+\figref{ucore}所示。
+
+其中贪吃蛇还需要产生随机数，熵的来源是CP0中count寄存器的值。
+对于幻灯片放映，利用了VGA内存映射区是行优先存储的特性，
+实现了流畅的纵向换页的动画效果。
+具体而言幻灯片的原始数据以行优先连续存储在flash里，
+而静态显示或者播放动画时只需从某一行开始把整个屏幕的内容从
+flash拷贝到VGA的内存映射区域即可。
+另外，为了在256色的VGA输
+出下实现较好的显示效果，对图像预先使用了Floyd-Steinberg
+dithering算法进行量化，相关细节请自行查阅文献。
+
+\begin{figure}[!ht]
+	\addplot{../ucore.png}
+	\caption{\label{fig:ucore}ucore运行效果，左上、右上、左下、右下
+	依次为刚进入shell时的画面、执行ls后的输出、贪吃蛇游戏界面、幻灯片播放界面}
+\end{figure}
+
+
+\subsection{开发板测试套件}
+本实验的一个附加产品是开发板基本功能的测试套件。
+
+\begin{enumerate}
+	\item 整体测试 \\
+		对于一个新的开发板，
+		可以先尝试在CPLD中烧入\verb|archive/cpld.jed|，
+		再在FPGA上烧入\verb|archive/armcpu.bit|。将拨码开关最右一个拨到1，
+		表示使用12.5M的时钟频率；其它全部置零。
+
+		在PC上连接好串口线后，\verb|cd utils/memtrans|，
+		运行\verb|./run_all.sh|，如果没有出错，
+		说明串口、flash和RAM均工作正常。
+		随后运行
+		\begin{verbatim}
+			./controller.py flash write ../../archive/ucore-kernel-initrd
+		\end{verbatim}
+		烧入ucore的系统镜像。然后接上VGA，插入ps/2键盘，
+		运行\verb|../terminal.py|进入终端。
+		最后把最左的拨码开关拨到1，表示从flash引导，
+		这时应该能看到显示器和串口终端都打印出ucore的引导信息，
+		PC的键盘或ps/2键盘均可用于输入。
+		此时开发板上的LED如\figref{led}所示，
+		其中数码管应显示23，内存LED指示灯快速闪烁，
+		数码管旁边的LED最右几个亮起。
+		\begin{figure}[!ht]
+			\addplot{../led.png}
+			\caption{\label{fig:led}ucore运行时的LED情况}
+		\end{figure}
+	\item LED测试 \\
+		烧入\verb|misc_fpga_proj/ledtest|里的工程，
+		数码管旁的LED应从右向左扫描。
+\end{enumerate}
+
+% vim: filetype=tex foldmethod=marker foldmarker=f{{{,f}}}
+

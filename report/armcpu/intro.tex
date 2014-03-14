@@ -1,0 +1,55 @@
+% $File: intro.tex
+% $Date: Fri Jan 31 18:50:38 2014 +0800
+% $Author: jiakai <jia.kai66@gmail.com>
+
+\section{导论}
+实验目标如下：
+\begin{enumerate}
+	\item 使用老师提供的开发板，
+		在FPGA上编程实现一个基于标准32位MIPS指令集的子集的流水CPU，
+		支持异常、中断、TLB等。
+	\item 在该CPU上运行ucore操作系统，进入用户态及shell环境，
+		正常执行shell命令。
+	\item 修改ucore，实现简单的远程文件执行功能，
+		即通过串口从PC上获取ELF文件，并在本地执行。
+	\item 修改编译原理课程中的decaf编译器，并结合GNU Binutils，
+		编译出可在ucore上执行的ELF文件。
+	\item 可选实现对VGA、ps/2 keyboard等其它外设的支持。
+\end{enumerate}
+
+实验硬件环境为老师提供的一块开发板，
+主要核心部件包含Xilinx Spartan6 xc6slx100 FPGA，
+8MB 32-bit字长的RAM，8MB 16-bit字长的flash，
+另有一块与FPGA相连的CPLD用于一些外设I/O操作。
+
+项目使用git管理，并托管在\url{https://git.net9.org/armcpu-devteam/armcpu}上。
+目录结构如\figref{dirtree}所示。注意，项目中很多地方使用了软链接，
+并且有大量的脚本，因此只能在linux等类unix系统下使用。
+
+\begin{figure}[!ht]
+\dirtree {%
+.1 /.
+.2 archive\DTcomment{经测试可用的FPGA, CPLD及ucore二进制映象}.
+.2 armcpu.
+.3 ipcore\_dir\DTcomment{xilinx ipcore相关，包括乘法器和VGA缓存}.
+.3 prog\DTcomment{写入ROM的引导程序的汇编代码}.
+.3 simulate\DTcomment{用于逻辑仿真的代码及期望输出}.
+.3 src\DTcomment{CPU核心部分源代码}.
+.4 gencode\DTcomment{用于代码生成的脚本}.
+.3 synthesis\DTcomment{用于逻辑综合的代码及ucf文件}.
+.2 decaf\DTcomment{修改过的decaf编译器}.
+.2 lib\DTcomment{一些通用的ucf及verilog文件，提供常见设备的驱动}.
+.2 misc\_fpga\_proj\DTcomment{开发初期进行实验及硬件测试的xilinx项目}.
+.3 cpld\DTcomment{需要烧入CPLD的程序，用于转发串口及处理ps/2键盘扫描码}.
+.2 report\DTcomment{实验报告的源代码}.
+.2 screenshots.
+.2 slides\DTcomment{展示时所用的幻灯片的相关资源}.
+.2 ucore\DTcomment{修改过的ucore源代码}.
+.3 ours\DTcomment{运行于ucore上的独立程序}.
+.2 utils\DTcomment{各种工具脚本}.
+}
+\caption{\label{fig:dirtree}项目目录结构}
+\end{figure}
+
+% vim: filetype=tex foldmethod=marker foldmarker=f{{{,f}}}
+
